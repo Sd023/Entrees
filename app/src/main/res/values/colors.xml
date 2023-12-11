@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FCFCFC</color>
+    <color name="bg_color">#202022</color>
+
+
+
+    <!--Table Colors -->
+    <color name="empty_table">#202022</color>
+    <color name="dead_table">#CA1F3D</color>
+    <color name="avail_table">#A6FD71</color>
+    <color name="taken_table">#FFEA7B</color>
 </resources>
