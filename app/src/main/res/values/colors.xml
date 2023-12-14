@@ -2,12 +2,13 @@
 <resources>
     <color name="white">#FCFCFC</color>
     <color name="bg_color">#202022</color>
+    <color name="primary_light">#FFEA7B</color>
 
 
 
     <!--Table Colors -->
-    <color name="empty_table">#202022</color>
+    <color name="empty_table">#5F5F5F</color>
     <color name="dead_table">#CA1F3D</color>
-    <color name="avail_table">#A6FD71</color>
-    <color name="taken_table">#FFEA7B</color>
+    <color name="avail_table">#54DD00</color>
+    <color name="bottom_items_color">#172A36</color>
 </resources>

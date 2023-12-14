@@ -18,8 +18,30 @@ class BaseActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
-        navView.setupWithNavController(navController)
+        navView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.orderHistory -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
+                    navController.navigate(R.id.orderHistory)
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.orderTaking -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
+                    navController.navigate(R.id.orderTaking)
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.profile -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
+                    navController.navigate(R.id.profile)
+                    return@setOnItemSelectedListener true
+                }
+
+                else -> { false }
+            }
+        }
+
 
     }
 }

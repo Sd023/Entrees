@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Entreés" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary_light</item>
         <item name="bottomNavigationStyle">@style/MyBottomNavigationView</item>
         <item name="android:statusBarColor">@color/white</item>
     </style>
@@ -10,10 +10,10 @@
     <style name="Theme.Entreés" parent="Base.Theme.Entreés" />
 
     <style name="MyBottomNavigationView" parent="Widget.Design.BottomNavigationView">
-        <item name="android:background">@drawable/gradient_bottom</item>
+        <item name="android:background">@color/primary_light</item>
         <item name="android:elevation">8dp</item>
-        <item name="itemTextColor">@color/bg_color</item>
-        <item name="itemIconTint">@color/bg_color</item>
+        <item name="itemTextColor">@color/bottom_items_color</item>
+        <item name="itemIconTint">@color/bottom_items_color</item>
     </style>
 
 </resources>

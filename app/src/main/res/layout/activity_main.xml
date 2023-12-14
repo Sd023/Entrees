@@ -9,14 +9,15 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/MyBottomNavigationView"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.87"
+        app:layout_constraintWidth_percent="0.96"
+        app:layout_constraintHeight_percent="0.092"
         app:menu="@menu/homescreen_bottom_items" />
 
     <fragment

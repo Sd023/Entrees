@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.gms)
 }
 
 android {
@@ -18,13 +19,28 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("D:\\test_project\\Test\\entrees.jks")
+            storePassword = "23012301"
+            keyAlias = "key0"
+            keyPassword = "23012301"
+        }
+
+    }
+
     buildTypes {
+
+        debug{
+           isDebuggable = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -41,6 +57,12 @@ android {
     dataBinding {
         true
     }
+    flavorDimensions += listOf("firebase")
+    productFlavors {
+        create("firebase") {
+            dimension = "firebase"
+        }
+    }
 }
 
 dependencies {
@@ -54,6 +76,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment.ktx)
+    implementation(libs.annotation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -61,4 +84,11 @@ dependencies {
     implementation(libs.converter.gson)
 
     implementation(libs.kotlinx.coroutines.android)
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
+
 }

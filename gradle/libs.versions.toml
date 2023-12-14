@@ -1,24 +1,28 @@
 [versions]
 agp = "8.1.2"
 converter-gson = "2.3.0"
+gradle = "8.1.2"
 kotlin = "1.8.0"
-core-ktx = "1.9.0"
+core-ktx = "1.12.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 kotlin-gradle-plugin = "1.8.0"
 kotlinx-coroutines-android = "1.6.4"
-material = "1.9.0"
+material = "1.10.0"
 constraintlayout = "2.1.4"
 retrofit = "2.9.0"
 lifecycle-livedata-ktx = "2.6.2"
 lifecycle-viewmodel-ktx = "2.6.2"
 navigation-fragment-ktx = "2.7.5"
+annotation = "1.7.0"
+gms = "4.4.0"
 
 [libraries]
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
@@ -33,10 +37,13 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle-livedata-ktx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+gms ={group = "com.google.gms.google-services", name = "google-services", version.ref = "gms"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+gms = {id = "com.google.gms.google-services", version.ref = "gms"}
 
 [bundles]
 
