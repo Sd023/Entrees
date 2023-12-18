@@ -12,12 +12,15 @@ interface LoginHelper {
 
         fun showError(msg : String?)
 
+        fun moveToNextScreen(loginBO: loginBO)
+
     }
 
     interface Presenter{
         fun attachView(view: LoginHelper.View, context: Context)
         fun detachView()
         fun login(
+            firebaseAuth: FirebaseAuth,
             userName: String,
             password: String
         )

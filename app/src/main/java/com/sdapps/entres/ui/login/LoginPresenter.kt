@@ -1,12 +1,15 @@
 package com.sdapps.entres.ui.login
 
 import android.content.Context
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 
 class LoginPresenter: LoginHelper.Presenter {
 
@@ -21,8 +24,48 @@ class LoginPresenter: LoginHelper.Presenter {
     override fun detachView() {
     }
 
-    override fun login(userName: String, password: String) {
+    override fun login(firebaseAuth: FirebaseAuth, userName: String, password: String) {
 
+        try{
+            firebaseAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    getUserDetailsFromId(firebaseAuth.currentUser?.uid)
+                }else{
+                   view.showError(task.exception?.message)
+                }
+            }
+        }catch (ex: Exception){
+            Log.d("FIREBASE",ex.printStackTrace().toString())
+            view.showError(ex.message)
+        }
+    }
+
+    fun getUserDetailsFromId(userId: String?){
+        if(userId != null){
+
+            val dbRef = FirebaseDatabase.getInstance().getReference("users")
+            dbRef.child(userId).addListenerForSingleValueEvent(object  : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if(snapshot.exists()){
+                        val role = snapshot.child("role").getValue(String::class.java)
+                        val bo = loginBO().apply {
+                            userRole = role!!
+
+                        }
+                        view.moveToNextScreen(bo)
+                    }else{
+                        view.showError("Error getting details from firebase!")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    view.showError(error.message)
+                    Log.d("FIREBASE",error.details)
+                }
+            })
+        }
     }
 
     override suspend fun register(firebaseAuth: FirebaseAuth,userName: String, password: String) {

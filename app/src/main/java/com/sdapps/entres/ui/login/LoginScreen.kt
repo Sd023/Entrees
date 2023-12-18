@@ -1,16 +1,22 @@
 package com.sdapps.entres.ui.login
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.UserManager.UserOperationException
+import android.util.Log
 import android.util.Patterns
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.sdapps.entres.BaseActivity
+import com.sdapps.entres.core.date.DateTools
+import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
 import com.sdapps.entres.databinding.ActivityLoginScreenBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +35,13 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
+        if (Build.VERSION.SDK_INT < 16) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+            actionBar?.hide()
+        }
         setContentView(binding.root)
 
         presenter = LoginPresenter()
@@ -65,8 +78,8 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
             Toast.makeText(applicationContext, "Password length less", Toast.LENGTH_LONG).show()
         } else {
             CoroutineScope(Dispatchers.IO).launch {
-                //Only Login Functionality.
                 //presenter.register(firebaseAuth, userName, password)
+                presenter.login(firebaseAuth,userName,password)
             }
 
         }
@@ -76,11 +89,22 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     override fun checkAndAuthorizeLogin(role: String) {
         CoroutineScope(Dispatchers.Main).launch {
             if (createUserRole(role)) {
-                moveToNextScreen(role)
+                //showProgress()
+                //moveToNextScreen(role)
             } else {
                 showError("Failed to create user!")
             }
         }
+    }
+
+    fun showProgress(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val progressDialog = ProgressDialog(applicationContext)
+            progressDialog.setTitle("Success")
+            progressDialog.setMessage("Account Created Successfullly, Please Login")
+            progressDialog.show()
+        }
+
     }
 
     override suspend fun createUserRole(role: String): Boolean {
@@ -91,9 +115,16 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
                 if (userId != null) {
                     val databaseReference = FirebaseDatabase.getInstance().reference.child("users").child(
                         userId
-                    ).child("role")
+                    )
+
+                    val map = HashMap<String,String>()
+
+                    map["role"] = role
+                    map["createdDate"] = DateTools().now(DATE_TIME)
+                    map["api"] = "https://status.pizza/302.json"
+
                     suspendCancellableCoroutine { continuation ->
-                        databaseReference.setValue(role)
+                        databaseReference.setValue(map)
                             .addOnSuccessListener {
                                 continuation.resume(true)
                             }
@@ -114,6 +145,23 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
 
     override fun showError(msg: String?) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+    }
+
+    override fun moveToNextScreen(loginBO: loginBO) {
+        if(loginBO != null){
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser?.uid
+
+            val intent = Intent(this@LoginScreen, BaseActivity::class.java)
+            intent.putExtra("uid",userId)
+            intent.putExtra("role",loginBO.userRole)
+            Log.d("ROLE",loginBO.userRole!!)
+            startActivity(intent)
+            finish()
+        }else{
+            showError("Unable to proceed further!")
+            Log.d("ERR", "bo : $loginBO")
+        }
     }
 
     private fun isUserNameValid(username: String): Boolean {
@@ -139,14 +187,4 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     }
 
 
-    fun moveToNextScreen(role: String){
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userId = currentUser?.uid
-
-        val intent = Intent(this@LoginScreen, BaseActivity::class.java)
-        intent.putExtra("uid",userId)
-        intent.putExtra("role",role)
-        startActivity(intent)
-        finish()
-    }
 }

@@ -9,6 +9,8 @@ out/
 .gradle/
 build/
 local.properties
+gradle.properties
+/gradle.properties
 proguard/
 *.log
 .navigation/
