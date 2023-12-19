@@ -1,4 +1,4 @@
-package com.sdapps.entres.home.ordertaking.food
+package com.sdapps.entres.home.ordertaking.fragment.food
 
 import android.os.Bundle
 import android.util.Log
@@ -23,18 +23,10 @@ class FoodListActivity : AppCompatActivity() {
     private lateinit var adapter: SectionAdapter
     private lateinit var allList: ArrayList<FoodBO>
 
-
-    private lateinit var viewModel : VM
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this)[VM::class.java]
-        Log.d("New","4")
         //val bundle = intent?.extras
 //        val str = bundle?.getString("SEAT")
 //        val tableNumber = bundle?.getString("tableNumber")
@@ -42,39 +34,9 @@ class FoodListActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        Log.d("YourActivity", "onCreateOptionsMenu")
-        menuInflater.inflate(R.menu.top_app_bar, menu)
-        val searchView: SearchView? = menu!!.findItem(R.id.searchIcon).actionView as SearchView?
-        searchView!!.setIconifiedByDefault(false)
-        searchView.isSubmitButtonEnabled = true
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("YourActivity", "onQueryTextChange: $newText")
-                viewModel.setSearchQuery(newText.orEmpty())
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("YourActivity", "onQueryTextSubmit: $query")
-                // Handle the submit action, if needed
-                return false
-            }
-        })
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
-
-
-
 
 
     fun setupViewPagerAndTab() {
-        Log.d("New","5")
         allList = getList()
         val categories: Set<String> = extractCategories(allList)
 

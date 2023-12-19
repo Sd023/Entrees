@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
 import com.sdapps.entres.home.history.VM
-import com.sdapps.entres.home.ordertaking.food.FoodBO
+import com.sdapps.entres.home.ordertaking.fragment.food.FoodBO
 import com.sdapps.entres.interfaces.SearchListener
 
 
@@ -21,8 +21,6 @@ class BaseFoodFragment : Fragment() {
     private lateinit var adapter: FoodAdapter
 
     private lateinit var dataToShow: List<FoodBO>
-
-    private lateinit var viewModel : VM
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,22 +33,16 @@ class BaseFoodFragment : Fragment() {
 
             dataToShow = filterDataByCategory(allData, category)
         }
-
-        viewModel = ViewModelProvider(requireActivity())[VM::class.java]
-
-
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
+        init()
+        return view
+    }
 
-        recyclerView = view.findViewById(R.id.recyclerView)
+    fun init(){
+        recyclerView = requireView().findViewById(R.id.recyclerView)
         adapter = FoodAdapter(dataToShow)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context,3)
-
-
-        viewModel.filteredData.observe(viewLifecycleOwner, Observer {
-            data -> adapter.updateData(data)
-        })
-        return view
     }
 
 

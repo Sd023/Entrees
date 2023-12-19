@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.home.ordertaking.food.FoodBO
+import com.sdapps.entres.home.ordertaking.fragment.food.FoodBO
 
 class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
 
