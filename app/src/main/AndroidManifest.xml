@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FoodListActivity"
+            android:name=".home.ordertaking.food.FoodListActivity"
             android:exported="false" />
         <activity
             android:name=".BaseActivity"

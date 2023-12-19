@@ -33,7 +33,7 @@
             android:layout_below="@id/rectangle_7"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:text=""
+            android:text="Textview"
             android:textColor="@android:color/white"
             android:textSize="15sp" />
 

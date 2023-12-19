@@ -15,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.sdapps.entres.BaseActivity
+import com.sdapps.entres.BaseView
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
 import com.sdapps.entres.databinding.ActivityLoginScreenBinding
@@ -35,13 +36,6 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
-        if (Build.VERSION.SDK_INT < 16) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-            actionBar?.hide()
-        }
         setContentView(binding.root)
 
         presenter = LoginPresenter()
@@ -116,13 +110,9 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
                     val databaseReference = FirebaseDatabase.getInstance().reference.child("users").child(
                         userId
                     )
-
                     val map = HashMap<String,String>()
-
-                    map["role"] = role
+                    map["isFrom"]= "MOBILE"
                     map["createdDate"] = DateTools().now(DATE_TIME)
-                    map["api"] = "https://status.pizza/302.json"
-
                     suspendCancellableCoroutine { continuation ->
                         databaseReference.setValue(map)
                             .addOnSuccessListener {
@@ -144,7 +134,7 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     }
 
     override fun showError(msg: String?) {
-        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, msg!!, Toast.LENGTH_LONG).show()
     }
 
     override fun moveToNextScreen(loginBO: loginBO) {
@@ -180,11 +170,12 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
     override fun onStart() {
         super.onStart()
         val currentUser = firebaseAuth.currentUser
-
-        if (currentUser != null) {
-            Toast.makeText(applicationContext, "Session Expired", Toast.LENGTH_LONG).show()
+        if (currentUser == null) {
+           showError("Session Expired")
         }
     }
+
+
 
 
 }

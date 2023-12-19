@@ -1,6 +1,7 @@
 package com.sdapps.entres
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -10,14 +11,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sdapps.entres.databinding.ActivityMainBinding
 import com.sdapps.entres.home.history.VM
 
-class BaseActivity : AppCompatActivity() {
+class BaseActivity : AppCompatActivity(), BaseView {
 
 
     private lateinit var binding: ActivityMainBinding
 
 
     private val viewModel by lazy {
-        ViewModelProvider(this).get(VM::class.java)
+        ViewModelProvider(this)[VM::class.java]
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class BaseActivity : AppCompatActivity() {
         navView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.orderHistory -> {
-                    viewModel.data = str
+                    viewModel.setData(str!!)
                     val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
                     navController.navigate(R.id.orderHistory)
                     return@setOnItemSelectedListener true
@@ -58,6 +59,10 @@ class BaseActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun showError(msg: String) {
+        Toast.makeText(applicationContext,msg,Toast.LENGTH_LONG).show()
     }
 
 

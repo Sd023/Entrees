@@ -16,14 +16,8 @@ class HistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentHistoryBinding
 
-
     private val viewModel by lazy {
-        ViewModelProvider(requireActivity()).get(VM::class.java)
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        ViewModelProvider(requireActivity())[VM::class.java]
     }
 
     override fun onCreateView(
@@ -31,17 +25,21 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
-        init()
        return binding.root
-    }
-
-    fun init(){
-        val dataFromActivity = viewModel.data
-        binding.role.text = dataFromActivity
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
 
     }
+
+    fun init(){
+        viewModel.data.observe(viewLifecycleOwner){
+            dataFromAliens ->
+            binding.role.text = dataFromAliens
+        }
+    }
+
+
 }

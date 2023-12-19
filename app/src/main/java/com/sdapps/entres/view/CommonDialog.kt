@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.sdapps.entres.FoodListActivity
+import com.sdapps.entres.home.ordertaking.food.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
 
 class CommonDialog() : DialogFragment(),CommonDialogView.View {
@@ -59,9 +59,10 @@ class CommonDialog() : DialogFragment(),CommonDialogView.View {
         cardAdapter.notifyDataSetChanged()
     }
 
-    override fun switchActivity(seat: String) {
+    override fun switchActivity(position: Int, seat: String) {
         val intent = Intent(context, FoodListActivity::class.java)
         intent.putExtra("SEAT",seat)
+        intent.putExtra("tableNumber", position)
         startActivity(intent)
 
     }

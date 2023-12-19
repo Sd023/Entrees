@@ -29,14 +29,17 @@ class CommonDialogAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == itemCount - 1) {
+
+        if (position == itemCount -1){
             holder.tbl.text = "+"
             holder.itemView.setOnClickListener {
                 onLastItemClickListener.onLastItemClick(position)
             }
-        } else {
-            holder.itemView.setOnClickListener(null)
+        }else{
             holder.tbl.text = data[position]
+            holder.itemView.setOnClickListener {
+                view.switchActivity(position, data[position])
+            }
         }
 
     }
