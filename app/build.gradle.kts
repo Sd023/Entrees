@@ -93,5 +93,6 @@ dependencies {
 
     implementation (libs.androidx.lifecycle.viewmodel.ktx.v231)
 
+    implementation (libs.androidx.core.splashscreen)
 
 }

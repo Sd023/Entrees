@@ -33,9 +33,15 @@ class BaseFoodFragment : Fragment() {
 
             dataToShow = filterDataByCategory(allData, category)
         }
+
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
-        init()
         return view
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
     }
 
     fun init(){

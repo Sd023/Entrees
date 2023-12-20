@@ -7,18 +7,25 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.sdapps.entres.core.date.DataMembers.tbl_masterUser
+import com.sdapps.entres.core.date.DataMembers.tbl_masterUserCols
+import com.sdapps.entres.core.date.DateTools
+import com.sdapps.entres.core.date.db.DBHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 class LoginPresenter: LoginHelper.Presenter {
 
     private lateinit var view: LoginHelper.View
     private lateinit var context: Context
+    private lateinit var db : DBHandler
 
-    override fun attachView(view: LoginHelper.View, context: Context) {
+    override fun attachView(view: LoginHelper.View, context: Context, dbHandler: DBHandler) {
         this.view = view
         this.context = context
+        this.db= dbHandler
     }
 
     override fun detachView() {
@@ -29,18 +36,32 @@ class LoginPresenter: LoginHelper.Presenter {
         try{
             firebaseAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener{ task ->
                 if(task.isSuccessful){
-                    getUserDetailsFromId(firebaseAuth.currentUser?.uid)
+                    val currentUser = firebaseAuth.currentUser?.uid
+                    val content = StringBuilder()
+                        .append(QS(currentUser!!))
+                        .append(",")
+                        .append(QS(userName))
+                        .append(",")
+                        .append(QS(DateTools().now(DateTools.DATE_TIME)))
+
+                    db.insertSQL(tbl_masterUser, tbl_masterUserCols, content.toString())
+                    getUserDetailsFromId(currentUser)
                 }else{
-                   view.showError(task.exception?.message)
+                   view.showErrorDialog(task.exception?.message)
                 }
             }
         }catch (ex: Exception){
             Log.d("FIREBASE",ex.printStackTrace().toString())
-            view.showError(ex.message)
+            view.showErrorDialog(ex.message)
         }
     }
 
+    fun QS(data: String?): String{
+        return "'$data'"
+    }
+
     fun getUserDetailsFromId(userId: String?){
+        view.showLoading()
         if(userId != null){
 
             val dbRef = FirebaseDatabase.getInstance().getReference("users")
@@ -56,12 +77,13 @@ class LoginPresenter: LoginHelper.Presenter {
                         }
                         view.moveToNextScreen(bo)
                     }else{
-                        view.showError("Error getting details from firebase!")
+                        view.showErrorDialog("Error getting details from firebase!")
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    view.showError(error.message)
+                    view.showErrorDialog(error.message)
+                    view.hideLoading()
                     Log.d("FIREBASE",error.details)
                 }
             })
@@ -78,7 +100,7 @@ class LoginPresenter: LoginHelper.Presenter {
                             if(it.isSuccessful){
                                 view.checkAndAuthorizeLogin(role)
                             }else{
-                                view.showError(it.exception?.message)
+                                view.showErrorDialog(it.exception?.message)
                             }
                         }
                 }else if(userName.lowercase().contains("_w")){
@@ -87,7 +109,7 @@ class LoginPresenter: LoginHelper.Presenter {
                         if(it.isSuccessful){
                             view.checkAndAuthorizeLogin(role)
                         }else{
-                            view.showError(it.exception?.message)
+                            view.showErrorDialog(it.exception?.message)
                         }
                     }
                 }else if(userName.lowercase().contains("_c")){
@@ -96,7 +118,7 @@ class LoginPresenter: LoginHelper.Presenter {
                         if(it.isSuccessful){
                             view.checkAndAuthorizeLogin(role)
                         }else{
-                            view.showError(it.exception?.message)
+                            view.showErrorDialog(it.exception?.message)
                         }
                     }
                 }

@@ -2,22 +2,18 @@ package com.sdapps.entres.ui.login
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
-import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.sdapps.entres.BaseActivity
-import com.sdapps.entres.BaseView
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
+import com.sdapps.entres.core.date.db.DBHandler
 import com.sdapps.entres.databinding.ActivityLoginScreenBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,27 +22,33 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-class LoginScreen : AppCompatActivity(), LoginHelper.View {
+class LoginScreen : BaseActivity(), LoginHelper.View {
 
     private lateinit var binding: ActivityLoginScreenBinding
     private lateinit var presenter: LoginPresenter
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var dbHandler : DBHandler
+    private lateinit var newBo : loginBO
+
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dbHandler = DBHandler(this)
+        dbHandler.createDataBase()
+        newBo = loginBO()
 
+        progressDialog = ProgressDialog(this)
         presenter = LoginPresenter()
-        presenter.attachView(this, applicationContext)
+        presenter.attachView(this, applicationContext, dbHandler)
 
         firebaseAuth = Firebase.auth
 
         val progressBar = binding.loading
         val loginBtn = binding.login
-
-
 
         loginBtn.setOnClickListener {
             progressBar.progress = 1
@@ -55,6 +57,17 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
             checkValid(username, password)
         }
 
+    }
+
+    override fun showLoading() {
+        progressDialog.setTitle("Loading")
+        progressDialog.setMessage("Checking user session")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+
+    override fun hideLoading() {
+        progressDialog.dismiss()
     }
 
     override fun checkValid(userName: String, password: String) {
@@ -119,7 +132,7 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
                                 continuation.resume(true)
                             }
                             .addOnFailureListener { exception ->
-                                showError(exception.message)
+                                showErrorDialog(exception.message)
                                 continuation.resume(false)
                             }
                     }
@@ -133,11 +146,11 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
         }
     }
 
-    override fun showError(msg: String?) {
-        Toast.makeText(applicationContext, msg!!, Toast.LENGTH_LONG).show()
+    override fun showErrorDialog(msg: String?) {
+        showAlert(msg!!)
     }
 
-    override fun moveToNextScreen(loginBO: loginBO) {
+    override fun moveToNextScreen(loginBO: loginBO?) {
         if(loginBO != null){
             val currentUser = FirebaseAuth.getInstance().currentUser
             val userId = currentUser?.uid
@@ -146,11 +159,9 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
             intent.putExtra("uid",userId)
             intent.putExtra("role",loginBO.userRole)
             Log.d("ROLE",loginBO.userRole!!)
+            hideLoading()
             startActivity(intent)
             finish()
-        }else{
-            showError("Unable to proceed further!")
-            Log.d("ERR", "bo : $loginBO")
         }
     }
 
@@ -169,9 +180,12 @@ class LoginScreen : AppCompatActivity(), LoginHelper.View {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = firebaseAuth.currentUser
+        val currentUser = firebaseAuth.currentUser?.uid
+
         if (currentUser == null) {
            showError("Session Expired")
+        }else{
+            presenter.getUserDetailsFromId(currentUser)
         }
     }
 

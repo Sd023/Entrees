@@ -2,22 +2,26 @@ package com.sdapps.entres.ui.login
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.sdapps.entres.core.date.db.DBHandler
 
 interface LoginHelper {
 
     interface View{
+
+        fun showLoading()
+        fun hideLoading()
         fun checkValid(userName: String, password: String)
         fun checkAndAuthorizeLogin(role: String)
         suspend fun createUserRole(role: String) : Boolean
 
-        fun showError(msg : String?)
+        fun showErrorDialog(msg : String?)
 
-        fun moveToNextScreen(loginBO: loginBO)
+        fun moveToNextScreen(loginBO: loginBO?)
 
     }
 
     interface Presenter{
-        fun attachView(view: LoginHelper.View, context: Context)
+        fun attachView(view: LoginHelper.View, context: Context, dbHandler: DBHandler)
         fun detachView()
         fun login(
             firebaseAuth: FirebaseAuth,

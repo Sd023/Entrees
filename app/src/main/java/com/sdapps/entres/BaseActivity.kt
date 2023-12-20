@@ -8,10 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.sdapps.entres.Commons.CommonDialog
 import com.sdapps.entres.databinding.ActivityMainBinding
 import com.sdapps.entres.home.history.VM
 
-class BaseActivity : AppCompatActivity(), BaseView {
+open class BaseActivity : AppCompatActivity(), BaseView {
 
 
     private lateinit var binding: ActivityMainBinding
@@ -26,8 +27,9 @@ class BaseActivity : AppCompatActivity(), BaseView {
         setContentView(binding.root)
 
         val bundle = intent.extras
-        val str = bundle?.getString("role")
-
+        var str : String? =null
+        if(bundle != null)
+            str = bundle.getString("role")
 
 
 
@@ -36,7 +38,9 @@ class BaseActivity : AppCompatActivity(), BaseView {
         navView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.orderHistory -> {
-                    viewModel.setData(str!!)
+                    if(str != null){
+                        viewModel.setData(str)
+                    }
                     val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
                     navController.navigate(R.id.orderHistory)
                     return@setOnItemSelectedListener true
@@ -63,6 +67,10 @@ class BaseActivity : AppCompatActivity(), BaseView {
 
     override fun showError(msg: String) {
         Toast.makeText(applicationContext,msg,Toast.LENGTH_LONG).show()
+    }
+
+    override fun showAlert(title: String) {
+        CommonDialog(title,false,this)
     }
 
 
