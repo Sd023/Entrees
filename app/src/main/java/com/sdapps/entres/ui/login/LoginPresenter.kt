@@ -72,6 +72,7 @@ class LoginPresenter: LoginHelper.Presenter {
                     if(snapshot.exists()){
                         val role = snapshot.child("role").getValue(String::class.java)
                         val bo = loginBO().apply {
+                            uid = userId
                             userRole = role!!
 
                         }

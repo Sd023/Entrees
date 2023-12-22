@@ -4,6 +4,7 @@ class loginBO {
 
     var username: String? = null
     var password: String? = null
+    var uid: String? = null
 
     var userRole : String? = null
     var imgUrl : String? = null

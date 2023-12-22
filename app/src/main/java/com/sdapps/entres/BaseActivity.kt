@@ -28,8 +28,11 @@ open class BaseActivity : AppCompatActivity(), BaseView {
 
         val bundle = intent.extras
         var str : String? =null
-        if(bundle != null)
+        var uid : String? = null
+        if(bundle != null){
             str = bundle.getString("role")
+            uid = bundle.getString("uid")
+        }
 
 
 
@@ -40,6 +43,7 @@ open class BaseActivity : AppCompatActivity(), BaseView {
                 R.id.orderHistory -> {
                     if(str != null){
                         viewModel.setData(str)
+                        viewModel.setUid(uid!!)
                     }
                     val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
                     navController.navigate(R.id.orderHistory)
