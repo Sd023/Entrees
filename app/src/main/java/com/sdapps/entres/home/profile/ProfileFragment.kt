@@ -38,8 +38,8 @@ class ProfileFragment : Fragment() {
 
         viewModel.getUserProfileData().observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.userName.text = it.name
-                binding.userEmail.text = it.email
+                binding.profileName.text = it.name
+                binding.email.text = it.email
             }
 
         })

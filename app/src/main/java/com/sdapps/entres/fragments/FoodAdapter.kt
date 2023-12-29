@@ -20,8 +20,8 @@ class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.food.text = data[position].food
-        holder.amount.text = data[position].cat
+        holder.food.text = data[position].foodName
+        holder.amount.text = data[position].price.toString()
 
     }
 

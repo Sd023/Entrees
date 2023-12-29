@@ -1,159 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+
+    <LinearLayout
+        android:id="@+id/rowHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="27dp" />
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="39dp"
-        android:scaleType="center"
-        android:src="@drawable/profile_bg"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/righteous_font"
-        android:text="Profile"
-        android:textColor="@color/bg_color"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="112dp"
-        android:layout_marginEnd="72dp"
-        android:elevation="20dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/food_login"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="@+id/cardView"
-        app:layout_constraintHorizontal_bias="0.923"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.099" />
+        android:layout_marginTop="60dp"
+        android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:elevation="0dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/logOutBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintHeight_percent="0.59"
-        app:layout_constraintWidth_percent="0.8">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImg"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:contentDescription="profileImg"/>
+
+        <TextView
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/righteous_font"
+            android:text=""
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/profileRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/righteous_font"
+            android:text=""
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/rowHeader"
+        android:layout_marginTop="15dp"
+        android:background="@color/bg_color" />
 
 
-        <RelativeLayout
-            android:id="@+id/parentRelative"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/kpiLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider1"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/dayOrdersLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
 
 
             <TextView
-                android:id="@+id/userNameLabel"
+                android:id="@+id/dayOrders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="100dp"
+                android:layout_gravity="center"
                 android:fontFamily="@font/righteous_font"
-                android:text="Username"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text=""
-                android:fontFamily="@font/righteous_font"
-                android:textSize="20sp"
-                android:layout_marginTop="6dp"
                 android:textColor="@color/bg_color"
-                android:layout_below="@+id/userNameLabel"
-                android:layout_marginStart="15dp"/>
+                android:textSize="28sp" />
+
 
             <TextView
-                android:id="@+id/emailLabel"
+                android:id="@+id/dayOrdersLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:layout_gravity="center"
                 android:fontFamily="@font/righteous_font"
-                android:layout_below="@+id/userName"
-                android:textSize="14sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
+                android:text="@string/day_orders"
+                android:textColor="@color/bg_color"
+                android:textSize="22sp" />
+        </LinearLayout>
 
-                />
+        <LinearLayout
+            android:id="@+id/totalOrdersLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:orientation="vertical">
+
 
             <TextView
-                android:id="@+id/userEmail"
+                android:id="@+id/totalOrders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/righteous_font"
                 android:text=""
-                android:layout_below="@+id/emailLabel"
-                android:layout_marginStart="15dp"
-                android:textSize="20sp"
-                android:layout_marginTop="6dp"
+                android:textColor="@color/bg_color"
+                android:textSize="28sp" />
+
+
+            <TextView
+                android:id="@+id/totalOrdersLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:fontFamily="@font/righteous_font"
-                android:layout_marginBottom="20dp"
-                android:textColor="@color/bg_color"/>
+                android:text="@string/total_orders"
+                android:textColor="@color/bg_color"
+                android:textSize="22sp" />
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rankingLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:orientation="vertical">
 
 
+            <TextView
+                android:id="@+id/rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/righteous_font"
+                android:text=""
+                android:textColor="@color/bg_color"
+                android:textSize="28sp" />
 
 
+            <TextView
+                android:id="@+id/rankingLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/righteous_font"
+                android:text="@string/rank"
+                android:textColor="@color/bg_color"
+                android:textSize="22sp" />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/kpiLayout"
+        android:layout_marginTop="15dp"
+        android:background="@color/bg_color" />
+
+
+    <LinearLayout
+        android:id="@+id/personalDetailsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/detailsLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/righteous_font"
+            android:text="@string/personal_details"
+            android:textColor="@color/bg_color"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/emailLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/righteous_font"
+            android:text="@string/email"
+            android:textColor="@color/bg_color"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/righteous_font"
+            android:text=""
+            android:textColor="@color/bg_color"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:id="@+id/phoneNumberLbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/righteous_font"
+            android:text="@string/phone"
+            android:textColor="@color/bg_color"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/righteous_font"
+            android:text=""
+            android:textColor="@color/bg_color"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/logOutBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/login_shape"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/btn_shape"
+        android:text="@string/edit"
+        android:textSize="20sp"
         android:fontFamily="@font/righteous_font"
-        android:padding="10dp"
-        android:text="Log out"
         android:textColor="@color/bg_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8896"
-        app:layout_constraintWidth_percent="0.62" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        />
+
+
+</RelativeLayout>

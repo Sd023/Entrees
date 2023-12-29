@@ -19,4 +19,11 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="search">Search</string>
+    <string name="day_orders">Day Orders</string>
+    <string name="total_orders">Total Orders</string>
+    <string name="rank">Rank</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="edit">Edit</string>
 </resources>

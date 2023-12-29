@@ -29,7 +29,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var dbHandler : DBHandler
-    private lateinit var newBo : loginBO
+    private lateinit var newBo : LoginBO
 
     private lateinit var progressDialog: ProgressDialog
 
@@ -39,7 +39,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         setContentView(binding.root)
         dbHandler = DBHandler(this)
         dbHandler.createDataBase()
-        newBo = loginBO()
+        newBo = LoginBO()
 
         progressDialog = ProgressDialog(this)
         presenter = LoginPresenter()
@@ -150,7 +150,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         showAlert(msg!!)
     }
 
-    override fun moveToNextScreen(loginBO: loginBO?) {
+    override fun moveToNextScreen(loginBO: LoginBO?) {
         if(loginBO != null){
             val currentUser = FirebaseAuth.getInstance().currentUser
             val userId = currentUser?.uid

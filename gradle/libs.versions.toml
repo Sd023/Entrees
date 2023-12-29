@@ -4,6 +4,7 @@ androidx-lifecycle-viewmodel-ktx = "2.3.1"
 converter-gson = "2.3.0"
 core-splashscreen = "1.0.1"
 gradle = "8.1.2"
+gson = "2.10.1"
 kotlin = "1.8.0"
 core-ktx = "1.12.0"
 junit = "4.13.2"
@@ -27,6 +28,7 @@ androidx-lifecycle-viewmodel-ktx-v231 = { module = "androidx.lifecycle:lifecycle
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

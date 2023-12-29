@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="day_orders">Day Orders</string>
+    <string name="total_orders">Total Orders</string>
+    <string name="rank">Rank</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="edit">Edit</string>
+</resources>

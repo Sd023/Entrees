@@ -5,14 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.home.history.VM
 import com.sdapps.entres.home.ordertaking.fragment.food.FoodBO
-import com.sdapps.entres.interfaces.SearchListener
 
 
 class BaseFoodFragment : Fragment() {
@@ -53,7 +49,7 @@ class BaseFoodFragment : Fragment() {
 
 
     private fun filterDataByCategory(allData: List<FoodBO>, category: String): List<FoodBO> {
-        return allData.filter { it.cat == category }
+        return allData.filter { it.category == category }
     }
 
 

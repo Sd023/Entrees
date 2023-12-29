@@ -1,6 +1,6 @@
 package com.sdapps.entres.ui.login
 
-class loginBO {
+class LoginBO {
 
     var username: String? = null
     var password: String? = null

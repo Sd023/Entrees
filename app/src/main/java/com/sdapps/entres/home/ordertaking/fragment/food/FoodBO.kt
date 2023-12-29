@@ -3,11 +3,14 @@ package com.sdapps.entres.home.ordertaking.fragment.food
 import android.os.Parcel
 import android.os.Parcelable
 
-data class FoodBO(val cat: String, val food: String) : Parcelable {
+data class FoodBO(val category: String, val foodName: String, val price:Int) : Parcelable {
+
+
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readInt()
     )
 
     override fun describeContents(): Int {
@@ -15,8 +18,9 @@ data class FoodBO(val cat: String, val food: String) : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(cat)
-        dest.writeString(food)
+        dest.writeString(category)
+        dest.writeString(foodName)
+        dest.writeInt(price)
     }
 
     companion object CREATOR : Parcelable.Creator<FoodBO> {
