@@ -20,7 +20,7 @@
             android:name=".SplashActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.login.LoginScreen"
+            android:name=".main.login.view.LoginScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,10 +29,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.ordertaking.frag.view.FoodListActivity"
+            android:name=".main.food.view.view.FoodListActivity"
             android:exported="false" />
         <activity
-            android:name=".BaseActivity"
+            android:name=".main.base.BaseActivity"
             android:exported="false"></activity>
     </application>
 

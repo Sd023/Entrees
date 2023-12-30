@@ -20,12 +20,12 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            storeFile = file("D:\\test_project\\Test\\entrees.jks")
-            storePassword = "23012301"
-            keyAlias = "key0"
-            keyPassword = "23012301"
-        }
+//        create("release") {
+//            storeFile = file("D:\\test_project\\Test\\entrees.jks")
+//            storePassword = "23012301"
+//            keyAlias = "key0"
+//            keyPassword = "23012301"
+//        }
 
     }
 
@@ -40,7 +40,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            //signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

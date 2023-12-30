@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/orderHistory"
-        android:name="com.sdapps.entres.home.history.HistoryFragment"
+        android:name="com.sdapps.entres.main.home.history.HistoryFragment"
         android:label="@string/order_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/orderTaking"
-        android:name="com.sdapps.entres.home.ordertaking.ui.view.OrderTakingFragment"
+        android:name="com.sdapps.entres.main.home.ordertaking.orderfrag.view.OrderTakingFragment"
         android:label="@string/order_taking"
         tools:layout="@layout/fragment_order_taking" />
 
     <fragment
         android:id="@+id/profile"
-        android:name="com.sdapps.entres.home.profile.ProfileFragment"
+        android:name="com.sdapps.entres.main.home.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
