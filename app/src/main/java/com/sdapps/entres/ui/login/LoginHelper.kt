@@ -16,7 +16,7 @@ interface LoginHelper {
 
         fun showErrorDialog(msg : String?)
 
-        fun moveToNextScreen(loginBO: LoginBO?)
+        fun moveToNextScreen()
 
     }
 

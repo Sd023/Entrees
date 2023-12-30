@@ -2,11 +2,12 @@ package com.sdapps.entres.ui.login
 
 class LoginBO {
 
-    var username: String? = null
-    var password: String? = null
-    var uid: String? = null
+    var currentUserUid : String? = null
+    var email: String? = null
+    var role: String? = null
+    var userId : Int? = null
+    var hotel: String? = null
+    var hotelBranch : String? = null
 
-    var userRole : String? = null
-    var imgUrl : String? = null
-    var createdDate : String? = null
+
 }

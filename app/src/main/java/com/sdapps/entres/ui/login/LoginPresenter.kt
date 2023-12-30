@@ -7,10 +7,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.sdapps.entres.core.date.DataMembers
 import com.sdapps.entres.core.date.DataMembers.tbl_foodDataMaster
 import com.sdapps.entres.core.date.DataMembers.tbl_foodMasterCols
-import com.sdapps.entres.core.date.DataMembers.tbl_masterUser
-import com.sdapps.entres.core.date.DataMembers.tbl_masterUserCols
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.db.DBHandler
 import kotlinx.coroutines.CoroutineScope
@@ -45,18 +44,16 @@ class LoginPresenter : LoginHelper.Presenter {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val currentUser = firebaseAuth.currentUser?.uid
-                        val content = StringBuilder()
-                            .append(QS(currentUser!!))
-                            .append(",")
-                            .append(QS(userName))
-                            .append(",")
-                            .append(QS(DateTools().now(DateTools.DATE_TIME)))
-
-                        db.insertSQL(tbl_masterUser, tbl_masterUserCols, content.toString())
-                        getUserDetailsFromId(currentUser)
+                        getUserDetailsFromId(currentUser, true)
                     } else {
                         view.showErrorDialog(task.exception?.message)
                     }
+                }
+                .addOnCanceledListener {
+                    view.showErrorDialog("Failed")
+                }
+                .addOnFailureListener {
+                    view.showErrorDialog(it.message)
                 }
         } catch (ex: Exception) {
             Log.d("FIREBASE", ex.printStackTrace().toString())
@@ -64,48 +61,46 @@ class LoginPresenter : LoginHelper.Presenter {
         }
     }
 
-    fun QS(data: String?): String {
+    fun QS(data: Any?): String {
         return "'$data'"
     }
 
-    fun getUserDetailsFromId(userId: String?) {
+    fun getUserDetailsFromId(currentUserID: String?, isNewLogin: Boolean) {
         view.showLoading()
-        if (userId != null) {
+        if (currentUserID != null) {
 
-            val dbRef = FirebaseDatabase.getInstance().getReference("users")
-            dbRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            if(isNewLogin){
+                val dbRef = FirebaseDatabase.getInstance().getReference("users")
+                dbRef.child(currentUserID).addListenerForSingleValueEvent(object : ValueEventListener {
 
-                override fun onDataChange(snapshot: DataSnapshot) {
+                    override fun onDataChange(snapshot: DataSnapshot) {
 
-                    if (snapshot.exists()) {
+                        if (snapshot.exists()) {
 
-                        val hotelData = snapshot.getValue(HotelBO::class.java)
-
-                        val hotelBO = HotelBO().apply {
-                            hotel = hotelData?.hotel
-                            hotelBranch = hotelData?.hotelBranch
+                            val userData = snapshot.getValue(LoginBO::class.java)
+                            val bo = LoginBO().apply {
+                                currentUserUid = currentUserID
+                                email = userData?.email
+                                role = userData?.role
+                                userId = userData?.userId
+                                hotel = userData?.hotel
+                                hotelBranch = userData?.hotelBranch
+                            }
+                            insertUserMasterRecords(bo)
+                        } else {
+                            view.showErrorDialog("Error getting details from firebase!")
                         }
-                        downloadTheHotelData(hotelBO)
-
-
-                        val role = snapshot.child("role").getValue(String::class.java)
-                        val bo = LoginBO().apply {
-                            uid = userId
-                            userRole = role!!
-
-                        }
-                        view.moveToNextScreen(bo)
-                    } else {
-                        view.showErrorDialog("Error getting details from firebase!")
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    view.showErrorDialog(error.message)
-                    view.hideLoading()
-                    Log.d("FIREBASE", error.details)
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        view.showErrorDialog(error.message)
+                        view.hideLoading()
+                        Log.d("FIREBASE", error.details)
+                    }
+                })
+            }else{
+                view.moveToNextScreen()
+            }
         }
     }
 
@@ -153,14 +148,43 @@ class LoginPresenter : LoginHelper.Presenter {
     }
 
 
-    fun downloadTheHotelData(bo: HotelBO) {
+    fun insertUserMasterRecords(bo: LoginBO){
+        try {
+            db.openDataBase()
+            val content = StringBuilder()
+                .append(QS(bo.currentUserUid!!))
+                .append(",")
+                .append(QS(bo.email))
+                .append(",")
+                .append(bo.userId)
+                .append(",")
+                .append(QS(bo.role))
+                .append(",")
+                .append(QS(bo.hotel))
+                .append(",")
+                .append(QS(bo.hotelBranch))
+                .append(",")
+                .append(QS(DateTools().now(DateTools.DATE_TIME)))
+            db.insertSQL(DataMembers.tbl_masterUser, DataMembers.tbl_masterUserCols, content.toString())
+            downloadTheHotelData(bo)
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+    }
+
+
+    fun downloadTheHotelData(bo: LoginBO) {
         foodBOMaster = HotelBO()
         masterItemList = mutableListOf()
         CoroutineScope(Dispatchers.IO).launch {
 
-            val hotelDBRef = FirebaseDatabase.getInstance().getReference("hotels").child(bo.hotel!!)
+            val hotelDBRef = FirebaseDatabase
+                .getInstance()
+                .getReference("hotels")
+                .child(bo.hotel!!)
 
-            hotelDBRef.child(bo.hotelBranch!!).child("FoodMenu")
+            hotelDBRef.child(bo.hotelBranch!!)
+                .child("FoodMenu")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -192,6 +216,10 @@ class LoginPresenter : LoginHelper.Presenter {
 
                     }
                 })
+
+            CoroutineScope(Dispatchers.Main).launch {
+                view.moveToNextScreen()
+            }
         }
     }
 

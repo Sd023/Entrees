@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/orderTaking"
-        android:name="com.sdapps.entres.home.ordertaking.OrderTakingFragment"
+        android:name="com.sdapps.entres.home.ordertaking.ui.view.OrderTakingFragment"
         android:label="@string/order_taking"
         tools:layout="@layout/fragment_order_taking" />
 

@@ -1,4 +1,4 @@
-package com.sdapps.entres.home.ordertaking.fragment.food
+package com.sdapps.entres.home.ordertaking.frag.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.sdapps.entres.core.date.db.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.fragments.BaseFoodFragment
+import com.sdapps.entres.home.ordertaking.frag.presenter.FoodActivityManager
+import com.sdapps.entres.home.ordertaking.frag.FoodBO
+import com.sdapps.entres.home.ordertaking.frag.presenter.FoodListPresenter
 
 
 class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {

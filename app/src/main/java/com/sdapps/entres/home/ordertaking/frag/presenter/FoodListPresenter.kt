@@ -1,7 +1,8 @@
-package com.sdapps.entres.home.ordertaking.fragment.food
+package com.sdapps.entres.home.ordertaking.frag.presenter
 
 import android.content.Context
 import com.sdapps.entres.core.date.db.DBHandler
+import com.sdapps.entres.home.ordertaking.frag.FoodBO
 
 class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 

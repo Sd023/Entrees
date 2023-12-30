@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.sdapps.entres.home.ordertaking.fragment.food.FoodListActivity
+import com.sdapps.entres.home.ordertaking.frag.view.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
 
 class CommonDialog() : DialogFragment(),CommonDialogView.View {
@@ -40,7 +40,7 @@ class CommonDialog() : DialogFragment(),CommonDialogView.View {
     fun initAll(){
             val tblText =  "Table: $position"
             binding.tblTxt.text = tblText
-            data = arrayListOf("A","B","C")
+            data = arrayListOf("A","B")
             cardAdapter = CommonDialogAdapter(data,object : CommonDialogAdapter.OnLastItemClickListener{
                 override fun onLastItemClick(lastPos: Int) {
                     addNewElement(lastPos)
@@ -50,7 +50,7 @@ class CommonDialog() : DialogFragment(),CommonDialogView.View {
     }
 
     fun addNewElement(lastPos : Int){
-        val alphabets = arrayListOf("A","B","C","D","E","F","G","H")
+        val alphabets = arrayListOf("+")
         if (lastPos < alphabets.lastIndex){
             data.add(alphabets[lastPos + 1])
         } else{

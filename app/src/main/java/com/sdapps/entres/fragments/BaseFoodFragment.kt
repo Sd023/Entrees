@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.home.ordertaking.fragment.food.FoodBO
+import com.sdapps.entres.home.ordertaking.frag.FoodBO
 
 
 class BaseFoodFragment : Fragment() {

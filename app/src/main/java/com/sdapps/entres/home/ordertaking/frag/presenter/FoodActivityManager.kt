@@ -1,6 +1,7 @@
-package com.sdapps.entres.home.ordertaking.fragment.food
+package com.sdapps.entres.home.ordertaking.frag.presenter
 
 import com.sdapps.entres.core.date.db.DBHandler
+import com.sdapps.entres.home.ordertaking.frag.FoodBO
 
 interface FoodActivityManager {
 
@@ -8,7 +9,7 @@ interface FoodActivityManager {
 
     }
     interface Presenter{
-        fun attachView(view: FoodActivityManager.View)
+        fun attachView(view: View)
         fun getFoodMasterList(db: DBHandler): ArrayList<FoodBO>
     }
 }

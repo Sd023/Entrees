@@ -150,19 +150,11 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         showAlert(msg!!)
     }
 
-    override fun moveToNextScreen(loginBO: LoginBO?) {
-        if(loginBO != null){
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val userId = currentUser?.uid
-
+    override fun moveToNextScreen() {
             val intent = Intent(this@LoginScreen, BaseActivity::class.java)
-            intent.putExtra("uid",userId)
-            intent.putExtra("role",loginBO.userRole)
-            Log.d("ROLE",loginBO.userRole!!)
             hideLoading()
             startActivity(intent)
             finish()
-        }
     }
 
     private fun isUserNameValid(username: String): Boolean {
@@ -185,7 +177,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         if (currentUser == null) {
            showError("Session Expired")
         }else{
-            presenter.getUserDetailsFromId(currentUser)
+            presenter.getUserDetailsFromId(currentUser,false)
         }
     }
 

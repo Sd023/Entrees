@@ -1,4 +1,4 @@
-package com.sdapps.entres.home.ordertaking
+package com.sdapps.entres.home.ordertaking.ui
 
 class OrderTakingBO {
     companion object{

@@ -1,7 +1,6 @@
-package com.sdapps.entres.home.ordertaking
+package com.sdapps.entres.home.ordertaking.ui.view
 
 import android.content.Context
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.view.CommonDialog
-import kotlin.random.Random
+import com.sdapps.entres.home.ordertaking.ui.presenter.OrderTakingManager
 
-class OrderTakingAdapter(private val data: ArrayList<Int>, private var context : Context,private var view: OrderTaking.View): RecyclerView.Adapter<OrderTakingAdapter.ViewHolder>() {
+class OrderTakingAdapter(private val data: ArrayList<Int>,private val map: HashMap<Int,String>, private var context : Context,private var view: OrderTakingManager.View): RecyclerView.Adapter<OrderTakingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,15 +23,18 @@ class OrderTakingAdapter(private val data: ArrayList<Int>, private var context :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try{
-            val text ="Table : ${data[position]}"
+            val text = "Table : ${data[position]}"
 
-            if(data[position] == 2){
+            val statusMap = data.mapNotNull { key -> map[key] }
+
+            if(statusMap[position]!!.contains("DEAD")){
                 holder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.dead_table))
-            }else if (data[position] == 5){
+            }else if(statusMap[position]!!.contains("ORD")){
                 holder.layout.setBackgroundColor(ContextCompat.getColor(context,R.color.avail_table))
-            }else {
+            }else{
                 holder.layout.setBackgroundColor(ContextCompat.getColor(context,R.color.empty_table))
             }
+
 
             holder.layout.setOnClickListener {
                 view.showDialog(data[position])

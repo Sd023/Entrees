@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.ordertaking.fragment.food.FoodListActivity"
+            android:name=".home.ordertaking.frag.view.FoodListActivity"
             android:exported="false" />
         <activity
             android:name=".BaseActivity"

@@ -1,4 +1,4 @@
-package com.sdapps.entres.home.ordertaking.fragment.food
+package com.sdapps.entres.home.ordertaking.frag
 
 import android.os.Parcel
 import android.os.Parcelable
