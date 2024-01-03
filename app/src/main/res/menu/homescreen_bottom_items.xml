@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/orderHistory"
-        android:enabled="true"
-        android:title="@string/order_history"
-        android:icon="@drawable/star_history"/>
-
+    
     <item
         android:id="@+id/orderTaking"
         android:enabled="true"

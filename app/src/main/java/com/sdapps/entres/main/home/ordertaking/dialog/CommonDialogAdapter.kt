@@ -7,11 +7,12 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
+import com.sdapps.entres.main.login.data.HotelBO
 
 
 class CommonDialogAdapter(
-    private var data: ArrayList<String>,
-    private var onLastItemClickListener: OnLastItemClickListener,
+    private var data: ArrayList<HotelBO.Seats>?,
+//    private var onLastItemClickListener: OnLastItemClickListener,
     private var view: CommonDialogView.View
 ) : RecyclerView.Adapter<CommonDialogAdapter.ViewHolder>() {
 
@@ -25,22 +26,23 @@ class CommonDialogAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return data!!.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if (position == itemCount -1){
-            holder.tbl.text = "+"
-            holder.itemView.setOnClickListener {
-                onLastItemClickListener.onLastItemClick(position)
-            }
-        }else{
-            holder.tbl.text = data[position]
-            holder.itemView.setOnClickListener {
-                view.switchActivity(position, data[position])
-            }
+        // Dynamically add seats in mobile. Not in use for now
+//        if (position == itemCount -1){
+//            holder.tbl.text = "+"
+//            holder.itemView.setOnClickListener {
+//                onLastItemClickListener.onLastItemClick(position)
+//            }
+//        }else{
+        holder.tbl.text = data?.get(position)?.seatNumber ?: ""
+        holder.itemView.setOnClickListener {
+            view.switchActivity(position, data?.get(position)!!.tblId)
         }
+        //}
 
     }
 
@@ -57,13 +59,13 @@ class CommonDialogAdapter(
         var cardView: CardView = itemView.findViewById(R.id.cardView)
     }
 
-    interface OnLastItemClickListener {
-        fun onLastItemClick(lastPos: Int)
-    }
-
-    fun handleCardClick(position: Int, holder: ViewHolder) {
-
-    }
+//    interface OnLastItemClickListener {
+//        fun onLastItemClick(lastPos: Int)
+//    }
+//
+//    fun handleCardClick(position: Int, holder: ViewHolder) {
+//
+//    }
 
 
 }

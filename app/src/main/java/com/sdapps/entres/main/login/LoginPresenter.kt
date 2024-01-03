@@ -51,12 +51,6 @@ class LoginPresenter : LoginHelper.Presenter {
                         view.showErrorDialog(task.exception?.message)
                     }
                 }
-                .addOnCanceledListener {
-                    view.showErrorDialog("Failed")
-                }
-                .addOnFailureListener {
-                    view.showErrorDialog(it.message)
-                }
         } catch (ex: Exception) {
             Log.d("FIREBASE", ex.printStackTrace().toString())
             view.showErrorDialog(ex.message)

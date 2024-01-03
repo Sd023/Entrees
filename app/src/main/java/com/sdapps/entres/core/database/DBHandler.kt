@@ -59,6 +59,7 @@ class DBHandler(val context: Context): SQLiteOpenHelper(context, DB_NAME, null, 
 
 
     fun dbRawQuery(sql: String){
+        Log.d("QUERY","-> $sql")
         sqlite!!.execSQL(sql)
     }
 

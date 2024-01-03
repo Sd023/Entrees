@@ -1,16 +1,18 @@
 package com.sdapps.entres.main.home.ordertaking.orderfrag.presenter
 
+import com.sdapps.entres.core.database.DBHandler
+
 interface OrderTakingManager {
 
-    interface View{
+    interface View {
         fun showDialog(position: Int)
-        fun setupView(list: ArrayList<Int>,map: HashMap<Int,String>)
+        fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>)
     }
 
 
-    interface Presenter{
+    interface Presenter {
 
-        fun attachView(view: View)
+        fun attachView(view: View, db: DBHandler)
         fun loadUserDetails()
 
         fun tableRef()

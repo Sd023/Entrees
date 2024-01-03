@@ -1,25 +1,26 @@
 package com.sdapps.entres.main.base
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sdapps.entres.R
-import com.sdapps.entres.core.Commons.CommonDialog
 import com.sdapps.entres.databinding.ActivityMainBinding
-import com.sdapps.entres.main.home.history.VM
 
 open class BaseActivity : AppCompatActivity(), BaseView {
 
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var alert: AlertDialog
 
-
-    private val viewModel by lazy {
-        ViewModelProvider(this)[VM::class.java]
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,15 +40,6 @@ open class BaseActivity : AppCompatActivity(), BaseView {
 
         navView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.orderHistory -> {
-                    if(str != null){
-                        viewModel.setData(str)
-                        viewModel.setUid(uid!!)
-                    }
-                    val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
-                    navController.navigate(R.id.orderHistory)
-                    return@setOnItemSelectedListener true
-                }
 
                 R.id.orderTaking -> {
                     val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
@@ -73,7 +65,19 @@ open class BaseActivity : AppCompatActivity(), BaseView {
     }
 
     override fun showAlert(title: String) {
-        CommonDialog(title,false,this)
+        val layoutInflator = this.layoutInflater
+        val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout,null)
+        dialog = AlertDialog.Builder(this).setView(dialogView)
+        val dialogText = dialogView.findViewById<TextView>(R.id.titleDialog)
+        val btn = dialogView.findViewById<Button>(R.id.btn_done)
+        dialogText.text = title
+        alert = dialog.create()
+        alert.show()
+
+        btn.setOnClickListener{
+            alert.dismiss()
+        }
+
     }
 
 

@@ -8,4 +8,10 @@ object DataMembers {
      const val tbl_foodDataMaster = "FoodDataMaster"
      const val tbl_foodMasterCols = "id,foodName,category,price,imgUrl"
 
+     const val tbl_tableMaster = "TableMaster"
+     const val tbl_tableMasterCols = "tableId,tableName,isStatus"
+
+     const val tbl_tableSeatMapping = "TableSeatMapping"
+     const val tbl_tableSeatMappingCols = "tableId,tableName,seatNum"
+
 }

@@ -4,11 +4,13 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.main.base.BaseActivity
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
@@ -17,6 +19,7 @@ import com.sdapps.entres.databinding.ActivityLoginScreenBinding
 import com.sdapps.entres.main.login.LoginHelper
 import com.sdapps.entres.main.login.LoginPresenter
 import com.sdapps.entres.main.login.data.LoginBO
+import com.sdapps.entres.network.NetworkTools
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +27,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-class LoginScreen : BaseActivity(), LoginHelper.View {
+class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     private lateinit var binding: ActivityLoginScreenBinding
     private lateinit var presenter: LoginPresenter
@@ -52,12 +55,9 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         val progressBar = binding.loading
         val loginBtn = binding.login
 
-        loginBtn.setOnClickListener {
-            progressBar.progress = 1
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
-            checkValid(username, password)
-        }
+        loginBtn.setOnClickListener(this)
+        ClickGuard.guard(loginBtn)
+
 
     }
 
@@ -183,7 +183,15 @@ class LoginScreen : BaseActivity(), LoginHelper.View {
         }
     }
 
-
+    override fun onClick(v: View?) {
+        if(NetworkTools().isAvailableConnection(this@LoginScreen)){
+            val username = binding.username.text.toString()
+            val password = binding.password.text.toString()
+            checkValid(username, password)
+        }else{
+            showErrorDialog("No Internet Connection")
+        }
+    }
 
 
 }
