@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/rowHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,17 +44,14 @@
             android:text=""
             android:textSize="24sp" />
     </LinearLayout>
-
-    <View
+        <View
         android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/rowHeader"
         android:layout_marginTop="15dp"
         android:background="@color/bg_color" />
-
-
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/kpiLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -154,17 +155,14 @@
 
 
     </LinearLayout>
-
-    <View
+        <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/kpiLayout"
         android:layout_marginTop="15dp"
         android:background="@color/bg_color" />
-
-
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/personalDetailsLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -229,8 +227,7 @@
             android:textColor="@color/bg_color"
             android:textSize="20sp" />
     </LinearLayout>
-
-    <Button
+        <Button
         android:layout_width="300dp"
         android:layout_height="70dp"
         android:layout_below="@+id/personalDetailsLayout"
@@ -243,6 +240,6 @@
 
         android:textColor="@color/bg_color"
         android:textSize="20sp" />
+    </RelativeLayout>
 
-
-</RelativeLayout>
+</ScrollView>
