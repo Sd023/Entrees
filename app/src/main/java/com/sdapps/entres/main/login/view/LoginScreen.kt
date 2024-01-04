@@ -3,6 +3,7 @@ package com.sdapps.entres.main.login.view
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -40,6 +41,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("ActivityLifeCycle","onCreate")
         binding = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dbHandler = DBHandler(this)
@@ -61,15 +63,14 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     }
 
-    override fun showLoading() {
-        progressDialog.setTitle("Loading")
-        progressDialog.setMessage("Checking user session")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
-    }
-
-    override fun hideLoading() {
-        progressDialog.dismiss()
+    override fun onClick(v: View?) {
+        if(NetworkTools().isAvailableConnection(this@LoginScreen)){
+            val username = binding.username.text.toString()
+            val password = binding.password.text.toString()
+            checkValid(username, password)
+        }else{
+            showErrorDialog("No Internet Connection")
+        }
     }
 
     override fun checkValid(userName: String, password: String) {
@@ -86,8 +87,9 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         } else if (!isPasswordValid(password)) {
             Toast.makeText(applicationContext, "Password length less", Toast.LENGTH_LONG).show()
         } else {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 //presenter.register(firebaseAuth, userName, password)
+                showLoading()
                 presenter.login(firebaseAuth,userName,password)
             }
 
@@ -95,7 +97,18 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     }
 
-    override fun checkAndAuthorizeLogin(role: String) {
+
+    override fun showLoading() {
+        progressDialog.setTitle("Loading")
+        progressDialog.setMessage("Checking user session")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+
+    override fun hideLoading() {
+        progressDialog.dismiss()
+    }
+    override fun checkAndRegisterUser(role: String) {
         CoroutineScope(Dispatchers.Main).launch {
             if (createUserRole(role)) {
                 //showProgress()
@@ -174,24 +187,20 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
+        Log.d("ActivityLifeCycle","onStart")
         val currentUser = firebaseAuth.currentUser?.uid
-
         if (currentUser == null) {
-           showError("Session Expired")
+           Log.d("USERCURRENT: ", currentUser.toString())
         }else{
+            showLoading()
             presenter.getUserDetailsFromId(currentUser,false)
         }
     }
 
-    override fun onClick(v: View?) {
-        if(NetworkTools().isAvailableConnection(this@LoginScreen)){
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
-            checkValid(username, password)
-        }else{
-            showErrorDialog("No Internet Connection")
-        }
-    }
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("ActivityLifeCycle","onPause")
+    }
 
 }

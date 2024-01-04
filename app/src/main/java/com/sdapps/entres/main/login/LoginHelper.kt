@@ -11,7 +11,7 @@ interface LoginHelper {
         fun showLoading()
         fun hideLoading()
         fun checkValid(userName: String, password: String)
-        fun checkAndAuthorizeLogin(role: String)
+        fun checkAndRegisterUser(role: String)
         suspend fun createUserRole(role: String) : Boolean
 
         fun showErrorDialog(msg : String?)

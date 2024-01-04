@@ -45,6 +45,7 @@ class OrderTakingPresenter(private var context: Context) : OrderTakingManager.Pr
 
 
             val db = DBHandler(context)
+            db.createDataBase()
             db.openDataBase()
 
             val cursor = db.selectSQL("select hotel,hotelBranch from MasterUser")

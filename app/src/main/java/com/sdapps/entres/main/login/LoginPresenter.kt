@@ -48,10 +48,12 @@ class LoginPresenter : LoginHelper.Presenter {
                         val currentUser = firebaseAuth.currentUser?.uid
                         getUserDetailsFromId(currentUser, true)
                     } else {
+                        view.hideLoading()
                         view.showErrorDialog(task.exception?.message)
                     }
                 }
         } catch (ex: Exception) {
+            view.hideLoading()
             Log.d("FIREBASE", ex.printStackTrace().toString())
             view.showErrorDialog(ex.message)
         }
@@ -62,7 +64,7 @@ class LoginPresenter : LoginHelper.Presenter {
     }
 
     fun getUserDetailsFromId(currentUserID: String?, isNewLogin: Boolean) {
-        view.showLoading()
+
         if (currentUserID != null) {
 
             if(isNewLogin){
@@ -109,7 +111,7 @@ class LoginPresenter : LoginHelper.Presenter {
                     firebaseAuth.createUserWithEmailAndPassword(userName, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                view.checkAndAuthorizeLogin(role)
+                                view.checkAndRegisterUser(role)
                             } else {
                                 view.showErrorDialog(it.exception?.message)
                             }
@@ -119,7 +121,7 @@ class LoginPresenter : LoginHelper.Presenter {
                     firebaseAuth.createUserWithEmailAndPassword(userName, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                view.checkAndAuthorizeLogin(role)
+                                view.checkAndRegisterUser(role)
                             } else {
                                 view.showErrorDialog(it.exception?.message)
                             }
@@ -129,7 +131,7 @@ class LoginPresenter : LoginHelper.Presenter {
                     firebaseAuth.createUserWithEmailAndPassword(userName, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                view.checkAndAuthorizeLogin(role)
+                                view.checkAndRegisterUser(role)
                             } else {
                                 view.showErrorDialog(it.exception?.message)
                             }
