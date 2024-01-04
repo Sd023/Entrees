@@ -7,6 +7,8 @@ interface OrderTakingManager {
     interface View {
         fun showDialog(position: Int)
         fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>)
+
+        fun showAlertDialog(msg: String)
     }
 
 

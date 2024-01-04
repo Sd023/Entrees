@@ -11,10 +11,10 @@
         android:id="@+id/nav_host_fragment_activity_home_class"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
+        android:layout_marginBottom="100dp"
         app:navGraph="@navigation/nav_graph" />
 
 

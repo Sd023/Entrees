@@ -5,18 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
 import com.sdapps.entres.main.food.view.FoodBO
+import com.sdapps.entres.network.NetworkTools
 
 
-class BaseFoodFragment : Fragment() {
+open class BaseFoodFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FoodAdapter
 
     private lateinit var dataToShow: List<FoodBO>
+    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var alert: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +45,22 @@ class BaseFoodFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-
     fun init(){
+        if(NetworkTools().isAvailableConnection(requireContext())){
+            recyclerView = requireView().findViewById(R.id.recyclerView)
+            adapter = FoodAdapter(dataToShow)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = GridLayoutManager(context,3)
+        }else {
+            hideAllViews()
+            showAlert("Connect To Network")
+        }
+
+    }
+
+    fun hideAllViews(){
         recyclerView = requireView().findViewById(R.id.recyclerView)
-        adapter = FoodAdapter(dataToShow)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context,3)
+        recyclerView.visibility = View.GONE
     }
 
 
@@ -63,6 +79,23 @@ class BaseFoodFragment : Fragment() {
                     putString(ARG_CATEGORY, category)
                 }
             }
+        }
+    }
+
+    fun showAlert(err: String){
+        val layoutInflator = this.layoutInflater
+        val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout,null)
+        dialog = AlertDialog.Builder(requireContext()).setView(dialogView)
+        val dialogText = dialogView.findViewById<TextView>(R.id.titleDialog)
+        val btn = dialogView.findViewById<Button>(R.id.btn_done)
+        dialogText.text = err
+        dialog.setCancelable(false)
+        alert = dialog.create()
+        alert.show()
+
+        btn.setOnClickListener{
+            alert.dismiss()
+            init()
         }
     }
 }
