@@ -104,6 +104,11 @@ class DBHandler(val context: Context): SQLiteOpenHelper(context, DB_NAME, null, 
             Log.e("Cant open DB", e.message!!)
         }
     }
+
+    fun shutDownDB(){
+        if(sqlite != null)
+            this.sqlite!!.close()
+    }
     fun dbExport(newVersion: Int){
 
         val dbPATH = context.getDatabasePath(DB_NAME).path

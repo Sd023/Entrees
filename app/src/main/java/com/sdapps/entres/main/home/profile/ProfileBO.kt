@@ -9,4 +9,9 @@ class ProfileBO {
     var memberSince: Int? = null
     var role : String? = null
     var isFrom: String? = null
+
+
+    var dayOrder : Int? = null
+    var rank : Int? = null
+    var totalOrders : Int? = null
 }

@@ -1,29 +1,42 @@
 package com.sdapps.entres.main.home.profile
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.sdapps.entres.R
+import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.databinding.FragmentProfileBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
 import com.sdapps.entres.network.NetworkTools
 
-class ProfileFragment : Fragment() {
+class ProfileFragment() : Fragment(){
 
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
 
+    private lateinit var storageRef: FirebaseStorage
+
     private val viewModel by lazy {
-        ViewModelProvider(this)[ProfileVM::class.java]
+        ViewModelProvider(this, ProfileFactory(requireActivity().application))[ProfileVM::class.java]
     }
 
     override fun onCreateView(
@@ -41,18 +54,46 @@ class ProfileFragment : Fragment() {
         initProfile()
     }
 
+
     fun initProfile(){
         if(NetworkTools().isAvailableConnection(requireContext())){
             viewModel.getUserProfileData().observe(viewLifecycleOwner, Observer {
                 it?.let {
                     binding.profileName.text = it.name
-                    binding.email.text = it.email
+                    binding.email.text= it.email
+                    binding.profileRole.text = it.role
+                    binding.dayOrders.text = it.dayOrder.toString() ?: ""
+                    binding.totalOrders.text = it.totalOrders.toString() ?: ""
+                    binding.phone.text = it.contact
+                    binding.rank.text = it.rank.toString() ?: ""
+                    val ref= Firebase.storage.getReferenceFromUrl(it.imgUrl!!)
+
+                    ref.downloadUrl.addOnCompleteListener(OnCompleteListener{ task : Task<Uri> ->
+
+                        if(task.isSuccessful){
+                            val img = task.result.toString()
+
+                            Glide.with(this@ProfileFragment)
+                                .load(img)
+                                .apply(RequestOptions().placeholder(R.drawable.ic_launcher_background))
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(binding.profileImg)
+                        }else{
+                            Glide.with(this@ProfileFragment).load(R.drawable.ic_launcher_foreground).into(binding.profileImg)
+                        }
+
+
+                    })
+
+
                 }
 
             })
         }else{
             showAlert("Cannot connect to network")
         }
+
+
 
 
     }

@@ -3,243 +3,270 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-        android:id="@+id/rowHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:orientation="vertical">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profileImg"
-            android:layout_width="150dp"
-            android:layout_gravity="center"
-            android:layout_height="150dp"
-            android:contentDescription="profileImg"/>
-
-        <TextView
-            android:id="@+id/profileName"
+            android:id="@+id/rowHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImg"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:contentDescription="profileImg" />
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/righteous_font"
+                android:text=""
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/profileRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/righteous_font"
+                android:text=""
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/rowHeader"
+            android:layout_marginTop="15dp"
+            android:background="@color/bg_color" />
+
+        <LinearLayout
+            android:id="@+id/kpiLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider1"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/righteous_font"
-            android:text=""
-            android:textSize="30sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/profileRole"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/righteous_font"
-            android:text=""
-            android:textSize="24sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/dayOrdersLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/dayOrders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text=""
+                    android:textColor="@color/bg_color"
+                    android:textSize="28sp" />
+
+
+                <TextView
+                    android:id="@+id/dayOrdersLbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text="@string/day_orders"
+                    android:textColor="@color/bg_color"
+                    android:textSize="22sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/totalOrdersLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/totalOrders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text=""
+                    android:textColor="@color/bg_color"
+                    android:textSize="28sp" />
+
+
+                <TextView
+                    android:id="@+id/totalOrdersLbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text="@string/total_orders"
+                    android:textColor="@color/bg_color"
+                    android:textSize="22sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rankingLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text=""
+                    android:textColor="@color/bg_color"
+                    android:textSize="28sp" />
+
+
+                <TextView
+                    android:id="@+id/rankingLbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/righteous_font"
+                    android:text="@string/rank"
+                    android:textColor="@color/bg_color"
+                    android:textSize="22sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
         <View
-        android:id="@+id/divider1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/rowHeader"
-        android:layout_marginTop="15dp"
-        android:background="@color/bg_color" />
-        <LinearLayout
-        android:id="@+id/kpiLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/divider1"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/kpiLayout"
+            android:layout_marginTop="15dp"
+            android:background="@color/bg_color" />
 
         <LinearLayout
-            android:id="@+id/dayOrdersLayout"
+            android:id="@+id/personalDetailsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_below="@id/divider2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="40dp"
             android:orientation="vertical">
 
 
             <TextView
-                android:id="@+id/dayOrders"
+                android:id="@+id/detailsLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/righteous_font"
+                android:text="@string/personal_details"
+                android:textColor="@color/bg_color"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/emailLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/righteous_font"
+                android:text="@string/email"
+                android:textColor="@color/bg_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
                 android:fontFamily="@font/righteous_font"
                 android:text=""
                 android:textColor="@color/bg_color"
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
 
             <TextView
-                android:id="@+id/dayOrdersLbl"
+                android:id="@+id/phoneNumberLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/righteous_font"
-                android:text="@string/day_orders"
+                android:text="@string/phone"
                 android:textColor="@color/bg_color"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/totalOrdersLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:orientation="vertical">
-
+                android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/totalOrders"
+                android:id="@+id/phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
                 android:fontFamily="@font/righteous_font"
                 android:text=""
                 android:textColor="@color/bg_color"
-                android:textSize="28sp" />
-
-
-            <TextView
-                android:id="@+id/totalOrdersLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/righteous_font"
-                android:text="@string/total_orders"
-                android:textColor="@color/bg_color"
-                android:textSize="22sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rankingLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/righteous_font"
-                android:text=""
-                android:textColor="@color/bg_color"
-                android:textSize="28sp" />
-
-
-            <TextView
-                android:id="@+id/rankingLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/righteous_font"
-                android:text="@string/rank"
-                android:textColor="@color/bg_color"
-                android:textSize="22sp" />
-
-
+                android:textSize="20sp" />
         </LinearLayout>
 
 
-    </LinearLayout>
-        <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/kpiLayout"
-        android:layout_marginTop="15dp"
-        android:background="@color/bg_color" />
-        <LinearLayout
-        android:id="@+id/personalDetailsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/divider2"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical">
+<!--        Edit Option Disabled, If needed can be enabled in future.-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/personalDetailsLayout"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            >-->
+<!--            <Button-->
+<!--                android:id="@+id/editBtn"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:background="@drawable/btn_shape"-->
+<!--                android:fontFamily="@font/righteous_font"-->
+<!--                android:text="@string/edit"-->
+<!--                android:textColor="@color/bg_color"-->
+<!--                android:textSize="20sp" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/saveBtn"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:background="@drawable/btn_shape"-->
+<!--                android:fontFamily="@font/righteous_font"-->
+<!--                android:text="Save"-->
+<!--                android:visibility="gone"-->
+<!--                android:textColor="@color/bg_color"-->
+<!--                android:textSize="20sp"-->
+<!--                tools:ignore="HardcodedText" />-->
+<!--        </LinearLayout>-->
 
 
-        <TextView
-            android:id="@+id/detailsLbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/righteous_font"
-            android:text="@string/personal_details"
-            android:textColor="@color/bg_color"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/emailLbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/righteous_font"
-            android:text="@string/email"
-            android:textColor="@color/bg_color"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="2dp"
-            android:fontFamily="@font/righteous_font"
-            android:text=""
-            android:textColor="@color/bg_color"
-            android:textSize="20sp" />
-
-
-        <TextView
-            android:id="@+id/phoneNumberLbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/righteous_font"
-            android:text="@string/phone"
-            android:textColor="@color/bg_color"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="2dp"
-            android:fontFamily="@font/righteous_font"
-            android:text=""
-            android:textColor="@color/bg_color"
-            android:textSize="20sp" />
-    </LinearLayout>
-        <Button
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/personalDetailsLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_shape"
-        android:fontFamily="@font/righteous_font"
-        android:text="@string/edit"
-
-        android:textColor="@color/bg_color"
-        android:textSize="20sp" />
     </RelativeLayout>
 
 </ScrollView>
