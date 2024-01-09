@@ -1,6 +1,7 @@
 package com.sdapps.entres.main.food
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
+import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.network.NetworkTools
 
@@ -23,6 +26,8 @@ open class BaseFoodFragment : Fragment() {
     private lateinit var dataToShow: List<FoodBO>
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
+
+    private lateinit var vm : CountVM
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +42,7 @@ open class BaseFoodFragment : Fragment() {
         }
 
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
+        vm = ViewModelProvider(requireActivity())[CountVM::class.java]
         return view
 
     }
@@ -51,6 +57,10 @@ open class BaseFoodFragment : Fragment() {
             adapter = FoodAdapter(dataToShow)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context,3)
+
+            adapter.itemClickListener {
+                vm.increaseCount()
+            }
         }else {
             hideAllViews()
             showAlert("Connect To Network")

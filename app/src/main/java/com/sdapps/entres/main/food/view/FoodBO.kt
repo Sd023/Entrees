@@ -3,14 +3,15 @@ package com.sdapps.entres.main.food.view
 import android.os.Parcel
 import android.os.Parcelable
 
-data class FoodBO(val category: String, val foodName: String, val price:Int) : Parcelable {
+data class FoodBO(val category: String, val foodName: String, val price:Int, val imgUrl : String) : Parcelable {
 
 
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readInt()
+        parcel.readInt(),
+        parcel.readString() ?: ""
     )
 
     override fun describeContents(): Int {
@@ -21,6 +22,7 @@ data class FoodBO(val category: String, val foodName: String, val price:Int) : P
         dest.writeString(category)
         dest.writeString(foodName)
         dest.writeInt(price)
+        dest.writeString(imgUrl)
     }
 
     companion object CREATOR : Parcelable.Creator<FoodBO> {

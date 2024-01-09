@@ -1,13 +1,20 @@
 package com.sdapps.entres.main.food.view.view
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProvider
+import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
+import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.main.food.view.presenter.FoodListPresenter
@@ -21,19 +28,26 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     private lateinit var presenter: FoodListPresenter
     private lateinit var db: DBHandler
+    private lateinit var vm : CountVM
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //val bundle = intent?.extras
-//        val str = bundle?.getString("SEAT")
-//        val tableNumber = bundle?.getString("tableNumber")
+
+        setSupportActionBar(binding.customToolbar)
+
         db  = DBHandler(applicationContext)
+        vm = ViewModelProvider(this)[CountVM::class.java]
 
         presenter = FoodListPresenter(applicationContext)
         presenter.attachView(this)
         setupViewPagerAndTab()
+
+        vm.count.observe(this) {
+            binding.count.text = it.toString()
+        }
 
     }
 
