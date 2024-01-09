@@ -6,6 +6,7 @@ import com.sdapps.entres.main.food.view.FoodBO
 interface FoodActivityManager {
 
     interface View{
+        fun updateBadge(count: Int)
 
     }
     interface Presenter{

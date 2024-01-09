@@ -1,6 +1,8 @@
 package com.sdapps.entres.main.food
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +12,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
 import com.sdapps.entres.main.food.view.FoodBO
+import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
 import com.sdapps.entres.network.NetworkTools
 
 
-open class BaseFoodFragment : Fragment() {
+class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FoodAdapter
@@ -23,6 +27,9 @@ open class BaseFoodFragment : Fragment() {
     private lateinit var dataToShow: List<FoodBO>
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
+
+    private lateinit var badCount : NotificationBadge
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +55,10 @@ open class BaseFoodFragment : Fragment() {
     fun init(){
         if(NetworkTools().isAvailableConnection(requireContext())){
             recyclerView = requireView().findViewById(R.id.recyclerView)
-            adapter = FoodAdapter(dataToShow)
+            adapter = FoodAdapter(context!!,dataToShow,this)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context,3)
+            //badCount = requireView().findViewById(R.id.badge)
         }else {
             hideAllViews()
             showAlert("Connect To Network")
@@ -98,4 +106,12 @@ open class BaseFoodFragment : Fragment() {
             init()
         }
     }
+
+    override fun updateBadge(count: Int) {
+        Log.d("COUNT?","Hello Mf $count")
+        //badCount.setNumber(count)
+    }
+
+
+
 }

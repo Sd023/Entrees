@@ -1,6 +1,7 @@
 package com.sdapps.entres.main.food.view.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -8,12 +9,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
+import com.sdapps.entres.main.food.CardClickListener
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.main.food.view.presenter.FoodListPresenter
 
 
-class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
+class FoodListActivity : AppCompatActivity(), FoodActivityManager.View , CardClickListener{
 
     private lateinit var binding: ActivityFoodListBinding
     private lateinit var adapter: SectionAdapter
@@ -21,6 +23,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     private lateinit var presenter: FoodListPresenter
     private lateinit var db: DBHandler
+    var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +33,11 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 //        val str = bundle?.getString("SEAT")
 //        val tableNumber = bundle?.getString("tableNumber")
         db  = DBHandler(applicationContext)
-
         presenter = FoodListPresenter(applicationContext)
         presenter.attachView(this)
         setupViewPagerAndTab()
+
+
 
     }
 
@@ -96,5 +100,14 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
             return fragmentTitles[position]
 
         }
+    }
+
+    override fun updateBadge(count: Int) {
+      //binding.badgeCount.text = count.toString()
+    }
+
+    override fun onCardClick(count: Int) {
+        Log.d("TAG","Voila! $count")
+
     }
 }
