@@ -1,7 +1,6 @@
 package com.sdapps.entres.main.food
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +25,8 @@ open class BaseFoodFragment : Fragment() {
     private lateinit var dataToShow: List<FoodBO>
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
+
+    private lateinit var finalList : ArrayList<FoodBO>
 
     private lateinit var vm : CountVM
 
@@ -52,14 +53,23 @@ open class BaseFoodFragment : Fragment() {
         init()
     }
     fun init(){
+        finalList = arrayListOf()
         if(NetworkTools().isAvailableConnection(requireContext())){
             recyclerView = requireView().findViewById(R.id.recyclerView)
             adapter = FoodAdapter(dataToShow)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context,3)
 
-            adapter.itemClickListener {
+            adapter.itemClickListener{
+                val foodDetail = dataToShow.getOrNull(it)
                 vm.increaseCount()
+                if(vm.cartList.value != null){
+                    vm.cartList.value!!.add(foodDetail!!)
+                }else{
+                    finalList.add(foodDetail!!)
+                    vm.setFoodDetailList(finalList)
+                }
+
             }
         }else {
             hideAllViews()

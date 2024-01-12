@@ -2,10 +2,11 @@ package com.sdapps.entres.main.food.view.view
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -14,6 +15,7 @@ import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
+import com.sdapps.entres.main.food.CartDrawer
 import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
 import com.sdapps.entres.main.food.view.FoodBO
@@ -30,6 +32,8 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
     private lateinit var db: DBHandler
     private lateinit var vm : CountVM
 
+    private lateinit var cart: RelativeLayout
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,8 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         setContentView(binding.root)
 
         setSupportActionBar(binding.customToolbar)
+
+        cart = binding.customToolbar.findViewById(R.id.cartImgHome)
 
         db  = DBHandler(applicationContext)
         vm = ViewModelProvider(this)[CountVM::class.java]
@@ -48,6 +54,13 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         vm.count.observe(this) {
             binding.count.text = it.toString()
         }
+
+        vm.cartList.observe(this){
+            for (data in it){
+                Log.d("FOODBO", ":->>> ${data.foodName} : ${data.price}")
+            }
+        }
+
 
     }
 
