@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
+import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
 import com.sdapps.entres.network.NetworkTools
@@ -27,6 +29,10 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     private lateinit var dataToShow: List<FoodBO>
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
+
+    private lateinit var finalList : ArrayList<FoodBO>
+
+    private lateinit var vm : CountVM
 
     private lateinit var badCount : NotificationBadge
 
@@ -44,6 +50,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         }
 
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
+        vm = ViewModelProvider(requireActivity())[CountVM::class.java]
         return view
 
     }
@@ -53,12 +60,24 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         init()
     }
     fun init(){
+        finalList = arrayListOf()
         if(NetworkTools().isAvailableConnection(requireContext())){
             recyclerView = requireView().findViewById(R.id.recyclerView)
-            adapter = FoodAdapter(context!!,dataToShow,this)
+            adapter = FoodAdapter(dataToShow)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context,3)
-            //badCount = requireView().findViewById(R.id.badge)
+
+            adapter.itemClickListener{
+                val foodDetail = dataToShow.getOrNull(it)
+                vm.increaseCount()
+                if(vm.cartList.value != null){
+                    vm.cartList.value!!.add(foodDetail!!)
+                }else{
+                    finalList.add(foodDetail!!)
+                    vm.setFoodDetailList(finalList)
+                }
+
+            }
         }else {
             hideAllViews()
             showAlert("Connect To Network")
@@ -106,12 +125,4 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
             init()
         }
     }
-
-    override fun updateBadge(count: Int) {
-        Log.d("COUNT?","Hello Mf $count")
-        //badCount.setNumber(count)
-    }
-
-
-
 }

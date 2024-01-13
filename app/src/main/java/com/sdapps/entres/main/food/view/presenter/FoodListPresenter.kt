@@ -17,14 +17,15 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 
             foodList = arrayListOf()
             db.openDataBase()
-            val cursor = db.selectSQL("SELECT category,foodName,price from FoodDataMaster")
+            val cursor = db.selectSQL("SELECT category,foodName,price,imgUrl from FoodDataMaster")
 
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     val category = cursor.getString(0)
                     val foodName = cursor.getString(1)
                     val price = cursor.getInt(2)
-                    foodList.add(FoodBO(category, foodName,price))
+                    val imgUrl = cursor.getString(3)
+                    foodList.add(FoodBO(category, foodName,price, imgUrl))
                 }
             }
 
