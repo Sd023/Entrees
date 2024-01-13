@@ -37,9 +37,9 @@ class OrderTakingAdapter(private val data: ArrayList<Int>,
 
                 val statusMap = data.mapNotNull { key -> map[key] }
 
-                if(statusMap[position]!!.contains("DEAD")){
+                if(statusMap[position].contains("DEAD")){
                     holder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.dead_table))
-                }else if(statusMap[position]!!.contains("ORD")){
+                }else if(statusMap[position].contains("ORD")){
                     holder.layout.setBackgroundColor(ContextCompat.getColor(context,R.color.avail_table))
                 }else{
                     holder.layout.setBackgroundColor(ContextCompat.getColor(context,R.color.empty_table))

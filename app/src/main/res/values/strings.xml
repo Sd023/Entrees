@@ -28,4 +28,5 @@
     <string name="edit">Edit</string>
     <string name="ok">Ok</string>
     <string name="order">Order</string>
+    <string name="notification">Notification</string>
 </resources>

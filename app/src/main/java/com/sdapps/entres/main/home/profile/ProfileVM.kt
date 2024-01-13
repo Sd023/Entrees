@@ -58,7 +58,7 @@ class ProfileVM(private var app: Application): ViewModel() {
 
             _firebaseRef = FirebaseDatabase.getInstance().getReference("users").child(uid).child("contactDetails")
 
-            _firebaseRef?.addValueEventListener(object : ValueEventListener{
+            _firebaseRef.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userProfile : ProfileBO = snapshot.getValue(ProfileBO::class.java)!!
                     _profileData.value = userProfile

@@ -26,13 +26,13 @@ open class BaseActivity : AppCompatActivity(), BaseView {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bundle = intent.extras
+       /* val bundle = intent.extras
         var str : String? =null
         var uid : String? = null
         if(bundle != null){
             str = bundle.getString("role")
             uid = bundle.getString("uid")
-        }
+        }*/
 
 
 

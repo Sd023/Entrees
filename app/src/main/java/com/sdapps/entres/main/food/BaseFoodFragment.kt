@@ -125,4 +125,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
             init()
         }
     }
+
+    override fun updateBadge(count: Int) {
+    }
 }

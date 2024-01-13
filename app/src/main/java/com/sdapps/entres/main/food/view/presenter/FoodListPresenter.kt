@@ -27,6 +27,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
                     val imgUrl = cursor.getString(3)
                     foodList.add(FoodBO(category, foodName,price, imgUrl))
                 }
+                cursor.close()
             }
 
         } catch (ex: Exception) {

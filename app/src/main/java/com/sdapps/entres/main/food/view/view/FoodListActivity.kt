@@ -124,4 +124,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
         }
     }
+
+    override fun updateBadge(count: Int) {
+    }
 }

@@ -54,6 +54,7 @@ class OrderTakingPresenter(private var context: Context) : OrderTakingManager.Pr
                     hotelName = cursor.getString(0)
                     hotelBranch = cursor.getString(1)
                 }
+                cursor.close()
             }
         } catch (ex: Exception) {
 
