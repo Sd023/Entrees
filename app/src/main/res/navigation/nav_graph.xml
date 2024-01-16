@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/orderTaking"
-        android:name="com.sdapps.entres.main.home.ordertaking.orderfrag.view.OrderTakingFragment"
+        android:name="com.sdapps.entres.main.home.tableview.tableFrag.view.TableViewFragment"
         android:label="@string/order_taking"
         tools:layout="@layout/fragment_order_taking" />
 

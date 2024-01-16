@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.ordertaking.dialog
+package com.sdapps.entres.main.home.tableview.dialog
 
 import com.sdapps.entres.main.login.data.HotelBO
 

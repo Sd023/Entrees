@@ -1,19 +1,17 @@
-package com.sdapps.entres.main.home.ordertaking.dialog
+package com.sdapps.entres.main.home.tableview.dialog
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.sdapps.entres.main.food.view.view.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
-import com.sdapps.entres.main.home.ordertaking.orderfrag.presenter.OrderTakingPresenter
+import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewPresenter
 import com.sdapps.entres.main.login.data.HotelBO
 
-class CommonDialog(var presenter: OrderTakingPresenter) : DialogFragment(), CommonDialogView.View {
+class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), CommonDialogView.View {
     companion object {
         const val TAG = "CommonDialog"
     }

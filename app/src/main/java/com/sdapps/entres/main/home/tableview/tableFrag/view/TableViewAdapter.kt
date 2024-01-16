@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.ordertaking.orderfrag.view
+package com.sdapps.entres.main.home.tableview.tableFrag.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,14 +9,14 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.main.home.ordertaking.orderfrag.presenter.OrderTakingManager
+import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewManager
 import com.sdapps.entres.network.NetworkTools
 
-class OrderTakingAdapter(private val data: ArrayList<Int>,
-                         private val map: HashMap<Int,String>,
-                         private var context : Context,
-                         private var view: OrderTakingManager.View)
-    : RecyclerView.Adapter<OrderTakingAdapter.ViewHolder>() {
+class TableViewAdapter(private val data: ArrayList<Int>,
+                       private val map: HashMap<Int,String>,
+                       private var context : Context,
+                       private var view: TableViewManager.View)
+    : RecyclerView.Adapter<TableViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

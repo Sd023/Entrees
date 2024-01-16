@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.drawerlayout.widget.DrawerLayout
-    android:id="@+id/drawerLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         tools:context=".main.food.view.view.FoodListActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/custom_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+<!--      Toolbar and cart hidden
+  <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/custom_toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="?attr/colorPrimary">-->
 
-            <RelativeLayout
+<!--            <RelativeLayout
                 android:id="@+id/cartImgHome"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
@@ -49,26 +46,92 @@
                     android:layout_marginEnd="-1dp"
                     android:gravity="center"
                     android:visibility="visible"/>
-            </RelativeLayout>
+            </RelativeLayout>-->
 
 
-        </androidx.appcompat.widget.Toolbar>
+<!--        </androidx.appcompat.widget.Toolbar>-->
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/custom_toolbar"
-            app:tabMode="scrollable"
-            app:tabContentStart="56dp"/>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabContentStart="56dp"
+        app:tabMode="scrollable" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="600dp"
+        android:layout_below="@id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/primary_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewPager"
+        app:layout_constraintVertical_bias="0.99">
+
+        <RelativeLayout
+            android:id="@+id/cartItem"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_below="@id/tabLayout"/>
+            android:padding="2dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="7dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            >
+
+            <ImageView
+                android:id="@+id/badge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/shopping_cart"
+                android:contentDescription="@string/cart" />
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cart_count"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/badge"
+                android:layout_alignTop="@id/badge"
+                android:layout_alignEnd="@id/badge"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="-1dp"
+                android:gravity="center"
+                android:visibility="visible"/>
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/orderBtn"
+            style="@style/Widget.Material3.FloatingActionButton.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="@string/order"
+            android:textColor="@color/bg_color"
+            android:textSize="20sp" />
     </RelativeLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 

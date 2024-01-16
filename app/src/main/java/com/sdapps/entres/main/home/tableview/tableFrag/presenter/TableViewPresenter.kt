@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.ordertaking.orderfrag.presenter
+package com.sdapps.entres.main.home.tableview.tableFrag.presenter
 
 import android.content.Context
 import android.util.Log
@@ -9,16 +9,16 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.sdapps.entres.core.constants.DataMembers
 import com.sdapps.entres.core.database.DBHandler
-import com.sdapps.entres.main.home.ordertaking.dialog.CommonDialogView
+import com.sdapps.entres.main.home.tableview.dialog.CommonDialogView
 import com.sdapps.entres.main.login.data.HotelBO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class OrderTakingPresenter(private var context: Context) : OrderTakingManager.Presenter {
+class TableViewPresenter(private var context: Context) : TableViewManager.Presenter {
 
 
-    private lateinit var view: OrderTakingManager.View
+    private lateinit var view: TableViewManager.View
 
 
     public var hotelName: String? = null
@@ -33,7 +33,7 @@ class OrderTakingPresenter(private var context: Context) : OrderTakingManager.Pr
 
     var tblKeyMap: HashMap<String, ArrayList<HotelBO.Seats>>? = null
     var tblSeatDetail: ArrayList<HotelBO.Seats>? = null
-    override fun attachView(view: OrderTakingManager.View, db: DBHandler) {
+    override fun attachView(view: TableViewManager.View, db: DBHandler) {
         this.view = view
         this.db = db
 

@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.ordertaking.orderfrag.view
+package com.sdapps.entres.main.home.tableview.tableFrag.view
 
 import android.content.Context
 import android.os.Bundle
@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.FragmentOrderTakingBinding
-import com.sdapps.entres.main.home.ordertaking.orderfrag.presenter.OrderTakingManager
-import com.sdapps.entres.main.home.ordertaking.orderfrag.presenter.OrderTakingPresenter
-import com.sdapps.entres.main.home.ordertaking.dialog.CommonDialog
+import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewManager
+import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewPresenter
+import com.sdapps.entres.main.home.tableview.dialog.CommonDialog
 import com.sdapps.entres.network.NetworkTools
 
-class OrderTakingFragment : Fragment(), OrderTakingManager.View {
+class TableViewFragment : Fragment(), TableViewManager.View {
 
     private var binding: FragmentOrderTakingBinding? = null
     private lateinit var context: Context
 
-    private lateinit var presenter: OrderTakingPresenter
+    private lateinit var presenter: TableViewPresenter
     private lateinit var db: DBHandler
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
@@ -38,7 +38,7 @@ class OrderTakingFragment : Fragment(), OrderTakingManager.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter = OrderTakingPresenter(context)
+        presenter = TableViewPresenter(context)
         db = DBHandler(context)
         presenter.attachView(this, db)
         initializeFirebase()
@@ -57,7 +57,7 @@ class OrderTakingFragment : Fragment(), OrderTakingManager.View {
     override fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>) {
         try {
             binding!!.recyclerView.layoutManager = GridLayoutManager(context, 3)
-            val adapter = OrderTakingAdapter(list, map,context, this)
+            val adapter = TableViewAdapter(list, map,context, this)
             binding!!.recyclerView.adapter = adapter
         } catch (ex: Exception) {
             ex.printStackTrace()

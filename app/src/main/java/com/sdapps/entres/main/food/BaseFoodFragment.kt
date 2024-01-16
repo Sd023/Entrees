@@ -27,14 +27,15 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     private lateinit var adapter: FoodAdapter
 
     private lateinit var dataToShow: List<FoodBO>
-    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var dialog: AlertDialog.Builder
     private lateinit var alert: AlertDialog
 
-    private lateinit var finalList : ArrayList<FoodBO>
+    private lateinit var finalList: ArrayList<FoodBO>
 
-    private lateinit var vm : CountVM
+    private lateinit var vm: CountVM
 
-    private lateinit var badCount : NotificationBadge
+    private lateinit var badCount: NotificationBadge
+    var count = 1
 
 
     override fun onCreateView(
@@ -59,33 +60,46 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         super.onViewCreated(view, savedInstanceState)
         init()
     }
-    fun init(){
+
+    fun init() {
         finalList = arrayListOf()
-        if(NetworkTools().isAvailableConnection(requireContext())){
+        if (NetworkTools().isAvailableConnection(requireContext())) {
             recyclerView = requireView().findViewById(R.id.recyclerView)
             adapter = FoodAdapter(dataToShow)
             recyclerView.adapter = adapter
-            recyclerView.layoutManager = GridLayoutManager(context,3)
+            recyclerView.layoutManager = GridLayoutManager(context, 3)
 
-            adapter.itemClickListener{
+            adapter.itemClickListener {
                 val foodDetail = dataToShow.getOrNull(it)
                 vm.increaseCount()
-                if(vm.cartList.value != null){
-                    vm.cartList.value!!.add(foodDetail!!)
-                }else{
-                    finalList.add(foodDetail!!)
-                    vm.setFoodDetailList(finalList)
+
+                if (vm.cartList.value != null) {
+                    if (finalList.contains(foodDetail)) {
+                        count += 1
+                        foodDetail!!.count = count
+                    } else {
+                        vm.cartList.value!!.add(foodDetail!!)
+                    }
+                } else {
+                    if (finalList.contains(foodDetail)) {
+                        count += 1
+                        foodDetail!!.count = count
+                    } else {
+                        finalList.add(foodDetail!!)
+                    }
                 }
+                vm.setFoodDetailList(finalList)
+
 
             }
-        }else {
+        } else {
             hideAllViews()
             showAlert("Connect To Network")
         }
 
     }
 
-    fun hideAllViews(){
+    fun hideAllViews() {
         recyclerView = requireView().findViewById(R.id.recyclerView)
         recyclerView.visibility = View.GONE
     }
@@ -96,7 +110,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     }
 
 
-    companion object{
+    companion object {
         private const val ARG_ALL_DATA = "all_data"
         private const val ARG_CATEGORY = "category"
         fun newInstance(allData: List<FoodBO>, category: String): BaseFoodFragment {
@@ -109,9 +123,9 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         }
     }
 
-    fun showAlert(err: String){
+    fun showAlert(err: String) {
         val layoutInflator = this.layoutInflater
-        val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout,null)
+        val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout, null)
         dialog = AlertDialog.Builder(requireContext()).setView(dialogView)
         val dialogText = dialogView.findViewById<TextView>(R.id.titleDialog)
         val btn = dialogView.findViewById<Button>(R.id.btn_done)
@@ -120,7 +134,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         alert = dialog.create()
         alert.show()
 
-        btn.setOnClickListener{
+        btn.setOnClickListener {
             alert.dismiss()
             init()
         }

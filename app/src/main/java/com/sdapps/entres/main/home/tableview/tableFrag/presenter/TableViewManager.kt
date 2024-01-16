@@ -1,8 +1,8 @@
-package com.sdapps.entres.main.home.ordertaking.orderfrag.presenter
+package com.sdapps.entres.main.home.tableview.tableFrag.presenter
 
 import com.sdapps.entres.core.database.DBHandler
 
-interface OrderTakingManager {
+interface TableViewManager {
 
     interface View {
         fun showDialog(position: Int)

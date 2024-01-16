@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.ordertaking.dialog
+package com.sdapps.entres.main.home.tableview.dialog
 
 import android.view.LayoutInflater
 import android.view.View

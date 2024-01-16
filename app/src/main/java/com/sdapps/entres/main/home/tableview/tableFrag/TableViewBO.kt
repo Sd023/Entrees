@@ -1,6 +1,6 @@
-package com.sdapps.entres.main.home.ordertaking.orderfrag
+package com.sdapps.entres.main.home.tableview.tableFrag
 
-class OrderTakingBO {
+class TableViewBO {
     companion object{
         var MENU_ORDER_HISTORY = "ORD_HIS"
         var MENU_ORDER_TAKING = "ORD_TAK"
