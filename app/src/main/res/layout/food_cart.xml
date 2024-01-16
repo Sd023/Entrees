@@ -36,6 +36,7 @@
 
 
     <Button
+        android:id="@+id/orderBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_shape"

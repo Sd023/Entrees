@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import com.sdapps.entres.core.constants.DataMembers
+import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.FoodCartBinding
 import com.sdapps.entres.main.food.view.CountVM
+import com.sdapps.entres.main.food.view.FoodBO
 
 class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
@@ -20,12 +20,22 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
     private lateinit var binding: FoodCartBinding
 
+    private lateinit var tableId : String
+    private lateinit var seats : String
+    private lateinit var data : ArrayList<FoodBO>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        val args = arguments
+
+         tableId = args!!.getString("tableNumber")!!
+         seats = args.getString("SEAT")!!
+
         binding = FoodCartBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -38,12 +48,85 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
     fun initAll(){
         if(vm.cartList.value != null){
             vm.cartList.observe(viewLifecycleOwner){
-                val data = it
+                data = it
                 binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
                 val adapter = CartAdapter(data)
                 binding.recyclerView.adapter = adapter
 
             }
         }
+
+        binding.orderBtn.setOnClickListener {
+            insertData(data)
+
+        }
     }
+
+    fun insertData(list: ArrayList<FoodBO>){
+
+        try{
+            val db = DBHandler(requireContext())
+            //(orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)
+
+
+            val timestamp = System.currentTimeMillis()
+            val userID = fetchUserId(db)
+
+            val uid = StringBuilder().append(userID).append(timestamp)
+
+            val sb =  StringBuilder()
+                .append(QS(uid))
+                .append(",")
+                .append(QS(tableId))
+                .append(",")
+                .append(QS(seats))
+                .append(",")
+                .append(QS(data.size))
+                .append(",")
+                .append(QS(data.size))  //simple logic
+
+            db.insertSQL(DataMembers.tbl_orderHeader, DataMembers.tbl_orderHeaderCols,sb.toString())
+
+            for(orderDetail in list){
+
+                //(orderId TEXT,foodName TEXT, qty INT,price DOUBLE, tableId TEXT,seatNumber TEXT, totalOrderValue DOUBLE)
+                val orderDetails = StringBuilder()
+                    .append(QS(uid))
+                    .append(",")
+                    .append(QS(orderDetail.foodName))
+                    .append(",")
+                    .append(QS(orderDetail.count))
+                    .append(",")
+                    .append(QS(orderDetail.price))
+                    .append(",")
+                    .append(QS(tableId))
+                    .append(",")
+                    .append(QS(seats))
+                    .append(",")
+                    .append(QS(orderDetail.price))
+
+                db.insertSQL(DataMembers.tbl_orderDetail,DataMembers.tbl_orderDetailCols,orderDetails.toString())
+            }
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+    }
+
+    fun QS(data: Any):String{
+        return "'$data'"
+    }
+    fun fetchUserId(db:DBHandler): Int{
+        db.createDataBase()
+        db.openDataBase()
+        val sql = "select userId from MasterUser"
+        val cursor = db.selectSQL(sql)
+        if(cursor != null){
+            while (cursor.moveToNext()){
+                return cursor.getInt(0)
+            }
+        }
+        return 0
+    }
+
 }

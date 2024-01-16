@@ -11,6 +11,8 @@ object DBHelper {
             db.dbRawQuery("create table if not exists FoodDataMaster(id INT PRIMARY KEY UNIQUE,foodName TEXT,category TEXT,price INT,imgUrl TEXT)")
             db.dbRawQuery("create table if not exists TableMaster (tableId TEXT PRIMARY KEY UNIQUE, tableName TEXT,isStatus TEXT)")
             db.dbRawQuery("create table if not exists TableSeatMapping (tableId TEXT PRIMARY KEY UNIQUE,tableName TEXT,seatNum TEXT)")
+            db.dbRawQuery("create table if not exists OrderHeader (orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)")
+            db.dbRawQuery("create table if not exists OrderDetail (orderId TEXT,foodName TEXT, qty INT,price DOUBLE, tableId TEXT,seatNumber TEXT, totalOrderValue DOUBLE)")
         }catch (ex: Exception){
             Log.d("Err!","wtf?")
             ex.printStackTrace()

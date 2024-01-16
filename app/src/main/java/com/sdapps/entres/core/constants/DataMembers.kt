@@ -14,4 +14,10 @@ object DataMembers {
      const val tbl_tableSeatMapping = "TableSeatMapping"
      const val tbl_tableSeatMappingCols = "tableId,tableName,seatNum"
 
+     const val tbl_orderHeader = "OrderHeader"
+     const val tbl_orderHeaderCols = "orderId,tableId,seatNumber,totalItems,totalOrderValue"
+
+     const val tbl_orderDetail = "OrderDetail"
+     const val tbl_orderDetailCols = "orderId,foodName,qty,price,tableId,seatNumber,totalOrderValue"
+
 }

@@ -1,9 +1,7 @@
 package com.sdapps.entres.main.food
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
-import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
@@ -50,7 +47,6 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         arguments?.let {
             val allData: List<FoodBO> = it.getParcelableArrayList(ARG_ALL_DATA) ?: emptyList()
             val category: String = it.getString(ARG_CATEGORY, "")
-
             dataToShow = filterDataByCategory(allData, category)
         }
 
@@ -76,7 +72,6 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
             adapter.itemClickListener {
                 val foodDetail = dataToShow.getOrNull(it)
-                showLoading()
                 if (vm.cartList.value != null) {
                     if (finalList.contains(foodDetail)) {
                         count += 1

@@ -31,10 +31,20 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
     private lateinit var cart: RelativeLayout
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private lateinit var tableId: String
+    private lateinit var seat : String
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFoodListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bundle = intent.extras
+        if(bundle != null){
+            tableId = bundle.getInt("tableNumber").toString()
+            seat = bundle.getString("SEAT").toString()
+        }
 
         db  = DBHandler(applicationContext)
         vm = ViewModelProvider(this)[CountVM::class.java]
@@ -55,6 +65,10 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     fun openCart(){
         val cartDialog = CartViewDialog(vm)
+        val args = Bundle()
+        args.putString("tableNumber", tableId)
+        args.putString("SEAT",seat)
+        cartDialog.arguments = args
         cartDialog.show(supportFragmentManager,CartViewDialog.TAG)
     }
 
@@ -67,7 +81,10 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
 
         for (category in categories) {
-            val frag = BaseFoodFragment.newInstance(filterDataByCategory(allList,category), category)
+            val frag = BaseFoodFragment.newInstance(
+                filterDataByCategory(allList,category),
+                category
+            )
             adapter.addFragment(frag, category)
         }
         binding.viewPager.adapter = adapter
