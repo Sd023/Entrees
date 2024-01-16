@@ -1,5 +1,6 @@
 package com.sdapps.entres.main.food
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
+import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.main.food.view.CountVM
 import com.sdapps.entres.main.food.view.FoodBO
 import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
@@ -36,6 +38,8 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     private lateinit var badCount: NotificationBadge
     var count = 1
+    private lateinit var progressDialog: ProgressDialog
+
 
 
     override fun onCreateView(
@@ -58,6 +62,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDialog = ProgressDialog(context)
         init()
     }
 
@@ -71,14 +76,20 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
             adapter.itemClickListener {
                 val foodDetail = dataToShow.getOrNull(it)
-                vm.increaseCount()
-
+                showLoading()
                 if (vm.cartList.value != null) {
                     if (finalList.contains(foodDetail)) {
                         count += 1
                         foodDetail!!.count = count
                     } else {
-                        vm.cartList.value!!.add(foodDetail!!)
+                        val list = vm.cartList.value
+                        if(list!!.contains(foodDetail)){
+                            count = 1
+                            foodDetail?.count = count + 1
+                            finalList.add(foodDetail!!)
+                        }else{
+                            vm.cartList.value!!.add(foodDetail!!)
+                        }
                     }
                 } else {
                     if (finalList.contains(foodDetail)) {
@@ -86,9 +97,11 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
                         foodDetail!!.count = count
                     } else {
                         finalList.add(foodDetail!!)
+                        vm.setFoodDetailList(finalList)
                     }
                 }
-                vm.setFoodDetailList(finalList)
+                vm.increaseCount()
+                hideLoading()
 
 
             }
@@ -104,6 +117,15 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         recyclerView.visibility = View.GONE
     }
 
+    fun showLoading(){
+        progressDialog.setTitle("Entrees")
+        progressDialog.setMessage("Adding Food to Cart")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+    fun hideLoading(){
+        progressDialog.dismiss()
+    }
 
     private fun filterDataByCategory(allData: List<FoodBO>, category: String): List<FoodBO> {
         return allData.filter { it.category == category }

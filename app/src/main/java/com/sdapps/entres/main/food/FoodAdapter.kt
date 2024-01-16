@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import com.sdapps.entres.R
+import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.main.food.view.FoodBO
 
 class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
