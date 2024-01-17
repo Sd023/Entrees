@@ -5,16 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.entres.R
 import com.sdapps.entres.databinding.FragmentOrderHistoryBinding
 import com.sdapps.entres.databinding.HistoryViewBinding
+import com.sdapps.entres.main.home.orders.vm.OrderHistoryDataManager
+import com.sdapps.entres.main.home.orders.vm.OrderHistoryFactory
+import com.sdapps.entres.main.home.orders.vm.VM
 
 
 class OrderHistoryFragment : Fragment() {
 
     private lateinit var binding : FragmentOrderHistoryBinding
     private lateinit var items : ArrayList<OrderHistoryBO>
+
+    private lateinit var repo : OrderHistoryDataManager
+
+    private val viewModel by lazy {
+        repo = OrderHistoryDataManager(requireContext())
+        ViewModelProvider(this,OrderHistoryFactory(requireActivity().application,repo))[VM::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,59 +42,12 @@ class OrderHistoryFragment : Fragment() {
     }
 
     fun initAll(){
-        items = arrayListOf()
-
-        val bo = OrderHistoryBO().apply {
-            tableName = "1"
-            totalPrice = "200"
-            totalItems = "10"
-            status = "preparing"
+        viewModel.getPastOrdersFromDB()
+        viewModel.orderList.observe(viewLifecycleOwner){
+            binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+            val adapter =  OrderHistoryAdapter(it)
+            binding.recyclerView.adapter =adapter
         }
-
-        items.add(bo)
-        val bo1 = OrderHistoryBO().apply {
-            tableName = "2"
-            totalPrice = "300"
-            totalItems = "20"
-            status = "done"
-        }
-        items.add(bo1)
-
-        val bo2 = OrderHistoryBO().apply {
-            tableName = "3"
-            totalPrice = "600"
-            totalItems = "2"
-            status = "waiting for pickup"
-        }
-        items.add(bo2)
-        val bo3 = OrderHistoryBO().apply {
-            tableName = "4"
-            totalPrice = "1200"
-            totalItems = "4"
-            status = "completed"
-        }
-        items.add(bo3)
-
-        val bo4 = OrderHistoryBO().apply {
-            tableName = "5"
-            totalPrice = "2200"
-            totalItems = "4"
-            status = "preparing"
-        }
-        items.add(bo4)
-
-        val bo5 = OrderHistoryBO().apply {
-            tableName = "6"
-            totalPrice = "3200"
-            totalItems = "2"
-            status = "completed"
-        }
-        items.add(bo5)
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-        val adapter =  OrderHistoryAdapter(items)
-        binding.recyclerView.adapter =adapter
-
     }
 
 }

@@ -19,7 +19,7 @@
             android:id="@+id/tableId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Table 1"
+            android:text=""
             android:textColor="@color/bg_color"
             android:fontFamily="@font/righteous_font"
             android:textSize="26sp" /> <!-- Adjust text size as needed -->
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/bg_color"
-            android:text="Total Items : 19"
+            android:text=""
             android:textSize="14sp" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/bg_color"
-            android:text="Total Price : 1000"
+            android:text=""
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:text="Status : Preparing"
+        android:text=""
         android:textColor="@color/red"
         android:textSize="15sp"
         />

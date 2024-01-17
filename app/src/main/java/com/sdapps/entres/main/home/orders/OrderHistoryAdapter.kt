@@ -27,7 +27,7 @@ class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
         holder.tableId.text  = StringBuilder().append("Table: ").append(data[position].tableName).toString()
         holder.totalItems.text = StringBuilder().append("Total Items: ").append(data[position].totalItems).toString()
         holder.totalPrice.text = StringBuilder().append("Total Price: ").append(data[position].totalPrice).toString()
-        holder.status.text = StringBuilder().append("Status: ").append(data[position].status).toString()
+        //holder.status.text = StringBuilder().append("Status: ").append(data[position].status).toString()
     }
 
     override fun getItemId(position: Int): Long {
