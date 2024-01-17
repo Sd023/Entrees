@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.food.dialog
+package com.sdapps.entres.main.food.cartdialog
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.main.food.view.FoodBO
+import com.sdapps.entres.main.food.main.FoodBO
 
 class CartAdapter(private val data : ArrayList<FoodBO>): RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
@@ -22,7 +22,7 @@ class CartAdapter(private val data : ArrayList<FoodBO>): RecyclerView.Adapter<Ca
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            holder.count.text = data[position].count.toString()
+            holder.count.text = data[position].qty.toString()
             holder.foodName.text = data[position].foodName
             holder.foodPrice.text = data[position].price.toString()
 

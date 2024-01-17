@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.orders
+package com.sdapps.entres.main.home.orderhistory
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.main.home.tableview.dialog.CommonDialogAdapter
 
 class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
     RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder>() {

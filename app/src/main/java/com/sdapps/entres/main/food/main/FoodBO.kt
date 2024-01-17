@@ -1,9 +1,13 @@
-package com.sdapps.entres.main.food.view
+package com.sdapps.entres.main.food.main
 
 import android.os.Parcel
 import android.os.Parcelable
 
-data class FoodBO(val category: String, val foodName: String, val price:Int, val imgUrl : String, var count: Int = 1) : Parcelable {
+data class FoodBO(val category: String,
+                  val foodName: String,
+                  val price:Int,
+                  val imgUrl : String,
+                  var qty: Int = 1) : Parcelable {
 
 
 
@@ -24,7 +28,7 @@ data class FoodBO(val category: String, val foodName: String, val price:Int, val
         dest.writeString(foodName)
         dest.writeInt(price)
         dest.writeString(imgUrl)
-        dest.writeInt(count)
+        dest.writeInt(qty)
     }
 
     companion object CREATOR : Parcelable.Creator<FoodBO> {

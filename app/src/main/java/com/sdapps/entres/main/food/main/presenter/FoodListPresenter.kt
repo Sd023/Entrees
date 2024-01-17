@@ -1,8 +1,8 @@
-package com.sdapps.entres.main.food.view.presenter
+package com.sdapps.entres.main.food.main.presenter
 
 import android.content.Context
 import com.sdapps.entres.core.database.DBHandler
-import com.sdapps.entres.main.food.view.FoodBO
+import com.sdapps.entres.main.food.main.FoodBO
 
 class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 

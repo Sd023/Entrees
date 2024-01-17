@@ -3,19 +3,15 @@ package com.sdapps.entres.main.home.tableview.dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
-import com.sdapps.entres.main.food.view.view.FoodListActivity
+import com.sdapps.entres.main.food.main.view.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
 import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewPresenter
 import com.sdapps.entres.main.login.data.HotelBO
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), CommonDialogView.View {
     companion object {
@@ -27,6 +23,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
     private lateinit var binding: CommonDialogTableViewBinding
     private var position: Int? = null
     var tablText: String? = null
+    var tableName: String? = null
 
     private lateinit var dialog : ProgressDialog
 
@@ -37,6 +34,9 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
     ): View? {
         val mArgs = arguments
         position = mArgs?.getInt("POSITION")
+        tableName = mArgs?.getString("TABLENAME")
+        Log.d("INTENT", " oncreate $position , $tableName")
+
         dialog = ProgressDialog(context)
         binding = CommonDialogTableViewBinding.inflate(inflater, container, false)
         return binding.root
@@ -89,6 +89,8 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
         val intent = Intent(context, FoodListActivity::class.java)
         intent.putExtra("SEAT", seat)
         intent.putExtra("tableNumber", position)
+        intent.putExtra("TABLENAME", tablText)
+        Log.d("INTENT", "Before $position , $seat , ${tableName!!.trim()} , $tablText")
         startActivity(intent)
 
     }

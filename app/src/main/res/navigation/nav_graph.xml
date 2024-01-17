@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/orderHistory"
-        android:name="com.sdapps.entres.main.home.orders.OrderHistoryFragment"
+        android:name="com.sdapps.entres.main.home.orderhistory.OrderHistoryFragment"
         android:label="@string/order_history"
         tools:layout="@layout/fragment_order_history"/>
 </navigation>

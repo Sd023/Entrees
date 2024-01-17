@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.orders.vm
+package com.sdapps.entres.main.home.orderhistory.vm
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

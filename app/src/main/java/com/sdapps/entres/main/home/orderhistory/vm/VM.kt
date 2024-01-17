@@ -1,11 +1,11 @@
-package com.sdapps.entres.main.home.orders.vm
+package com.sdapps.entres.main.home.orderhistory.vm
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdapps.entres.main.home.orders.OrderHistoryBO
+import com.sdapps.entres.main.home.orderhistory.OrderHistoryBO
 import kotlinx.coroutines.launch
 
 class VM(private var app: Application, private var orderRepo: OrderHistoryDataManager) :

@@ -14,18 +14,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
-import com.sdapps.entres.main.food.view.CountVM
-import com.sdapps.entres.main.food.view.FoodBO
-import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
+import com.sdapps.entres.main.food.main.CountVM
+import com.sdapps.entres.main.food.main.FoodBO
+import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
 import com.sdapps.entres.network.NetworkTools
 
 
+//Base view  where food data is loaded in recyclerview.
+// filtered based on the category
 class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FoodAdapter
 
-    private lateinit var dataToShow: List<FoodBO>
+    private lateinit var filteredFoodList: List<FoodBO>
     private lateinit var dialog: AlertDialog.Builder
     private lateinit var alert: AlertDialog
 
@@ -34,7 +36,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     private lateinit var vm: CountVM
 
     private lateinit var badCount: NotificationBadge
-    var count = 1
+    var qty = 1
     private lateinit var progressDialog: ProgressDialog
 
 
@@ -45,9 +47,9 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     ): View? {
 
         arguments?.let {
-            val allData: List<FoodBO> = it.getParcelableArrayList(ARG_ALL_DATA) ?: emptyList()
-            val category: String = it.getString(ARG_CATEGORY, "")
-            dataToShow = filterDataByCategory(allData, category)
+            val masterFoodData: List<FoodBO> = it.getParcelableArrayList(MASTER_DATA) ?: emptyList()
+            val masterCategory: String = it.getString(MASTER_CATEGORY, "")
+            filteredFoodList = filterDataByCategory(masterFoodData, masterCategory)
         }
 
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
@@ -66,21 +68,21 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         finalList = arrayListOf()
         if (NetworkTools().isAvailableConnection(requireContext())) {
             recyclerView = requireView().findViewById(R.id.recyclerView)
-            adapter = FoodAdapter(dataToShow)
+            adapter = FoodAdapter(filteredFoodList)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
             adapter.itemClickListener {
-                val foodDetail = dataToShow.getOrNull(it)
+                val foodDetail = filteredFoodList.getOrNull(it)
                 if (vm.cartList.value != null) {
                     if (finalList.contains(foodDetail)) {
-                        count += 1
-                        foodDetail!!.count = count
+                        qty += 1
+                        foodDetail!!.qty = qty
                     } else {
                         val list = vm.cartList.value
                         if(list!!.contains(foodDetail)){
-                            count = 1
-                            foodDetail?.count = count + 1
+                            qty = 1
+                            foodDetail?.qty = qty + 1
                             finalList.add(foodDetail!!)
                         }else{
                             vm.cartList.value!!.add(foodDetail!!)
@@ -88,8 +90,8 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
                     }
                 } else {
                     if (finalList.contains(foodDetail)) {
-                        count += 1
-                        foodDetail!!.count = count
+                        qty += 1
+                        foodDetail!!.qty = qty
                     } else {
                         finalList.add(foodDetail!!)
                         vm.setFoodDetailList(finalList)
@@ -128,13 +130,13 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
 
     companion object {
-        private const val ARG_ALL_DATA = "all_data"
-        private const val ARG_CATEGORY = "category"
+        private const val MASTER_DATA = "all_data"
+        private const val MASTER_CATEGORY = "category"
         fun newInstance(allData: List<FoodBO>, category: String): BaseFoodFragment {
             return BaseFoodFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelableArrayList(ARG_ALL_DATA, ArrayList(allData))
-                    putString(ARG_CATEGORY, category)
+                    putParcelableArrayList(MASTER_DATA, ArrayList(allData))
+                    putString(MASTER_CATEGORY, category)
                 }
             }
         }

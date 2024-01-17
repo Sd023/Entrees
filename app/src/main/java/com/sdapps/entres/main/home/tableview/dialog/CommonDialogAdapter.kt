@@ -40,7 +40,7 @@ class CommonDialogAdapter(
 //        }else{
         holder.tbl.text = data?.get(position)?.seatNumber ?: ""
         holder.itemView.setOnClickListener {
-            view.switchActivity(position, data?.get(position)!!.tblId)
+            view.switchActivity(position, data?.get(position)!!.seatNumber)
         }
         //}
 

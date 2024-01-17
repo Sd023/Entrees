@@ -1,6 +1,7 @@
-package com.sdapps.entres.main.food.dialog
+package com.sdapps.entres.main.food.cartdialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.entres.core.constants.DataMembers
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.FoodCartBinding
-import com.sdapps.entres.main.food.view.CountVM
-import com.sdapps.entres.main.food.view.FoodBO
+import com.sdapps.entres.main.food.main.CountVM
+import com.sdapps.entres.main.food.main.FoodBO
 
 class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
@@ -22,6 +23,7 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
     private lateinit var tableId : String
     private lateinit var seats : String
+    private lateinit var tableName : String
     private lateinit var data : ArrayList<FoodBO>
 
 
@@ -35,7 +37,9 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
          tableId = args!!.getString("tableNumber")!!
          seats = args.getString("SEAT")!!
+        tableName = args.getString("TABLENAME")!!
 
+        Log.d("INTENT", "cart dialog $tableId, $seats ,$tableName")
         binding = FoodCartBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -77,7 +81,7 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
             val sb =  StringBuilder()
                 .append(QS(uid))
                 .append(",")
-                .append(QS(tableId))
+                .append(QS(tableName))
                 .append(",")
                 .append(QS(seats))
                 .append(",")
@@ -95,11 +99,11 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
                     .append(",")
                     .append(QS(orderDetail.foodName))
                     .append(",")
-                    .append(QS(orderDetail.count))
+                    .append(QS(orderDetail.qty))
                     .append(",")
                     .append(QS(orderDetail.price))
                     .append(",")
-                    .append(QS(tableId))
+                    .append(QS(tableName))
                     .append(",")
                     .append(QS(seats))
                     .append(",")

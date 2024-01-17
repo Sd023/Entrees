@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.food.view
+package com.sdapps.entres.main.food.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

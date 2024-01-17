@@ -5,7 +5,7 @@ import com.sdapps.entres.core.database.DBHandler
 interface TableViewManager {
 
     interface View {
-        fun showDialog(position: Int)
+        fun showDialog(position: Int, tableName: String)
         fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>)
 
         fun showAlertDialog(msg: String)

@@ -1,4 +1,4 @@
-package com.sdapps.entres.main.home.orders
+package com.sdapps.entres.main.home.orderhistory
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sdapps.entres.R
 import com.sdapps.entres.databinding.FragmentOrderHistoryBinding
-import com.sdapps.entres.databinding.HistoryViewBinding
-import com.sdapps.entres.main.home.orders.vm.OrderHistoryDataManager
-import com.sdapps.entres.main.home.orders.vm.OrderHistoryFactory
-import com.sdapps.entres.main.home.orders.vm.VM
+import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryDataManager
+import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryFactory
+import com.sdapps.entres.main.home.orderhistory.vm.VM
 
 
 class OrderHistoryFragment : Fragment() {

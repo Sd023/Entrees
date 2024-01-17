@@ -33,7 +33,7 @@ class TableViewAdapter(private val data: ArrayList<Int>,
     fun prepView(holder: ViewHolder, position: Int){
         try{
             if(NetworkTools().isAvailableConnection(context)){
-                val text = "Table : ${data[position]}"
+                val tableName = "Table : ${data[position]}"
 
                 val statusMap = data.mapNotNull { key -> map[key] }
 
@@ -47,10 +47,10 @@ class TableViewAdapter(private val data: ArrayList<Int>,
 
 
                 holder.layout.setOnClickListener {
-                    view.showDialog(data[position])
+                    view.showDialog(data[position],tableName)
                 }
 
-                holder.textView.text = text
+                holder.textView.text = tableName
             }else{
                 view.showAlertDialog("Cannot connect to network!")
             }

@@ -1,8 +1,8 @@
-package com.sdapps.entres.main.home.orders.vm
+package com.sdapps.entres.main.home.orderhistory.vm
 
 import android.content.Context
 import com.sdapps.entres.core.database.DBHandler
-import com.sdapps.entres.main.home.orders.OrderHistoryBO
+import com.sdapps.entres.main.home.orderhistory.OrderHistoryBO
 
 class OrderHistoryDataManager(var context: Context) {
 

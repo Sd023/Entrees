@@ -82,10 +82,11 @@ class TableViewFragment : Fragment(), TableViewManager.View {
     }
 
 
-    override fun showDialog(position: Int) {
+    override fun showDialog(position: Int, tableName: String) {
         val dialog = CommonDialog(presenter)
         val args = Bundle()
         args.putInt("POSITION", position)
+        args.putString("TABLENAME",tableName)
         dialog.arguments = args
         dialog.show(childFragmentManager, CommonDialog.TAG)
     }

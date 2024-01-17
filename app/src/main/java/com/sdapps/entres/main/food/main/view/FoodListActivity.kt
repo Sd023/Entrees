@@ -1,6 +1,7 @@
-package com.sdapps.entres.main.food.view.view
+package com.sdapps.entres.main.food.main.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.RelativeLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,18 +12,24 @@ import androidx.lifecycle.ViewModelProvider
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
-import com.sdapps.entres.main.food.dialog.CartViewDialog
-import com.sdapps.entres.main.food.view.CountVM
-import com.sdapps.entres.main.food.view.presenter.FoodActivityManager
-import com.sdapps.entres.main.food.view.FoodBO
-import com.sdapps.entres.main.food.view.presenter.FoodListPresenter
+import com.sdapps.entres.main.food.cartdialog.CartViewDialog
+import com.sdapps.entres.main.food.main.CountVM
+import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
+import com.sdapps.entres.main.food.main.FoodBO
+import com.sdapps.entres.main.food.main.presenter.FoodListPresenter
 
+
+
+//Parent class for Whole Food Activity, Which consits of Tab and Recyclerview
+//Category and Foodname data is filtered and category data is extracted used to inflate TabView.
+// Each food will be filtered based on the category and inflated in separate Fragment
+// RecyclerView logic should be handled in BaseFoodFragment & Adapter classes.
 
 class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     private lateinit var binding: ActivityFoodListBinding
     private lateinit var adapter: SectionAdapter
-    private lateinit var allList: ArrayList<FoodBO>
+    private lateinit var masterDataList: ArrayList<FoodBO>
 
     private lateinit var presenter: FoodListPresenter
     private lateinit var db: DBHandler
@@ -33,6 +40,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     private lateinit var tableId: String
     private lateinit var seat : String
+    private lateinit var tableName : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +50,12 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
         val bundle = intent.extras
         if(bundle != null){
+            //data from tableView Common Dialog
             tableId = bundle.getInt("tableNumber").toString()
             seat = bundle.getString("SEAT").toString()
+            tableName = bundle.getString("TABLENAME")!!
+
+            Log.d("INTENT GET","activity Created $tableId , $seat, $tableName")
         }
 
         db  = DBHandler(applicationContext)
@@ -68,24 +80,27 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         val args = Bundle()
         args.putString("tableNumber", tableId)
         args.putString("SEAT",seat)
+        args.putString("TABLENAME",tableName)
+        Log.d("INTENT", "cart : $tableId , $seat , $tableName")
         cartDialog.arguments = args
         cartDialog.show(supportFragmentManager,CartViewDialog.TAG)
     }
 
     fun setupViewPagerAndTab() {
-        allList = getList()
-        val categories: Set<String> = extractCategories(allList)
+        masterDataList = getFoodDataListFromDB()
+        val categorySet: Set<String> = extractFoodNameBasedOnCategory(masterDataList)
 
 
         adapter = SectionAdapter(supportFragmentManager)
 
 
-        for (category in categories) {
+        for (category in categorySet) {
             val frag = BaseFoodFragment.newInstance(
-                filterDataByCategory(allList,category),
+                filterFoodListByCategory(masterDataList,category),
                 category
             )
             adapter.addFragment(frag, category)
+            // Category is added to TabView & Food list added as RecyclerView.
         }
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
@@ -93,12 +108,12 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     }
 
-    fun extractCategories(list: ArrayList<FoodBO>): Set<String> {
+    fun extractFoodNameBasedOnCategory(list: ArrayList<FoodBO>): Set<String> {
         return list.map { it.category }.toSet()
     }
 
 
-    private fun filterDataByCategory(
+    private fun filterFoodListByCategory(
         allData: ArrayList<FoodBO>,
         category: String
     ): List<FoodBO> {
@@ -106,7 +121,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
     }
 
 
-    fun getList(): ArrayList<FoodBO> {
+    fun getFoodDataListFromDB(): ArrayList<FoodBO> {
         return presenter.getFoodMasterList(db)
     }
 
@@ -115,6 +130,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         private val fragments = mutableListOf<Fragment>()
         private val fragmentTitles = mutableListOf<String>()
 
+        //Tab view inflated here.
         fun addFragment(fragment: Fragment, title: String) {
             fragments.add(fragment)
             fragmentTitles.add(title)
