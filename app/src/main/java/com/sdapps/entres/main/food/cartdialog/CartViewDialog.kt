@@ -1,19 +1,26 @@
 package com.sdapps.entres.main.food.cartdialog
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sdapps.entres.BaseEntreesManager
 import com.sdapps.entres.core.constants.DataMembers
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.FoodCartBinding
 import com.sdapps.entres.main.food.main.CountVM
 import com.sdapps.entres.main.food.main.FoodBO
+import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryDataManager
+import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryFactory
+import com.sdapps.entres.main.home.orderhistory.vm.VM
 
-class CartViewDialog (private val vm : CountVM): DialogFragment() {
+class CartViewDialog (private val vm : CountVM): DialogFragment(){
 
     companion object {
         const val TAG = "FoodDialog"
@@ -21,12 +28,18 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
 
     private lateinit var binding: FoodCartBinding
 
+    private lateinit var prg : ProgressDialog
+
     private lateinit var tableId : String
     private lateinit var seats : String
     private lateinit var tableName : String
     private lateinit var data : ArrayList<FoodBO>
+    private lateinit var repo : CartRepo
 
-
+    private val viewModel by lazy {
+        repo = CartRepo(requireContext())
+        ViewModelProvider(this, CartVMFactory(repo))[CartVM::class.java]
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +47,7 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
     ): View {
 
         val args = arguments
-
+        prg = ProgressDialog(context)
          tableId = args!!.getString("tableNumber")!!
          seats = args.getString("SEAT")!!
         tableName = args.getString("TABLENAME")!!
@@ -61,14 +74,15 @@ class CartViewDialog (private val vm : CountVM): DialogFragment() {
         }
 
         binding.orderBtn.setOnClickListener {
-            insertData(data)
-
+            viewModel.insertDataToDB(data,tableName,seats)
         }
     }
 
-    fun insertData(list: ArrayList<FoodBO>){
+    fun insertData(dialog: CartViewDialog,list: ArrayList<FoodBO>){
 
         try{
+            dialog.dismiss()
+            Toast.makeText(context,"LETS GO ", Toast.LENGTH_LONG).show()
             val db = DBHandler(requireContext())
             //(orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)
 

@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class OrderHistoryFactory(private val app: Application, private val repo: OrderHistoryDataManager): ViewModelProvider.Factory{
+class OrderHistoryFactory(private val app: Application,
+                          private val repo: OrderHistoryDataManager)
+    : ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(VM::class.java)){

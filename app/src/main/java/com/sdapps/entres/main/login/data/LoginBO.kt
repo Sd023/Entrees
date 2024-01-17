@@ -9,5 +9,7 @@ class LoginBO {
     var hotel: String? = null
     var hotelBranch : String? = null
 
+    var createdDate : String? = null
+
 
 }

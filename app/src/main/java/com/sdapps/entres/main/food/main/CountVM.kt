@@ -3,6 +3,7 @@ package com.sdapps.entres.main.food.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sdapps.entres.main.food.cartdialog.CartViewDialog
 
 class CountVM: ViewModel() {
 
@@ -19,5 +20,9 @@ class CountVM: ViewModel() {
 
     fun setFoodDetailList(bo: ArrayList<FoodBO>){
         foodInCartList.value = bo
+    }
+
+    fun insertData(dialog: CartViewDialog, list: ArrayList<FoodBO>){
+
     }
 }
