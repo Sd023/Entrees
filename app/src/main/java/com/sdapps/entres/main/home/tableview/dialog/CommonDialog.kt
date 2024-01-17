@@ -1,15 +1,21 @@
 package com.sdapps.entres.main.home.tableview.dialog
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.sdapps.entres.main.food.view.view.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
 import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewPresenter
 import com.sdapps.entres.main.login.data.HotelBO
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), CommonDialogView.View {
     companion object {
@@ -22,6 +28,8 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
     private var position: Int? = null
     var tablText: String? = null
 
+    private lateinit var dialog : ProgressDialog
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,6 +37,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
     ): View? {
         val mArgs = arguments
         position = mArgs?.getInt("POSITION")
+        dialog = ProgressDialog(context)
         binding = CommonDialogTableViewBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -44,6 +53,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
         binding.tblTxt.text = tablText
         try {
             if (presenter != null) {
+                binding.progressBar.visibility = View.VISIBLE
                 presenter.getSeatsReference(this)
             }
 
@@ -72,6 +82,9 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
          cardAdapter.notifyDataSetChanged()
      }*/
 
+
+
+
     override fun switchActivity(position: Int, seat: String) {
         val intent = Intent(context, FoodListActivity::class.java)
         intent.putExtra("SEAT", seat)
@@ -80,7 +93,18 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
 
     }
 
+    fun showloading(){
+
+    }
+
+    fun hideLoading(){
+       binding.recyclerView.visibility = View.VISIBLE
+    }
+
     override fun setupView(map: HashMap<String, ArrayList<HotelBO.Seats>>?) {
+        binding.progressBar.visibility = View.GONE
+        binding.recyclerView.visibility = View.VISIBLE
+
         val list = map?.get(tablText)
         cardAdapter = CommonDialogAdapter(list, this)
         binding.recyclerView.adapter = cardAdapter

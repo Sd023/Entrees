@@ -21,6 +21,7 @@ lifecycle-viewmodel-ktx = "2.6.2"
 navigation-fragment-ktx = "2.7.6"
 annotation = "1.7.0"
 gms = "4.4.0"
+activity = "1.8.0"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
@@ -45,6 +46,7 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 gms ={group = "com.google.gms.google-services", name = "google-services", version.ref = "gms"}
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

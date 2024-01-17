@@ -12,8 +12,27 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text=""
+        android:text="Table"
         android:textSize="35sp" />
+
+
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/tblTxt"
+        android:indeterminate="true"
+        app:indicatorColor="@color/red"
+        app:indicatorSize="44dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackColor="@color/bg_color"
+        app:trackThickness="8dp" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -21,6 +40,7 @@
         android:layout_width="296dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:visibility="gone"
         android:layout_below="@id/tblTxt"
         android:layout_centerHorizontal="true"
         android:background="@android:color/background_light"

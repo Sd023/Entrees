@@ -53,6 +53,12 @@ open class BaseActivity : AppCompatActivity(), BaseView {
                     return@setOnItemSelectedListener true
                 }
 
+                R.id.orderHistory -> {
+                    val navController = findNavController(R.id.nav_host_fragment_activity_home_class)
+                    navController.navigate(R.id.orderHistory)
+                    return@setOnItemSelectedListener true
+                }
+
                 else -> { false }
             }
         }
