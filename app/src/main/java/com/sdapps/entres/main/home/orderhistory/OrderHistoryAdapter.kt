@@ -23,7 +23,7 @@ class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.tableId.text  = StringBuilder().append("Table: ").append(data[position].tableName).toString()
+        holder.tableId.text  = data[position].tableName
         holder.totalItems.text = StringBuilder().append("Total Items: ").append(data[position].totalItems).toString()
         holder.totalPrice.text = StringBuilder().append("Total Price: ").append(data[position].totalPrice).toString()
         //holder.status.text = StringBuilder().append("Status: ").append(data[position].status).toString()
