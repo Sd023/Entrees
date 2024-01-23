@@ -7,7 +7,7 @@ data class FoodBO(val category: String,
                   val foodName: String,
                   val price:Int,
                   val imgUrl : String,
-                  var qty: Int = 1) : Parcelable {
+                  var qty: Int = 1, var seatName: String, var tableName: String) : Parcelable {
 
 
 
@@ -16,7 +16,9 @@ data class FoodBO(val category: String,
         parcel.readString() ?: "",
         parcel.readInt(),
         parcel.readString() ?: "",
-        parcel.readInt()
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
     )
 
     override fun describeContents(): Int {
@@ -29,6 +31,8 @@ data class FoodBO(val category: String,
         dest.writeInt(price)
         dest.writeString(imgUrl)
         dest.writeInt(qty)
+        dest.writeString(seatName)
+        dest.writeString(tableName)
     }
 
     companion object CREATOR : Parcelable.Creator<FoodBO> {

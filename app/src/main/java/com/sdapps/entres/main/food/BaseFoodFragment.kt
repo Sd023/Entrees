@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
-import com.sdapps.entres.main.food.main.CountVM
+import com.sdapps.entres.main.food.main.vm.CartViewModel
 import com.sdapps.entres.main.food.main.FoodBO
 import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
 import com.sdapps.entres.network.NetworkTools
@@ -33,12 +33,11 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     private lateinit var finalList: ArrayList<FoodBO>
 
-    private lateinit var vm: CountVM
+    private lateinit var vm: CartViewModel
 
     private lateinit var badCount: NotificationBadge
     var qty = 1
     private lateinit var progressDialog: ProgressDialog
-
 
 
     override fun onCreateView(
@@ -53,7 +52,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         }
 
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
-        vm = ViewModelProvider(requireActivity())[CountVM::class.java]
+        vm = ViewModelProvider(requireActivity())[CartViewModel::class.java]
         return view
 
     }
@@ -72,23 +71,13 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
-            adapter.itemClickListener {
-                val foodDetail = filteredFoodList.getOrNull(it)
+            adapter.itemClickListener { position ->
+                val foodDetail = filteredFoodList.getOrNull(position)
+
                 if (vm.cartList.value != null) {
-                    if (finalList.contains(foodDetail)) {
-                        qty += 1
-                        foodDetail!!.qty = qty
-                    } else {
-                        val list = vm.cartList.value
-                        if(list!!.contains(foodDetail)){
-                            qty = 1
-                            foodDetail?.qty = qty + 1
-                            finalList.add(foodDetail!!)
-                        }else{
-                            vm.cartList.value!!.add(foodDetail!!)
-                        }
-                    }
-                } else {
+                    finalList = vm.cartList.value!!
+                }
+                if (finalList.isNotEmpty()) {
                     if (finalList.contains(foodDetail)) {
                         qty += 1
                         foodDetail!!.qty = qty
@@ -96,11 +85,11 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
                         finalList.add(foodDetail!!)
                         vm.setFoodDetailList(finalList)
                     }
+                } else {
+                    finalList.add(foodDetail!!)
+                    vm.setFoodDetailList(finalList)
                 }
                 vm.increaseCount()
-                hideLoading()
-
-
             }
         } else {
             hideAllViews()
@@ -114,13 +103,14 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         recyclerView.visibility = View.GONE
     }
 
-    fun showLoading(){
+    fun showLoading() {
         progressDialog.setTitle("Entrees")
         progressDialog.setMessage("Adding Food to Cart")
         progressDialog.setCancelable(false)
         progressDialog.show()
     }
-    fun hideLoading(){
+
+    fun hideLoading() {
         progressDialog.dismiss()
     }
 

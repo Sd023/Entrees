@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
+import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
 import com.sdapps.entres.main.food.BaseFoodFragment
-import com.sdapps.entres.main.food.cartdialog.CartViewDialog
-import com.sdapps.entres.main.food.main.CountVM
+import com.sdapps.entres.main.food.main.vm.CartViewModel
 import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
 import com.sdapps.entres.main.food.main.FoodBO
 import com.sdapps.entres.main.food.main.presenter.FoodListPresenter
-
+import com.sdapps.entres.main.food.main.vm.CartRepo
+import com.sdapps.entres.main.food.main.vm.CartVMFactory
 
 
 //Parent class for Whole Food Activity, Which consits of Tab and Recyclerview
@@ -33,7 +34,6 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     private lateinit var presenter: FoodListPresenter
     private lateinit var db: DBHandler
-    private lateinit var vm : CountVM
 
     private lateinit var cart: RelativeLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -42,6 +42,14 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
     private lateinit var seat : String
     private lateinit var tableName : String
 
+    private lateinit var rightDrawerFragment: Fragment
+    private lateinit var repo : CartRepo
+
+
+    private val viewModel by lazy {
+        repo = CartRepo(applicationContext)
+        ViewModelProvider(this, CartVMFactory(repo))[CartViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +67,12 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         }
 
         db  = DBHandler(applicationContext)
-        vm = ViewModelProvider(this)[CountVM::class.java]
 
         presenter = FoodListPresenter(applicationContext)
         presenter.attachView(this)
         setupViewPagerAndTab()
 
-        vm.count.observe(this) {
+        viewModel.count.observe(this) {
             binding.count.text = it.toString()
         }
         binding.cartItem.setOnClickListener {
@@ -76,14 +83,19 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
 
     fun openCart(){
-        val cartDialog = CartViewDialog(vm)
-        val args = Bundle()
-        args.putString("tableNumber", tableId)
-        args.putString("SEAT",seat)
-        args.putString("TABLENAME",tableName)
-        Log.d("INTENT", "cart : $tableId , $seat , $tableName")
-        cartDialog.arguments = args
-        cartDialog.show(supportFragmentManager,CartViewDialog.TAG)
+        rightDrawerFragment = CartDrawerFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        val frag = fragmentManager.findFragmentByTag("cartDrawerFragment")
+
+        if(frag != null){
+            transaction.remove(frag)
+        }
+
+        rightDrawerFragment = CartDrawerFragment()
+        transaction.replace(R.id.rightFragView, rightDrawerFragment, "cartDrawerFragment").commit()
+        binding.drawerLayout.openDrawer(findViewById(R.id.rightFragView))
+
     }
 
     fun setupViewPagerAndTab() {
@@ -148,6 +160,12 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
             return fragmentTitles[position]
 
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.resetCount()
     }
 
     override fun updateBadge(count: Int) {
