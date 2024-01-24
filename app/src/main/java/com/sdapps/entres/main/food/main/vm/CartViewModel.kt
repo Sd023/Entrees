@@ -15,6 +15,9 @@ class CartViewModel(var repo: CartRepo): ViewModel() {
     private val foodInCartList = MutableLiveData<ArrayList<FoodBO>>()
     val cartList : LiveData<ArrayList<FoodBO>> = foodInCartList
 
+    private val isOrdered = MutableLiveData<Boolean>()
+    val _isOrdered : LiveData<Boolean> = isOrdered
+
 
     fun increaseCount(){
         _counter.value = (_counter.value ?: 0) + 1
@@ -27,7 +30,6 @@ class CartViewModel(var repo: CartRepo): ViewModel() {
     fun resetCount(){
         _counter.value = 0
     }
-
     fun insertDataToDB(list: ArrayList<FoodBO>, tableName: String, seat: String){
         viewModelScope.launch {
             repo.insertData(list, tableName, seat)

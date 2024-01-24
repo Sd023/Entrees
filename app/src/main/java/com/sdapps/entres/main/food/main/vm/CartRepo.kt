@@ -11,7 +11,6 @@ class CartRepo(var context: Context) {
     fun insertData (list: ArrayList<FoodBO>, tableName : String, seats: String){
 
         try{
-            Toast.makeText(context,"LETS GO ", Toast.LENGTH_LONG).show()
             val db = DBHandler(context)
             //(orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)
 
@@ -56,6 +55,7 @@ class CartRepo(var context: Context) {
                     DataMembers.tbl_orderDetail,
                     DataMembers.tbl_orderDetailCols,orderDetails.toString())
             }
+            Toast.makeText(context,"Order Saved!", Toast.LENGTH_LONG).show()
         }catch (ex: Exception){
             ex.printStackTrace()
         }

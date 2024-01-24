@@ -17,6 +17,8 @@ import com.sdapps.entres.R
 import com.sdapps.entres.main.food.main.vm.CartViewModel
 import com.sdapps.entres.main.food.main.FoodBO
 import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
+import com.sdapps.entres.main.food.main.vm.CartRepo
+import com.sdapps.entres.main.food.main.vm.CartVMFactory
 import com.sdapps.entres.network.NetworkTools
 
 
@@ -38,7 +40,6 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     private lateinit var badCount: NotificationBadge
     var qty = 1
     private lateinit var progressDialog: ProgressDialog
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -150,5 +151,9 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
     }
 
     override fun updateBadge(count: Int) {
+    }
+
+    override fun closeDrawer() {
+
     }
 }
