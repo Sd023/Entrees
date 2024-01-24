@@ -58,15 +58,17 @@ class ProfileFragment() : Fragment(){
     fun initProfile(){
         if(NetworkTools().isAvailableConnection(requireContext())){
             viewModel.getUserProfileData().observe(viewLifecycleOwner, Observer {
-                it?.let {
-                    binding.profileName.text = it.name
-                    binding.email.text= it.email
-                    binding.profileRole.text = it.role
-                    binding.dayOrders.text = it.dayOrder.toString() ?: ""
-                    binding.totalOrders.text = it.totalOrders.toString() ?: ""
-                    binding.phone.text = it.contact
-                    binding.rank.text = it.rank.toString() ?: ""
-                    val ref= Firebase.storage.getReferenceFromUrl(it.imgUrl!!)
+                it?.let { attr ->
+                    binding.profileName.text = attr.name
+                    binding.email.text= attr.email
+                    binding.profileRole.text = attr.role
+                    binding.dayOrders.text = attr.dayOrder.toString() ?: ""
+                    binding.totalOrders.text = attr.totalOrders.toString() ?: ""
+                    binding.phone.text = attr.contact
+                    binding.rank.text = attr.rank.toString() ?: ""
+                    binding.hotelBranch.text = attr.hotelBranch.toString()
+                    binding.hotelName.text = attr.hotelName.toString()
+                    val ref= Firebase.storage.getReferenceFromUrl(attr.imgUrl!!)
 
                     ref.downloadUrl.addOnCompleteListener(OnCompleteListener{ task : Task<Uri> ->
 
