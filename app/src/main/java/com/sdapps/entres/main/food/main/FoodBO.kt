@@ -5,20 +5,26 @@ import android.os.Parcelable
 
 data class FoodBO(val category: String,
                   val foodName: String,
-                  val price:Int,
+                  var price:Double,
                   val imgUrl : String,
-                  var qty: Int = 1, var seatName: String, var tableName: String) : Parcelable {
+                  var qty: Int = 1,
+                  var seatName: String,
+                  var tableName: String,
+    var totalOrderValue : Double
+
+) : Parcelable {
 
 
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readInt(),
+        parcel.readDouble()?: 0.0,
         parcel.readString() ?: "",
-        parcel.readInt(),
+        parcel.readInt()?: 0,
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readDouble() ?: 0.0
     )
 
     override fun describeContents(): Int {
@@ -28,11 +34,12 @@ data class FoodBO(val category: String,
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(category)
         dest.writeString(foodName)
-        dest.writeInt(price)
+        dest.writeDouble(price)
         dest.writeString(imgUrl)
         dest.writeInt(qty)
         dest.writeString(seatName)
         dest.writeString(tableName)
+        dest.writeDouble(totalOrderValue)
     }
 
     companion object CREATOR : Parcelable.Creator<FoodBO> {

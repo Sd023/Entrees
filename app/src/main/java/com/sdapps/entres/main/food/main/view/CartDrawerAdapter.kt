@@ -4,18 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
-import com.sdapps.entres.core.commons.ClickGuard
-import com.sdapps.entres.core.constants.DataMembers
-import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.main.food.main.FoodBO
+import com.sdapps.entres.main.food.main.vm.CartViewModel
 
-class CartDrawerAdapter(var context: Context, var data: ArrayList<FoodBO>) :
+class CartDrawerAdapter(var vm: CartViewModel,var parent : CartDrawerFragment,var context: Context, var data: ArrayList<FoodBO>) :
     RecyclerView.Adapter<CartDrawerAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -23,13 +21,19 @@ class CartDrawerAdapter(var context: Context, var data: ArrayList<FoodBO>) :
             holder.count.text = data[position].qty.toString()
             holder.foodName.text = data[position].foodName
             holder.foodPrice.text = data[position].price.toString()
+
+            if(data[position].qty <= 1){
+                holder.removeItem.setImageResource(R.drawable.cross)
+            }
         }
 
         holder.addItem.setOnClickListener {
             val count = data[position].qty
             val addQty = count + 1
             data[position].qty = addQty
-            notifyDataSetChanged()
+            notifyItemChanged(position)
+            vm.calculateOrderValue(data)
+
         }
 
         holder.removeItem.setOnClickListener {
@@ -40,10 +44,10 @@ class CartDrawerAdapter(var context: Context, var data: ArrayList<FoodBO>) :
                 Toast.makeText(context, "Items cannot be 0", Toast.LENGTH_LONG).show()
             } else {
                 data[position].qty = removeQty
-                notifyDataSetChanged()
+                notifyItemChanged(position)
+                vm.calculateOrderValue(data)
             }
         }
-
     }
 
 
@@ -73,6 +77,7 @@ class CartDrawerAdapter(var context: Context, var data: ArrayList<FoodBO>) :
         var removeItem: ImageView= itemView.findViewById(R.id.removeItem)
         var count: TextView= itemView.findViewById(R.id.cartCount)
 
+        var cardViewCart : RelativeLayout = itemView.findViewById(R.id.cardViewCart)
     }
 
 

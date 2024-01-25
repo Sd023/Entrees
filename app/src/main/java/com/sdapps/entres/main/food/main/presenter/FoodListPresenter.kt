@@ -23,9 +23,9 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
                 while (cursor.moveToNext()) {
                     val category = cursor.getString(0)
                     val foodName = cursor.getString(1)
-                    val price = cursor.getInt(2)
+                    val price = cursor.getDouble(2)
                     val imgUrl = cursor.getString(3)
-                    foodList.add(FoodBO(category, foodName,price, imgUrl,1,"",""))
+                    foodList.add(FoodBO(category, foodName,price, imgUrl,1,"","",0.0))
                 }
                 cursor.close()
             }

@@ -1,19 +1,25 @@
 package com.sdapps.entres.main.food
 
 import android.app.ProgressDialog
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.notificationbadge.NotificationBadge
 import com.sdapps.entres.R
+import com.sdapps.entres.main.BaseEntreesFragment
 import com.sdapps.entres.main.food.main.vm.CartViewModel
 import com.sdapps.entres.main.food.main.FoodBO
 import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
@@ -24,7 +30,7 @@ import com.sdapps.entres.network.NetworkTools
 
 //Base view  where food data is loaded in recyclerview.
 // filtered based on the category
-class BaseFoodFragment : Fragment(), FoodActivityManager.View {
+class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FoodAdapter
@@ -39,6 +45,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
 
     private lateinit var badCount: NotificationBadge
     var qty = 1
+    var totalOrderValue = 0.0
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(
@@ -73,6 +80,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
             adapter.itemClickListener { position ->
+                vibrate()
                 val foodDetail = filteredFoodList.getOrNull(position)
 
                 if (vm.cartList.value != null) {
@@ -82,15 +90,23 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
                     if (finalList.contains(foodDetail)) {
                         qty += 1
                         foodDetail!!.qty = qty
+                        vm.calculateOrderValue(finalList)
+                        foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     } else {
+                        vm.calculateOrderValue(finalList)
+                        foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                         finalList.add(foodDetail!!)
                         vm.setFoodDetailList(finalList)
                     }
                 } else {
+                    vm.calculateOrderValue(finalList)
+                    foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     finalList.add(foodDetail!!)
                     vm.setFoodDetailList(finalList)
+
                 }
                 vm.increaseCount()
+                Toast.makeText(context,"Food Added to Cart",Toast.LENGTH_LONG).show()
             }
         } else {
             hideAllViews()
@@ -110,6 +126,7 @@ class BaseFoodFragment : Fragment(), FoodActivityManager.View {
         progressDialog.setCancelable(false)
         progressDialog.show()
     }
+
 
     fun hideLoading() {
         progressDialog.dismiss()

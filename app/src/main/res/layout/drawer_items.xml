@@ -8,6 +8,7 @@
     app:cardCornerRadius="6dp">
 
     <RelativeLayout
+        android:id="@+id/cardViewCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
@@ -51,8 +52,8 @@
 
             <ImageView
                 android:id="@+id/removeItem"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:clickable="true"
                 android:focusable="true"
@@ -72,8 +73,8 @@
 
             <ImageView
                 android:id="@+id/addItem"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:clickable="true"

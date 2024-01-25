@@ -23,10 +23,11 @@ import com.google.firebase.storage.ktx.storage
 import com.sdapps.entres.R
 import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.databinding.FragmentProfileBinding
+import com.sdapps.entres.main.BaseEntreesFragment
 import com.sdapps.entres.main.food.BaseFoodFragment
 import com.sdapps.entres.network.NetworkTools
 
-class ProfileFragment() : Fragment(){
+class ProfileFragment() : BaseEntreesFragment(){
 
 
     private lateinit var binding: FragmentProfileBinding

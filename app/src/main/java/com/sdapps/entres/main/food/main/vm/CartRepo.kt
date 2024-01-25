@@ -8,7 +8,7 @@ import com.sdapps.entres.main.food.main.FoodBO
 
 class CartRepo(var context: Context) {
 
-    fun insertData (list: ArrayList<FoodBO>, tableName : String, seats: String){
+    fun insertData (totalOrderPrice: Double,list: ArrayList<FoodBO>, tableName : String, seats: String){
 
         try{
             val db = DBHandler(context)
@@ -29,11 +29,13 @@ class CartRepo(var context: Context) {
                 .append(",")
                 .append(QS(list.size))
                 .append(",")
-                .append(QS(list.size))  //simple logic
+                .append(totalOrderPrice)  //simple logic
 
             db.insertSQL(DataMembers.tbl_orderHeader, DataMembers.tbl_orderHeaderCols,sb.toString())
 
             for(orderDetail in list){
+
+                val qtyValue = orderDetail.qty * orderDetail.price
 
                 //(orderId TEXT,foodName TEXT, qty INT,price DOUBLE, tableId TEXT,seatNumber TEXT, totalOrderValue DOUBLE)
                 val orderDetails = StringBuilder()
@@ -49,7 +51,7 @@ class CartRepo(var context: Context) {
                     .append(",")
                     .append(QS(seats))
                     .append(",")
-                    .append(QS(orderDetail.price))
+                    .append(QS(qtyValue))
 
                 db.insertSQL(
                     DataMembers.tbl_orderDetail,
