@@ -10,6 +10,8 @@ class ProfileBO {
     var role : String? = null
     var isFrom: String? = null
 
+    var hotelBranch : String? = null
+    var hotelName : String? = null
 
     var dayOrder : Int? = null
     var rank : Int? = null

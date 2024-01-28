@@ -8,7 +8,7 @@ object DBHelper {
         try{
             db.openDataBase()
             db.dbRawQuery("create table if not exists MasterUser(uid TEXT,email TEXT,userId INT PRIMARY KEY UNIQUE,role TEXT,hotel TEXT,hotelBranch TEXT,createdDate TEXT)")
-            db.dbRawQuery("create table if not exists FoodDataMaster(id INT PRIMARY KEY UNIQUE,foodName TEXT,category TEXT,price INT,imgUrl TEXT)")
+            db.dbRawQuery("create table if not exists FoodDataMaster(id INT PRIMARY KEY UNIQUE,foodName TEXT,category TEXT,price DOUBLE,imgUrl TEXT)")
             db.dbRawQuery("create table if not exists TableMaster (tableId TEXT PRIMARY KEY UNIQUE, tableName TEXT,isStatus TEXT)")
             db.dbRawQuery("create table if not exists TableSeatMapping (tableId TEXT PRIMARY KEY UNIQUE,tableName TEXT,seatNum TEXT)")
             db.dbRawQuery("create table if not exists OrderHeader (orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)")

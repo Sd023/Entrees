@@ -7,6 +7,7 @@ interface FoodActivityManager {
 
     interface View{
         fun updateBadge(count: Int)
+        fun closeDrawer()
 
     }
     interface Presenter{

@@ -31,4 +31,6 @@
     <string name="notification">Notification</string>
     <string name="cart">Cart</string>
     <string name="cart_count">0</string>
+    <string name="totalOrderValue">"Total Value : "</string>
+    <string name="items_not_added_to_cart">Items not added to cart</string>
 </resources>
