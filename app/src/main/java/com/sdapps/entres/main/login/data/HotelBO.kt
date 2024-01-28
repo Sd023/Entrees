@@ -20,5 +20,5 @@ class HotelBO {
 
     data class Items(var name: String,var category: String,var id: String, var imgUrl : String, var price: String)
 
-    data class Seats(var seatNumber : String, var tblId : String)
+    data class Seats(var seatNumber : String, var tblId : String, var isOrdered: Boolean = false)
 }

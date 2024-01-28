@@ -93,16 +93,16 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
                         vm.calculateOrderValue(finalList)
                         foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     } else {
-                        vm.calculateOrderValue(finalList)
-                        foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                         finalList.add(foodDetail!!)
                         vm.setFoodDetailList(finalList)
+                        vm.calculateOrderValue(finalList)
+                        foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     }
                 } else {
-                    vm.calculateOrderValue(finalList)
-                    foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     finalList.add(foodDetail!!)
                     vm.setFoodDetailList(finalList)
+                    vm.calculateOrderValue(finalList)
+                    foodDetail!!.totalOrderValue = vm.getOrderValue()!!
 
                 }
                 vm.increaseCount()

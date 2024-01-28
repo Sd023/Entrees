@@ -240,7 +240,8 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
 
                                     val items = HotelBO.Seats(
                                         seatAttributes["seatNum"].toString(),
-                                        seatAttributes["tableId"].toString()
+                                        seatAttributes["tableId"].toString(),
+                                        seatAttributes["isOrdered"].toString().toBoolean()
                                     )
                                     tblSeatDetail!!.add(items)
                                     tblKeyMap!![test.toString()] = tblSeatDetail!!
