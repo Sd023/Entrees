@@ -33,8 +33,8 @@ class CartViewDialog (private val vm : CartViewModel): DialogFragment() {
 
         val args = arguments
 
-         tableId = args!!.getString("tableNumber")!!
-         seats = args.getString("SEAT")!!
+        tableId = args!!.getString("tableNumber")!!
+        seats = args.getString("SEAT")!!
         tableName = args.getString("TABLENAME")!!
 
         Log.d("INTENT", "cart dialog $tableId, $seats ,$tableName")
