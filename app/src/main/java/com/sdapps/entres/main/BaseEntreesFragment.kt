@@ -1,6 +1,7 @@
 package com.sdapps.entres.main
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -8,10 +9,17 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.print.PrintHelper
+import com.sdapps.entres.R
 
 open class BaseEntreesFragment() : Fragment() {
 
+    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var alert: AlertDialog
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -22,6 +30,10 @@ open class BaseEntreesFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    interface AlertDialogListener{
+        fun onClick()
     }
 
     fun vibrate(){
@@ -38,6 +50,22 @@ open class BaseEntreesFragment() : Fragment() {
                 vibrator.vibrate(100)
             }
         }
+    }
+
+    fun showPrintDialog(listener: AlertDialogListener){
+        dialog = AlertDialog.Builder(requireContext())
+        dialog.setMessage("Order Created Successfully!")
+            .setPositiveButton("PrintOrder"
+            ) { dialog, which ->
+                listener.onClick()
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+
+            }
+            .setCancelable(false)
+        alert = dialog.create()
+        alert.show()
+
     }
 
 

@@ -14,7 +14,7 @@ class CartRepo(var context: Context) {
     private lateinit var hotel: String
     private lateinit var hotelBranch : String
 
-    fun insertData (totalOrderPrice: Double,list: ArrayList<FoodBO>, tableName : String, seats: String){
+    fun insertData (vm : CartViewModel,totalOrderPrice: Double,list: ArrayList<FoodBO>, tableName : String, seats: String){
 
         try{
             val db = DBHandler(context)
@@ -23,8 +23,9 @@ class CartRepo(var context: Context) {
             if(currentUserID.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
                 val userID = currentUserID
-
+                var lineValue = 0.0
                 val uid = StringBuilder().append(userID).append(timestamp)
+                vm.setOrderId(uid.toString())
 
                 val sb =  StringBuilder()
                     .append(QS(uid))
@@ -41,7 +42,7 @@ class CartRepo(var context: Context) {
 
                 for(orderDetail in list){
 
-                    val qtyValue = orderDetail.qty * orderDetail.price
+                    lineValue = (orderDetail.qty * orderDetail.price)
 
                     //(orderId TEXT,foodName TEXT, qty INT,price DOUBLE, tableId TEXT,seatNumber TEXT, totalOrderValue DOUBLE)
                     val orderDetails = StringBuilder()
@@ -57,14 +58,14 @@ class CartRepo(var context: Context) {
                         .append(",")
                         .append(QS(seats))
                         .append(",")
-                        .append(QS(qtyValue))
+                        .append(QS(lineValue))
 
                     db.insertSQL(
                         DataMembers.tbl_orderDetail,
                         DataMembers.tbl_orderDetailCols,orderDetails.toString())
 
                 }
-                sendOrderDetailsToFirebase(uid.toString(),list,totalOrderPrice,tableName,seats)
+                sendOrderDetailsToFirebase(vm,uid.toString(),list,totalOrderPrice,tableName,seats)
 
             }else{
                 showToast("User id empty, Unable to create Order")
@@ -77,7 +78,7 @@ class CartRepo(var context: Context) {
 
     }
 
-    fun sendOrderDetailsToFirebase(uid: String,list: ArrayList<FoodBO>, totalOrderPrice: Double, tableName: String, seats: String){
+    fun sendOrderDetailsToFirebase(vm: CartViewModel,uid: String,list: ArrayList<FoodBO>, totalOrderPrice: Double, tableName: String, seats: String){
         try{
             var isDataInserted = false
 
@@ -88,9 +89,8 @@ class CartRepo(var context: Context) {
                 .child(hotel)
                 .child(hotelBranch)
 
-            var orderHeaderMap : HashMap<String,Any> = hashMapOf()
-            var orderDetailsMap : HashMap<String, Any> = hashMapOf()
-            var orderDetailsMaster : HashMap<String, HashMap<String, Any>> = hashMapOf()
+            val orderHeaderMap : HashMap<String,Any> = hashMapOf()
+            val orderDetailsMaster : HashMap<String, HashMap<String, Any>> = hashMapOf()
             //OrderHeader - (orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)
 
 
@@ -101,6 +101,8 @@ class CartRepo(var context: Context) {
             orderHeaderMap["totalItems"] = list.size
 
             ref.child("OrderHeader")
+                .child(tableName)
+                .child(seats)
                 .child(uid)
                 .setValue(orderHeaderMap)
                 .addOnSuccessListener { task ->
@@ -112,14 +114,19 @@ class CartRepo(var context: Context) {
 
             //OrderDetail - (orderId TEXT,foodName TEXT, qty INT,price DOUBLE, tableId TEXT,seatNumber TEXT, totalOrderValue DOUBLE)
 
+            var totalLineValue = 0.0
             for((index,data) in list.withIndex()){
+                totalLineValue = (data.qty * data.price)
+                val orderDetailsMap : HashMap<String, Any> = hashMapOf()
                 orderDetailsMap["OrderID"] = uid
                 orderDetailsMap["FoodName"] = data.foodName
                 orderDetailsMap["qty"]= data.qty
                 orderDetailsMap["price"] = data.price
+                orderDetailsMap["lineTotal"] = totalLineValue
                 orderDetailsMap["totalOrderValue"] = totalOrderPrice
                 orderDetailsMaster["$uid : $index"] = orderDetailsMap
             }
+            vm.setOrderedHashMap(orderDetailsMaster)
 
             ref.child("OrderDetails")
                 .child(tableName)

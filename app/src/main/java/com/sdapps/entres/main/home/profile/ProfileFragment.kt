@@ -96,15 +96,11 @@ class ProfileFragment() : BaseEntreesFragment(){
             showAlert("Cannot connect to network")
         }
 
-
-
-
     }
-
-
     fun showAlert(err: String){
         val layoutInflator = this.layoutInflater
         val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout,null)
+
         dialog = AlertDialog.Builder(requireContext()).setView(dialogView)
         val dialogText = dialogView.findViewById<TextView>(R.id.titleDialog)
         val btn = dialogView.findViewById<Button>(R.id.btn_done)

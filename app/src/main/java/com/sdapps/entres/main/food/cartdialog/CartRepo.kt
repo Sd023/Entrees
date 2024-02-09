@@ -15,8 +15,6 @@ class CartRepo(var context: Context) {
             Toast.makeText(context,"LETS GO ", Toast.LENGTH_LONG).show()
             val db = DBHandler(context)
             //(orderId TEXT, tableId TEXT, seatNumber TEXT, totalItems INT, totalOrderValue Double)
-
-
             val timestamp = System.currentTimeMillis()
             val userID = fetchUserId(db)
 

@@ -18,11 +18,30 @@ class CartViewModel(var repo: CartRepo): ViewModel() {
     private val _orderValue = MutableLiveData<Double>().apply { value = 0.0 }
     val totalOrderValue : LiveData<Double> =  _orderValue
 
+
+    private val _orderedMap = MutableLiveData<HashMap<String, HashMap<String, Any>>>()
+    private val _ordId = MutableLiveData<String>()
+
+
+
+    fun setOrderId(ordId: String){
+        _ordId.value = ordId
+    }
+
+    fun getOrderId(): String? {
+        return _ordId.value
+    }
     fun increaseCount(){
         _counter.value = (_counter.value ?: 0) + 1
     }
 
+    fun setOrderedHashMap(map : HashMap<String, HashMap<String,Any>>){
+        _orderedMap.value = map
+    }
 
+    fun getOrderedHashMap(): HashMap<String,HashMap<String, Any>>?{
+        return _orderedMap.value
+    }
 
     fun calculateOrderValue(list: ArrayList<FoodBO>){
         var sum = 0.0
@@ -43,9 +62,6 @@ class CartViewModel(var repo: CartRepo): ViewModel() {
         _counter.value = 0
     }
     fun insertDataToDB(totalOrderPrice: Double,list: ArrayList<FoodBO>, tableName: String, seat: String){
-        viewModelScope.launch {
-            repo.insertData(totalOrderPrice,list, tableName, seat)
-        }
-
+        repo.insertData(this,totalOrderPrice,list, tableName, seat)
     }
 }

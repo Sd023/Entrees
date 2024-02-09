@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.entres.R
 import com.sdapps.entres.databinding.DrawerContentMainBinding
 import com.sdapps.entres.main.BaseEntreesFragment
+import com.sdapps.entres.main.PrintDataManager
 import com.sdapps.entres.main.food.main.FoodBO
 import com.sdapps.entres.main.food.main.presenter.FoodActivityManager
 import com.sdapps.entres.main.food.main.vm.CartRepo
 import com.sdapps.entres.main.food.main.vm.CartVMFactory
 import com.sdapps.entres.main.food.main.vm.CartViewModel
 
-class CartDrawerFragment : BaseEntreesFragment() {
+class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialogListener {
 
     private lateinit var binding: DrawerContentMainBinding
     private lateinit var vm: CartViewModel
@@ -26,7 +27,6 @@ class CartDrawerFragment : BaseEntreesFragment() {
 
     private var tableName: String? = null
     private var seat: String? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +93,7 @@ class CartDrawerFragment : BaseEntreesFragment() {
                         itemList.clear()
                         vm.resetCount()
                         closeListener!!.closeDrawer()
+                        showPrintDialog(this)
                     } else {
                         Toast.makeText(context, "Unable to save Data", Toast.LENGTH_LONG).show()
 
@@ -111,6 +112,10 @@ class CartDrawerFragment : BaseEntreesFragment() {
 
     fun closeDrawer(listener: FoodActivityManager.View) {
         this.closeListener = listener
+    }
+
+    override fun onClick() {
+        PrintDataManager(vm,requireContext()).createPrintFile()
     }
 
 }
