@@ -18,14 +18,14 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
         const val TAG = "CommonDialog"
     }
 
-    private lateinit var cardAdapter: CommonDialogAdapter
+    private lateinit var cardAdapter: SeatsDialogAdapter
     private lateinit var data: ArrayList<String>
     private lateinit var binding: CommonDialogTableViewBinding
     private var position: Int? = null
     var tablText: String? = null
     var tableName: String? = null
 
-    private lateinit var dialog : ProgressDialog
+    private lateinit var dialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +63,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
 
 
 //        data = arrayListOf("A", "B")
-        /* cardAdapter = CommonDialogAdapter(data,*//*object : CommonDialogAdapter.OnLastItemClickListener{
+        /* cardAdapter = SeatsDialogAdapter(data,*//*object : SeatsDialogAdapter.OnLastItemClickListener{
                 override fun onLastItemClick(lastPos: Int) {
                     addNewElement(lastPos)
                 }
@@ -83,8 +83,6 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
      }*/
 
 
-
-
     override fun switchActivity(position: Int, seat: String) {
         val intent = Intent(context, FoodListActivity::class.java)
         intent.putExtra("SEAT", seat)
@@ -95,12 +93,12 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
 
     }
 
-    fun showloading(){
+    fun showloading() {
 
     }
 
-    fun hideLoading(){
-       binding.recyclerView.visibility = View.VISIBLE
+    fun hideLoading() {
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
     override fun setupView(map: HashMap<String, ArrayList<HotelBO.Seats>>?) {
@@ -108,7 +106,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
         binding.recyclerView.visibility = View.VISIBLE
 
         val list = map?.get(tablText)
-        cardAdapter = CommonDialogAdapter(list, this)
+        cardAdapter = SeatsDialogAdapter(list, this)
         binding.recyclerView.adapter = cardAdapter
     }
 }

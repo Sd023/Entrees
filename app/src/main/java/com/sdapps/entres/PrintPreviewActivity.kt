@@ -11,7 +11,7 @@ import java.io.File
 class PrintPreviewActivity : AppCompatActivity() {
 
 
-    private lateinit var binding : ActivityPrintPreviewBinding
+    private lateinit var binding: ActivityPrintPreviewBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,14 +19,14 @@ class PrintPreviewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val filePath = intent.getStringExtra("file_path")
-        if(filePath!!.isNotEmpty()){
+        if (filePath!!.isNotEmpty()) {
             val file = File(filePath)
             if (file.exists()) {
                 binding.textViewPreview.text = file.readText()
             }
         }
 
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             onBackPressed()
         }
 

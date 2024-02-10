@@ -89,7 +89,7 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
 
                 binding.cartOrderBtn.setOnClickListener {
                     if (tableName!!.isNotEmpty() && seat!!.isNotEmpty()) {
-                        vm.insertDataToDB(vm.getOrderValue()!!,itemList, tableName!!, seat!!)
+                        vm.insertDataToDB(vm.getOrderValue()!!, itemList, tableName!!, seat!!)
                         itemList.clear()
                         vm.resetCount()
                         closeListener!!.closeDrawer()
@@ -115,7 +115,7 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
     }
 
     override fun onClick() {
-        PrintDataManager(vm,requireContext()).createPrintFile()
+        PrintDataManager(vm, requireContext()).createPrintFile()
     }
 
 }

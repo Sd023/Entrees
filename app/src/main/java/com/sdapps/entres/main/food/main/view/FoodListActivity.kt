@@ -55,7 +55,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("LIFE","onCreate drawer close")
+        Log.d("LIFE", "onCreate drawer close")
         binding = ActivityFoodListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -68,7 +68,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
 
             Log.d("INTENT GET", "activity Created $tableId , $seat, $tableName")
         }
-        rightDrawerFragment = CartDrawerFragment.newInstance(tableName,seat)
+        rightDrawerFragment = CartDrawerFragment.newInstance(tableName, seat)
         rightDrawerFragment.arguments = bundle
 
 
@@ -97,9 +97,9 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
             transaction.remove(frag)
         }
 
-        rightDrawerFragment = CartDrawerFragment.newInstance(tableName,seat)
+        rightDrawerFragment = CartDrawerFragment.newInstance(tableName, seat)
 
-        Log.d("INTENT","Cart clicked $tableName,$seat")
+        Log.d("INTENT", "Cart clicked $tableName,$seat")
         (rightDrawerFragment as CartDrawerFragment).closeDrawer(this)
         transaction.replace(R.id.rightFragView, rightDrawerFragment, "cartDrawerFragment").commit()
         binding.drawerLayout.openDrawer(findViewById(R.id.rightFragView))

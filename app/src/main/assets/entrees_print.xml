@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<recipt>
+<receipt>
     <newline count="1" />
 
-    <line><view name="print_type" align="center" length="32" padding="left" /></line>
-    <line><view name="order_number" align="center" length="32" padding="left"  text="Order No:" /></line>
-    <line><view name="ret_name" align="left" length="32" padding="left"  text="Hotel:" /></line>
-    <line><view name="ret_address1" align="left" length="32" padding="left"  wrap_text= "Yes" text="Address: " /></line>
- 
-    <line batch="no" group="product_details" prod_name_single_line="yes">
-        <view space ="-31" name="prod_name" length="32" text="Item  Qty " new_line ="Yes"  />
-        <view space ="3" name="prod_price_piece" length="9" padding="left"   text="Price" />
-        <view  name="total_price" length="10" padding="right"  text="Amount"/>
+    <line>
+        <view name="print_type" align="center" length="32" padding="left" />
+    </line>
+    <line>
+        <view name="order_number" align="center" length="32" padding="left" text="Order No:" />
+    </line>
+    <line>
+        <view name="ret_name" align="left" length="32" padding="left" text="Hotel:" />
+    </line>
+    <line>
+        <view name="ret_address1" align="left" length="32" padding="left" text="Address: "
+            wrap_text="Yes" />
     </line>
 
-    <line> <view name="label" align="left" length="32" padding="left" repeat="yes" text="-" /></line>
+    <line batch="no" group="product_details" prod_name_single_line="yes">
+        <view name="prod_name" length="32" new_line="Yes" space="-31" text="Item  Qty " />
+        <view name="prod_price_piece" length="9" padding="left" space="3" text="Price" />
+        <view name="total_price" length="10" padding="right" text="Amount" />
+    </line>
 
-</recipt>
+    <line>
+        <view name="label" align="left" length="32" padding="left" repeat="yes" text="-" />
+    </line>
+
+</receipt>

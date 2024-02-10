@@ -14,20 +14,20 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.StringReader
 
-class PrintDataManager(var vm : CartViewModel,var context: Context){
-    fun createPrintFile(){
-        try{
-            val xmlTemplate = readXmlTemplateFromAssets(context,"entrees_print.xml")
+class PrintDataManager(var vm: CartViewModel, var context: Context) {
+    fun createPrintFile() {
+        try {
+            val xmlTemplate = readXmlTemplateFromAssets(context, "entrees_print.xml")
             val thermalBuilder = parseXmlTemplate(xmlTemplate)
             println(thermalBuilder)
             writeToFile(thermalBuilder.toString())
 
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
     }
 
-    private fun readXmlTemplateFromAssets(context: Context,fileName: String): String {
+    private fun readXmlTemplateFromAssets(context: Context, fileName: String): String {
         val inputStream: InputStream = context.assets.open(fileName)
         return try {
             val reader = BufferedReader(InputStreamReader(inputStream))
@@ -64,6 +64,7 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
                         "view" -> {
                             handleViewTag(attributeName, attributeValue, thermalBuilder)
                         }
+
                         "line" -> {
                             thermalBuilder.addLine("")
                         }
@@ -71,6 +72,7 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
 
                     currentTagName = tagName
                 }
+
                 XmlPullParser.TEXT -> {
                     val text = parser.text.trim()
                     if (text.isNotEmpty()) {
@@ -85,35 +87,42 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
         return thermalBuilder
     }
 
-    fun formatCentered(value: String): String {
-        val paddingLength = (32 - value.length) / 2
-        return value.padStart(paddingLength + value.length, ' ').padEnd(32, ' ')
-    }
 
-    private fun handleViewTag(attributeName: String?, attributeValue: String?, thermalBuilder: ThermalPrintStringBuilder) {
+    private fun handleViewTag(
+        attributeName: String?,
+        attributeValue: String?,
+        thermalBuilder: ThermalPrintStringBuilder
+    ) {
         try {
+            val itemNameHeader = "Item name"
+            val qtyHeader = "Qty"
+            val priceHeader = "Price"
+            val amountHeader = "Amount"
+
+            val headerLine =
+                "$itemNameHeader                 $qtyHeader    $priceHeader   $amountHeader"
+            val headerLength = headerLine.length
+
             when (attributeName) {
                 "print_type" -> {
-                    thermalBuilder.addLine(formatCentered("Original"))
+                    thermalBuilder.addLine(formatCentered("Original", 32))
                 }
+
                 "order_number" -> {
-                    thermalBuilder.addLine(formatCentered(("OrderID ${vm.getOrderId()}")))
+                    thermalBuilder.addLine(formatCentered("OrderID ${vm.getOrderId()}", 32))
                 }
+
                 "ret_name" -> {
-                    thermalBuilder.addLine(formatCentered(("${vm.getHotelName()}")))
+                    thermalBuilder.addLine("Hotel: ${vm.getHotelName()}".leftAlign(32))
                 }
+
                 "ret_address1" -> {
-                    thermalBuilder.addLine(formatCentered("${vm.getHotelBranch()}"))
+                    thermalBuilder.addLine("Address: ${vm.getHotelBranch()}".leftAlign(32))
                 }
+
                 "prod_name" -> {
-
-                    val itemNameHeader = "Item name"
-                    val qtyHeader = "QTY"
-                    val priceHeader = "Price"
-                    val amountHeader = "Amount"
-
-                    thermalBuilder.addLine("$itemNameHeader\t\t$qtyHeader\t$priceHeader\t$amountHeader")
-                    thermalBuilder.addLine("-----------------------------------------------------------")
+                    thermalBuilder.addLine(headerLine)
+                    thermalBuilder.addLine("-".repeat(headerLength))
 
                     for ((key, value) in vm.getOrderedHashMap()!!) {
                         val itemName = value["FoodName"].toString()
@@ -121,27 +130,60 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
                         val price = value["price"].toString()
                         val lineTotal = value["lineTotal"].toString()
 
-                        val itemNameFormatted = "%-25s".format(itemName)
-                        val qtyFormatted = "%-6s".format(qty)
-                        val priceFormatted = "%-7s".format(price)
-                        val lineTotalFormatted = "%-8s".format(lineTotal)
-
-                        val itemLine = "$itemNameFormatted\t$qtyFormatted\t$priceFormatted\t$lineTotalFormatted"
+                        val itemLine = itemName.leftAlign(20) +
+                                qty.rightAlign(10) +
+                                price.rightAlign(12) +
+                                lineTotal.rightAlign(14)
                         thermalBuilder.addLine(itemLine)
                     }
                 }
+
                 "total_price" -> {
-                    thermalBuilder.addLine("-----------------------------------------------------------")
-                    thermalBuilder.addLine("\t\t\t\t\t\t\t\t\t\tPrice \t ${vm.getOrderValue()} ")
+                    thermalBuilder.addLine("-".repeat(headerLength))
+                    thermalBuilder.addLine("Price".padEnd(26) + "${vm.getOrderValue()}".rightAlign(6))
                 }
+
                 "label" -> thermalBuilder.addLine("-")
             }
+
+
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
     }
 
-    private fun writeToFile(printFile: String){
+    fun formatCentered(text: String, length: Int): String {
+        val paddingLength = (length - text.length) / 2
+        val leftPadding = " ".repeat(paddingLength)
+        val rightPadding = " ".repeat(length - text.length - paddingLength)
+        return "$leftPadding$text$rightPadding"
+    }
+
+    fun formatCentered(value: String): String {
+        val paddingLength = (32 - value.length) / 2
+        return value.padStart(paddingLength + value.length, ' ').padEnd(32, ' ')
+    }
+
+    fun formatLeftAligned(text: String, length: Int): String {
+        val paddingLength = length - text.length
+        val rightPadding = " ".repeat(paddingLength)
+        return "$text$rightPadding"
+    }
+
+    fun String.leftAlign(width: Int): String {
+        return this.padEnd(width)
+    }
+
+    fun String.rightAlign(width: Int): String {
+        return this.padStart(width - this.length + this.length % 2)
+    }
+
+    fun String.centerAlign(width: Int): String {
+        val padding = (width - this.length) / 2
+        return " ".repeat(padding) + this + " ".repeat(padding + (width - this.length) % 2)
+    }
+
+    private fun writeToFile(printFile: String) {
         try {
             val dirName = "PRINTFILE"
             val fileName = "ord_${vm.getOrderId()}.txt"
@@ -152,13 +194,13 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
             if (!outputDirectory.exists()) {
                 try {
                     outputDirectory.mkdirs()
-                    Log.d("PRINT","Directory created: ${outputDirectory.absolutePath}")
+                    Log.d("PRINT", "Directory created: ${outputDirectory.absolutePath}")
                 } catch (e: SecurityException) {
-                    Log.d("PRINT","Failed to create directory: ${e.message}")
+                    Log.d("PRINT", "Failed to create directory: ${e.message}")
                     return
                 }
             }
-           val outputFile = File(outputDirectory, fileName)
+            val outputFile = File(outputDirectory, fileName)
             try {
                 outputFile.createNewFile()
                 outputFile.writeText(printFile)
@@ -172,11 +214,12 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
                 println("Failed to write file: ${e.message}")
             }
 
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
 
     }
+
     private class ThermalPrintStringBuilder {
         private val content = StringBuilder()
 
@@ -184,7 +227,7 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
             content.append("$text\n")
         }
 
-        fun appendValue(text: String){
+        fun appendValue(text: String) {
             content.append(text)
         }
 

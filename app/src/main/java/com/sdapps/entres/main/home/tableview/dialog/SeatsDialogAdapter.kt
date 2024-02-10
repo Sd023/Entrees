@@ -12,13 +12,13 @@ import com.sdapps.entres.R
 import com.sdapps.entres.main.login.data.HotelBO
 
 
-class CommonDialogAdapter(
+class SeatsDialogAdapter(
     private var data: ArrayList<HotelBO.Seats>?,
 //    private var onLastItemClickListener: OnLastItemClickListener,
     private var view: CommonDialogView.View
-) : RecyclerView.Adapter<CommonDialogAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<SeatsDialogAdapter.ViewHolder>() {
 
-    private lateinit var context : Context
+    private lateinit var context: Context
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,24 +44,31 @@ class CommonDialogAdapter(
 //            }
 //        }else{
 
-        if(data != null){
-            if(data!![position].isOrdered){
-                holder.itemView.setOnClickListener {
-                    view.switchActivity(position, data?.get(position)!!.seatNumber)
-                }
+        if (data != null) {
+            if (data!![position].isOrdered) {
+                holder.itemView.setOnClickListener(null)
                 //holder.itemView.setOnClickListener(null)
                 holder.tbl.text = data!![position].seatNumber ?: ""
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.avail_table))
+                holder.cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.avail_table
+                    )
+                )
 
-            }else{
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.primary_light))
+            } else {
+                holder.cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.primary_light
+                    )
+                )
                 holder.tbl.text = data?.get(position)?.seatNumber ?: ""
                 holder.itemView.setOnClickListener {
                     view.switchActivity(position, data?.get(position)!!.seatNumber)
                 }
             }
         }
-
 
 
     }
