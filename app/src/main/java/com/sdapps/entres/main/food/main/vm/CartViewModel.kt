@@ -22,6 +22,24 @@ class CartViewModel(var repo: CartRepo): ViewModel() {
     private val _orderedMap = MutableLiveData<HashMap<String, HashMap<String, Any>>>()
     private val _ordId = MutableLiveData<String>()
 
+    private val hotelName = MutableLiveData<String>()
+    private val hotelBranch = MutableLiveData<String>()
+
+
+    fun setHotelName(name : String){
+        hotelName.value = name
+    }
+
+    fun getHotelName():String? {
+        return hotelName.value
+    }
+    fun setHotelBranch(name : String){
+        hotelBranch.value = name
+    }
+
+    fun getHotelBranch():String? {
+        return hotelBranch.value
+    }
 
 
     fun setOrderId(ordId: String){

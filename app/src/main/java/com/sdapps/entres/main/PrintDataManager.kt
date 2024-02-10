@@ -1,25 +1,29 @@
 package com.sdapps.entres.main
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.util.Xml
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import com.sdapps.entres.PrintPreviewActivity
+import com.sdapps.entres.main.base.BaseActivity
 import com.sdapps.entres.main.food.main.vm.CartViewModel
 import org.xmlpull.v1.XmlPullParser
 import java.io.BufferedReader
+import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.StringReader
 
-class PrintDataManager(var vm : CartViewModel,var context: Context) {
-
-    fun xmlRead(){
-
-    }
-
+class PrintDataManager(var vm : CartViewModel,var context: Context){
     fun createPrintFile(){
         try{
             val xmlTemplate = readXmlTemplateFromAssets(context,"entrees_print.xml")
             val thermalBuilder = parseXmlTemplate(xmlTemplate)
-            println(thermalBuilder.toString())
+            writeToFile(thermalBuilder.toString())
+
         }catch (ex: Exception){
             ex.printStackTrace()
         }
@@ -91,26 +95,62 @@ class PrintDataManager(var vm : CartViewModel,var context: Context) {
                 }
                 "order_number" -> { thermalBuilder.appendValue("OrderID ${vm.getOrderId()}") }
                 "ret_name" -> {
-                    thermalBuilder.appendValue("Sudhiksha Hotels!")
+                    thermalBuilder.appendValue("${vm.getHotelName()}")
                 }
                 "ret_address1" -> {
-                    thermalBuilder.addLine("Sulthanpet")
+                    thermalBuilder.addLine("${vm.getHotelBranch()}")
                 }
                 "prod_name" -> {
-                    thermalBuilder.addLine("Item name\t\t\t\t\tQTY\tPrice\tAmount")
-                    thermalBuilder.addLine("--------------------------------------------------")
+                    thermalBuilder.addLine("Item name\t\t\t\t\t\t\t\tQTY\t\tPrice\t\tAmount")
+                    thermalBuilder.addLine("-----------------------------------------------------------")
                     thermalBuilder.addLine("")
 
                     for((key,value) in vm.getOrderedHashMap()!!){
-                        thermalBuilder.addLine("${value["FoodName"]}\t\t\t\t\t${value["qty"]}\t${value["price"]}\t${value["lineTotal"]}")
+                        thermalBuilder.addLine("${value["FoodName"]}\t\t\t\t\t\t\t\t${value["qty"]}\t\t${value["price"]}\t\t${value["lineTotal"]}")
                     }
                 }
                 "total_price" -> {
-                    thermalBuilder.addLine("--------------------------------------------------")
-                    thermalBuilder.addLine("\t\t\t\t\t\t\tPrice \t ${vm.getOrderValue()} ")
+                    thermalBuilder.addLine("-----------------------------------------------------------")
+                    thermalBuilder.addLine("\t\t\t\t\t\t\t\t\t\t\tPrice \t ${vm.getOrderValue()} ")
                 }
                 "label" -> thermalBuilder.addLine("-")
             }
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+    }
+    private fun writeToFile(printFile: String){
+        try {
+            val dirName = "PRINTFILE"
+            val fileName = "ord_${vm.getOrderId()}.txt"
+
+            val rootDirectory = File(context.filesDir.toString())
+            val outputDirectory = File(rootDirectory, dirName)
+
+            if (!outputDirectory.exists()) {
+                try {
+                    outputDirectory.mkdirs()
+                    Log.d("PRINT","Directory created: ${outputDirectory.absolutePath}")
+                } catch (e: SecurityException) {
+                    Log.d("PRINT","Failed to create directory: ${e.message}")
+                    return
+                }
+            }
+           val outputFile = File(outputDirectory, fileName)
+            try {
+                outputFile.createNewFile()
+                outputFile.writeText(printFile)
+                println("File written: ${outputFile.absolutePath}")
+
+                val intent = Intent(context, PrintPreviewActivity::class.java).apply {
+                    putExtra("file_path", outputFile.toString())
+                }
+                context.startActivity(intent)
+            } catch (e: IOException) {
+                println("Failed to write file: ${e.message}")
+            }
+
         }catch (ex: Exception){
             ex.printStackTrace()
         }

@@ -14,6 +14,8 @@ class CartRepo(var context: Context) {
     private lateinit var hotel: String
     private lateinit var hotelBranch : String
 
+
+
     fun insertData (vm : CartViewModel,totalOrderPrice: Double,list: ArrayList<FoodBO>, tableName : String, seats: String){
 
         try{
@@ -88,6 +90,9 @@ class CartRepo(var context: Context) {
                 dataBaseRef.getReference("hotels")
                 .child(hotel)
                 .child(hotelBranch)
+
+            vm.setHotelName(hotel)
+            vm.setHotelBranch(hotelBranch)
 
             val orderHeaderMap : HashMap<String,Any> = hashMapOf()
             val orderDetailsMaster : HashMap<String, HashMap<String, Any>> = hashMapOf()
