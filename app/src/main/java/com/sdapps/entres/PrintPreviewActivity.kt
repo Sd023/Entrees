@@ -26,5 +26,13 @@ class PrintPreviewActivity : AppCompatActivity() {
             }
         }
 
+        binding.backBtn.setOnClickListener{
+            onBackPressed()
+        }
+
+        binding.printBtn.setOnClickListener {
+
+        }
+
     }
 }

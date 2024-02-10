@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <recipt>
-    <property special=".," total_length="32"  />
-    <line>
-        <empty />
-    </line>
     <newline count="1" />
 
     <line><view name="print_type" align="center" length="32" padding="left" /></line>

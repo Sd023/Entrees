@@ -46,7 +46,10 @@ class CommonDialogAdapter(
 
         if(data != null){
             if(data!![position].isOrdered){
-                holder.itemView.setOnClickListener(null)
+                holder.itemView.setOnClickListener {
+                    view.switchActivity(position, data?.get(position)!!.seatNumber)
+                }
+                //holder.itemView.setOnClickListener(null)
                 holder.tbl.text = data!![position].seatNumber ?: ""
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.avail_table))
 

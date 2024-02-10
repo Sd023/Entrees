@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.util.Xml
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import com.sdapps.entres.PrintPreviewActivity
-import com.sdapps.entres.main.base.BaseActivity
 import com.sdapps.entres.main.food.main.vm.CartViewModel
 import org.xmlpull.v1.XmlPullParser
 import java.io.BufferedReader
@@ -22,6 +19,7 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
         try{
             val xmlTemplate = readXmlTemplateFromAssets(context,"entrees_print.xml")
             val thermalBuilder = parseXmlTemplate(xmlTemplate)
+            println(thermalBuilder)
             writeToFile(thermalBuilder.toString())
 
         }catch (ex: Exception){
@@ -87,39 +85,62 @@ class PrintDataManager(var vm : CartViewModel,var context: Context){
         return thermalBuilder
     }
 
+    fun formatCentered(value: String): String {
+        val paddingLength = (32 - value.length) / 2
+        return value.padStart(paddingLength + value.length, ' ').padEnd(32, ' ')
+    }
+
     private fun handleViewTag(attributeName: String?, attributeValue: String?, thermalBuilder: ThermalPrintStringBuilder) {
         try {
             when (attributeName) {
                 "print_type" -> {
-                    thermalBuilder.appendValue("Original")
+                    thermalBuilder.addLine(formatCentered("Original"))
                 }
-                "order_number" -> { thermalBuilder.appendValue("OrderID ${vm.getOrderId()}") }
+                "order_number" -> {
+                    thermalBuilder.addLine(formatCentered(("OrderID ${vm.getOrderId()}")))
+                }
                 "ret_name" -> {
-                    thermalBuilder.appendValue("${vm.getHotelName()}")
+                    thermalBuilder.addLine(formatCentered(("${vm.getHotelName()}")))
                 }
                 "ret_address1" -> {
-                    thermalBuilder.addLine("${vm.getHotelBranch()}")
+                    thermalBuilder.addLine(formatCentered("${vm.getHotelBranch()}"))
                 }
                 "prod_name" -> {
-                    thermalBuilder.addLine("Item name\t\t\t\t\t\t\t\tQTY\t\tPrice\t\tAmount")
-                    thermalBuilder.addLine("-----------------------------------------------------------")
-                    thermalBuilder.addLine("")
 
-                    for((key,value) in vm.getOrderedHashMap()!!){
-                        thermalBuilder.addLine("${value["FoodName"]}\t\t\t\t\t\t\t\t${value["qty"]}\t\t${value["price"]}\t\t${value["lineTotal"]}")
+                    val itemNameHeader = "Item name"
+                    val qtyHeader = "QTY"
+                    val priceHeader = "Price"
+                    val amountHeader = "Amount"
+
+                    thermalBuilder.addLine("$itemNameHeader\t\t$qtyHeader\t$priceHeader\t$amountHeader")
+                    thermalBuilder.addLine("-----------------------------------------------------------")
+
+                    for ((key, value) in vm.getOrderedHashMap()!!) {
+                        val itemName = value["FoodName"].toString()
+                        val qty = value["qty"].toString()
+                        val price = value["price"].toString()
+                        val lineTotal = value["lineTotal"].toString()
+
+                        val itemNameFormatted = "%-25s".format(itemName)
+                        val qtyFormatted = "%-6s".format(qty)
+                        val priceFormatted = "%-7s".format(price)
+                        val lineTotalFormatted = "%-8s".format(lineTotal)
+
+                        val itemLine = "$itemNameFormatted\t$qtyFormatted\t$priceFormatted\t$lineTotalFormatted"
+                        thermalBuilder.addLine(itemLine)
                     }
                 }
                 "total_price" -> {
                     thermalBuilder.addLine("-----------------------------------------------------------")
-                    thermalBuilder.addLine("\t\t\t\t\t\t\t\t\t\t\tPrice \t ${vm.getOrderValue()} ")
+                    thermalBuilder.addLine("\t\t\t\t\t\t\t\t\t\tPrice \t ${vm.getOrderValue()} ")
                 }
                 "label" -> thermalBuilder.addLine("-")
             }
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
-
     }
+
     private fun writeToFile(printFile: String){
         try {
             val dirName = "PRINTFILE"
