@@ -3,13 +3,18 @@ package com.sdapps.entres.main.home.orderhistory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
+import com.sdapps.entres.main.home.orderhistory.vm.Listener
+import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryDataManager
 
 class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
     RecyclerView.Adapter<OrderHistoryAdapter.ViewHolder>() {
 
+        private var listener: Listener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout =
@@ -21,12 +26,19 @@ class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
         return data.size
     }
 
+    fun setItemListener(listener: Listener){
+        this.listener = listener
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.tableId.text  = data[position].tableName
         holder.totalItems.text = StringBuilder().append("Total Items: ").append(data[position].totalItems).toString()
         holder.totalPrice.text = StringBuilder().append("Total Price: ").append(data[position].totalPrice).toString()
         //holder.status.text = StringBuilder().append("Status: ").append(data[position].status).toString()
+
+        holder.cardView.setOnClickListener {
+           listener?.loadOrderDetail(data[position].orderID!!)
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -42,6 +54,8 @@ class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
         var totalPrice: TextView = itemView.findViewById(R.id.totalPrice)
         var totalItems: TextView = itemView.findViewById(R.id.totalItems)
         var status: TextView = itemView.findViewById(R.id.status)
+
+        var cardView :CardView = itemView.findViewById(R.id.cardView)
 
     }
 }

@@ -116,6 +116,7 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
 
     override fun onClick() {
         PrintDataManager(vm, requireContext()).createPrintFile()
+        requireActivity().finish()
     }
 
 }

@@ -9,4 +9,10 @@ class OrderHistoryBO {
     var totalPrice : String? = null
 
     var status : String? = null
+
+
+    var foodName :String? = null
+    var qty :Int? = null
+    var price : Double? = null
+    var netValue : Double? = null
 }

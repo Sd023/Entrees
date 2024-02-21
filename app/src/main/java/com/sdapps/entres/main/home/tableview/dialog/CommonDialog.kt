@@ -90,7 +90,8 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
         intent.putExtra("TABLENAME", tablText)
         Log.d("INTENT", "Before $position , $seat , ${tableName!!.trim()} , $tablText")
         startActivity(intent)
-
+        if(dialog != null)
+            dismiss()
     }
 
     fun showloading() {

@@ -7,16 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sdapps.entres.R
 import com.sdapps.entres.databinding.FragmentOrderHistoryBinding
+import com.sdapps.entres.main.home.orderhistory.orderdetails.OrderDetailsFragment
+import com.sdapps.entres.main.home.orderhistory.vm.Listener
 import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryDataManager
 import com.sdapps.entres.main.home.orderhistory.vm.OrderHistoryFactory
 import com.sdapps.entres.main.home.orderhistory.vm.VM
 
 
-class OrderHistoryFragment : Fragment() {
+class OrderHistoryFragment : Fragment(), Listener {
 
     private lateinit var binding : FragmentOrderHistoryBinding
-    private lateinit var items : ArrayList<OrderHistoryBO>
 
     private lateinit var repo : OrderHistoryDataManager
 
@@ -44,8 +46,21 @@ class OrderHistoryFragment : Fragment() {
         viewModel.orderList.observe(viewLifecycleOwner){
             binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
             val adapter =  OrderHistoryAdapter(it)
+            adapter.setItemListener(this)
             binding.recyclerView.adapter =adapter
         }
+    }
+
+    override fun loadOrderDetail(ordID: String) {
+        //viewModel.getOrderDetail(orderId = ordID)
+        binding.recyclerView.visibility = View.GONE
+        binding.container.visibility= View.VISIBLE
+
+        val detailsFragment = OrderDetailsFragment.newInstance(ordID)
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.container,detailsFragment)
+        transaction.commit()
+
     }
 
 }
