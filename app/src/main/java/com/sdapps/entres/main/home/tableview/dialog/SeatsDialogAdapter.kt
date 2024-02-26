@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ class SeatsDialogAdapter(
     ): ViewHolder {
         val layout =
             LayoutInflater.from(parent.context).inflate(R.layout.tbl_grid_layout, parent, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         context = parent.context
         return ViewHolder(layout)
     }

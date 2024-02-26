@@ -34,4 +34,9 @@
     <string name="totalOrderValue">"Total Value : "</string>
     <string name="items_not_added_to_cart">Items not added to cart</string>
     <string name="print">Print</string>
+    <string name="settings">settings</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="app_theme">App Theme</string>
+    <string name="no_orders">No Orders!</string>
 </resources>

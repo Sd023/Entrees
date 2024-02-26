@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
@@ -33,6 +34,7 @@ class TableViewFragment : Fragment(), TableViewManager.View {
     ): View {
         context = requireContext().applicationContext
         binding = FragmentOrderTakingBinding.inflate(inflater, container, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return binding!!.root
     }
 

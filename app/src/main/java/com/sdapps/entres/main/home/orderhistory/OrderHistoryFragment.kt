@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.entres.R
@@ -31,6 +32,7 @@ class OrderHistoryFragment : Fragment(), Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding = FragmentOrderHistoryBinding.inflate(layoutInflater,container,false)
         return binding.root
     }
@@ -44,10 +46,13 @@ class OrderHistoryFragment : Fragment(), Listener {
     fun initAll(){
         viewModel.getPastOrdersFromDB()
         viewModel.orderList.observe(viewLifecycleOwner){
-            binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            val adapter =  OrderHistoryAdapter(it)
-            adapter.setItemListener(this)
-            binding.recyclerView.adapter =adapter
+            list ->
+            binding.recyclerView.visibility  = View.VISIBLE
+                binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                val adapter =  OrderHistoryAdapter(list)
+                adapter.setItemListener(this)
+                binding.recyclerView.adapter =adapter
+
         }
     }
 

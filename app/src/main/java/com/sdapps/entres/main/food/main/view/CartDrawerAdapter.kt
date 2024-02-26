@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
 import com.sdapps.entres.main.food.main.FoodBO
@@ -54,6 +55,7 @@ class CartDrawerAdapter(var vm: CartViewModel,var parent : CartDrawerFragment,va
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout =
             LayoutInflater.from(parent.context).inflate(R.layout.drawer_items, parent, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return ViewHolder(layout)
     }
 

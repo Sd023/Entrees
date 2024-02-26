@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sdapps.entres.databinding.FoodCartBinding
@@ -32,7 +33,7 @@ class CartViewDialog (private val vm : CartViewModel): DialogFragment() {
     ): View {
 
         val args = arguments
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         tableId = args!!.getString("tableNumber")!!
         seats = args.getString("SEAT")!!
         tableName = args.getString("TABLENAME")!!

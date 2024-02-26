@@ -7,15 +7,21 @@ import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.sdapps.entres.R
 import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.main.base.BaseActivity
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
 import com.sdapps.entres.core.database.DBHandler
+import com.sdapps.entres.databinding.ActivityLoginNewBinding
 import com.sdapps.entres.databinding.ActivityLoginScreenBinding
 import com.sdapps.entres.main.login.LoginHelper
 import com.sdapps.entres.main.login.LoginPresenter
@@ -30,7 +36,7 @@ import kotlin.coroutines.resume
 
 class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
-    private lateinit var binding: ActivityLoginScreenBinding
+    private lateinit var binding: ActivityLoginNewBinding
     private lateinit var presenter: LoginPresenter
 
     private lateinit var firebaseAuth: FirebaseAuth
@@ -42,19 +48,19 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("ActivityLifeCycle","onCreate")
-        binding = ActivityLoginScreenBinding.inflate(layoutInflater)
+        binding = ActivityLoginNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dbHandler = DBHandler(this)
         dbHandler.createDataBase()
         newBo = LoginBO()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        enableEdgeToEdge()
 
         progressDialog = ProgressDialog(this)
         presenter = LoginPresenter()
         presenter.attachView(this, applicationContext, dbHandler)
 
         firebaseAuth = Firebase.auth
-
-        val progressBar = binding.loading
         val loginBtn = binding.login
 
         loginBtn.setOnClickListener(this)

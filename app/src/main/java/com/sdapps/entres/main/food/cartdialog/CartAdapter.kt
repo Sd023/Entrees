@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
 import com.sdapps.entres.main.food.main.FoodBO
@@ -13,6 +14,7 @@ class CartAdapter(private val data : ArrayList<FoodBO>): RecyclerView.Adapter<Ca
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.drawer_items,parent, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return ViewHolder(layout)
     }
 

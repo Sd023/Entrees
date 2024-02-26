@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import com.sdapps.entres.main.food.main.view.FoodListActivity
 import com.sdapps.entres.databinding.CommonDialogTableViewBinding
@@ -39,6 +40,7 @@ class CommonDialog(var presenter: TableViewPresenter) : DialogFragment(), Common
 
         dialog = ProgressDialog(context)
         binding = CommonDialogTableViewBinding.inflate(inflater, container, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return binding.root
     }
 

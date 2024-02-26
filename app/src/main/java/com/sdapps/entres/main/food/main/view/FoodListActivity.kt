@@ -3,8 +3,10 @@ package com.sdapps.entres.main.food.main.view
 import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -58,8 +60,9 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         Log.d("LIFE", "onCreate drawer close")
         binding = ActivityFoodListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val bundle = intent.extras
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        enableEdgeToEdge()
         if (bundle != null) {
             //data from tableView Common Dialog
             tableId = bundle.getInt("tableNumber").toString()

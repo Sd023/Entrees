@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
 import com.sdapps.entres.main.home.orderhistory.OrderHistoryBO
@@ -19,6 +20,7 @@ class OrderDetailsAdapter(var data : ArrayList<OrderHistoryBO>): RecyclerView.Ad
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout =
             LayoutInflater.from(parent.context).inflate(R.layout.order_details_view, parent, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return ViewHolder(layout)
     }
 

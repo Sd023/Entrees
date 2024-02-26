@@ -1,18 +1,20 @@
 package com.sdapps.entres.main.base
 
-import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sdapps.entres.R
 import com.sdapps.entres.databinding.ActivityMainBinding
+
 
 open class BaseActivity : AppCompatActivity(), BaseView {
 
@@ -25,7 +27,12 @@ open class BaseActivity : AppCompatActivity(), BaseView {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, com.sdapps.entres.R.color.black)
+        }
        /* val bundle = intent.extras
         var str : String? =null
         var uid : String? = null

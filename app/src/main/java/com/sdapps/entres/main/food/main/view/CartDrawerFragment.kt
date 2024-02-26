@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +36,7 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
     ): View? {
         binding = DrawerContentMainBinding.inflate(layoutInflater, container, false)
         vm = ViewModelProvider(requireActivity())[CartViewModel::class.java]
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         arguments?.let {
             tableName = it.getString(TABLE_NAME)
             seat = it.getString(SEAT)

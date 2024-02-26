@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sdapps.entres.R
@@ -23,6 +24,7 @@ class TableViewAdapter(private val data: ArrayList<Int>,
         viewType: Int
     ): ViewHolder {
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.table_items, parent, false)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         return ViewHolder(layout)
     }
 
