@@ -1,19 +1,15 @@
 package com.sdapps.entres.main.home.profile
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -24,12 +20,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import com.sdapps.entres.AppSettingsActivity
 import com.sdapps.entres.R
-import com.sdapps.entres.core.commons.ClickGuard
 import com.sdapps.entres.databinding.FragmentProfileBinding
 import com.sdapps.entres.main.BaseEntreesFragment
-import com.sdapps.entres.main.food.BaseFoodFragment
 import com.sdapps.entres.network.NetworkTools
 
 class ProfileFragment() : BaseEntreesFragment(){
@@ -57,11 +50,6 @@ class ProfileFragment() : BaseEntreesFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        binding.settings.setOnClickListener {
-            requireActivity().startActivity(Intent(context, AppSettingsActivity::class.java))
-        }
 
         initProfile()
     }
