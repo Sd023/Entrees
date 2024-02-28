@@ -1,16 +1,21 @@
 package com.sdapps.entres.main.login.view
 
+import android.widget.RelativeLayout.LayoutParams
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -22,7 +27,6 @@ import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityLoginNewBinding
-import com.sdapps.entres.databinding.ActivityLoginScreenBinding
 import com.sdapps.entres.main.login.LoginHelper
 import com.sdapps.entres.main.login.LoginPresenter
 import com.sdapps.entres.main.login.data.LoginBO
@@ -50,6 +54,40 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         Log.d("ActivityLifeCycle","onCreate")
         binding = ActivityLoginNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        startAnimations()
+        init()
+    }
+
+    fun startAnimations(){
+        //binding.appNameLogin?.setTextFadeAnim(getString(R.string.app_name))
+        SlideupTransition.slideDown(binding.appNameLogin!!,1000)
+        startAnimationForCard()
+    }
+
+    fun TextView.setTextFadeAnim(text: String){
+
+        val fadeIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in)
+        fadeIn.duration = 1000
+
+        fadeIn.setAnimationListener(object : AnimationListener{
+            override fun onAnimationStart(animation: Animation?) {
+               this@setTextFadeAnim.text = text
+                //SlideupTransition.slideUp(binding.appNameLogin!!,2000)
+                //binding.progressBar?.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                this@setTextFadeAnim.text = text
+                //binding.progressBar?.visibility = View.GONE
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+                this@setTextFadeAnim.text = text
+            }
+        })
+        this.startAnimation(fadeIn)
+    }
+    fun init(){
         dbHandler = DBHandler(this)
         dbHandler.createDataBase()
         newBo = LoginBO()
@@ -65,8 +103,10 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
         loginBtn.setOnClickListener(this)
         ClickGuard.guard(loginBtn)
+    }
 
-
+    fun startAnimationForCard(){
+        SlideupTransition.slideUp(binding.cardLayout!!,1000)
     }
 
     override fun onClick(v: View?) {
