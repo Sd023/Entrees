@@ -110,26 +110,26 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation(libs.firebase.bom)
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
 
-    implementation("com.google.firebase:firebase-storage:20.3.0")
-    implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
+    implementation(libs.firebase.storage)
+    implementation (libs.firebase.ui.storage)
 
     implementation (libs.androidx.lifecycle.viewmodel.ktx.v231)
 
     implementation (libs.androidx.core.splashscreen)
 
     implementation (libs.gson)
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation (libs.glide)
 
-    implementation ("com.nex3z:notification-badge:1.0.4")
+    implementation ("com.nex3z:notification-badge:1.0.5")
 
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android.v152)
 
 
 }
