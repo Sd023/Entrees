@@ -59,34 +59,11 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
     }
 
     fun startAnimations(){
-        //binding.appNameLogin?.setTextFadeAnim(getString(R.string.app_name))
-        SlideupTransition.slideDown(binding.appNameLogin!!,1000)
+        binding.appNameLogin?.text = getString(R.string.app_name)
+        SlideupTransition.slideDownFadeIn(binding.appNameLogin!!,1000)
         startAnimationForCard()
     }
 
-    fun TextView.setTextFadeAnim(text: String){
-
-        val fadeIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in)
-        fadeIn.duration = 1000
-
-        fadeIn.setAnimationListener(object : AnimationListener{
-            override fun onAnimationStart(animation: Animation?) {
-               this@setTextFadeAnim.text = text
-                //SlideupTransition.slideUp(binding.appNameLogin!!,2000)
-                //binding.progressBar?.visibility = View.VISIBLE
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                this@setTextFadeAnim.text = text
-                //binding.progressBar?.visibility = View.GONE
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {
-                this@setTextFadeAnim.text = text
-            }
-        })
-        this.startAnimation(fadeIn)
-    }
     fun init(){
         dbHandler = DBHandler(this)
         dbHandler.createDataBase()
