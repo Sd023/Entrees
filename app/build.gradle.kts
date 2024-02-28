@@ -1,8 +1,20 @@
+import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.gradle.api.BaseVariantOutput
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.gms)
+}
+
+val gitBuildNumber: Int by lazy {
+    val stdout = org.apache.commons.io.output.ByteArrayOutputStream()
+    rootProject.exec {
+        commandLine("git", "rev-list", "--count", "HEAD")
+        standardOutput = stdout
+    }
+    stdout.toString().trim().toInt()
 }
 
 android {
@@ -14,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +45,7 @@ android {
             //signingConfig = signingConfigs.getByName("release")
         }
     }
+    applicationVariants.all(ApplicationVariantAction())
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -47,10 +60,31 @@ android {
     dataBinding {
         true
     }
-    flavorDimensions += listOf("firebase")
+    flavorDimensions += listOf("frb")
     productFlavors {
-        create("firebase") {
-            dimension = "firebase"
+        create("frb") {
+            dimension = "frb"
+        }
+    }
+}
+
+
+class ApplicationVariantAction : Action<ApplicationVariant> {
+    override fun execute(variant: ApplicationVariant) {
+        val fileName = createFileName(variant)
+        variant.outputs.all(VariantOutputAction(fileName))
+    }
+
+    private fun createFileName(variant: ApplicationVariant): String {
+        return "entrees_${variant.versionName}_${variant.versionCode}.apk"
+    }
+    class VariantOutputAction(
+        private val fileName: String
+    ) : Action<BaseVariantOutput> {
+        override fun execute(output: BaseVariantOutput) {
+            if (output is BaseVariantOutputImpl) {
+                output.outputFileName = fileName
+            }
         }
     }
 }
