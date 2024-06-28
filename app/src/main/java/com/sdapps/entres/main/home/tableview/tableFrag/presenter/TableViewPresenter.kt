@@ -57,7 +57,7 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
                 cursor.close()
             }
         } catch (ex: Exception) {
-
+            ex.printStackTrace()
         }
 
     }
@@ -76,8 +76,8 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
         masterTableMap = HashMap<Any, Any>()
         tblKeyList = arrayListOf()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            if (hotelName != null && hotelBranch != null) {
+
+            if(hotelName != null && hotelBranch != null) {
                 databaseReference = FirebaseDatabase
                     .getInstance()
                     .getReference("hotels")
@@ -86,7 +86,7 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
                 val tblDbRef = databaseReference
                 tblDbRef.child("TableMaster").addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot != null) {
+                        if (snapshot.exists()) {
                             masterTableMap = ((snapshot.value as? HashMap<*, *>)!!)
                             if (tableList.isNotEmpty())
                                 tableList.clear()
@@ -119,7 +119,7 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
                 })
             }
 
-        }
+
     }
 
 
@@ -227,7 +227,7 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
         databaseReference.child("SeatMaster").addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot != null) {
+                if (snapshot.exists()) {
                         val map = (snapshot.value as? HashMap<*, *>)!!
                         for (test in map.keys) {
                             val seatKeyList = (map[test] as HashMap<String, String>)

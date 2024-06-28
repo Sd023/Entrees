@@ -54,7 +54,7 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         Log.d("ActivityLifeCycle","onCreate")
         binding = ActivityLoginNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        startAnimations()
+        //startAnimations()
         init()
     }
 
@@ -110,11 +110,8 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         } else if (!isPasswordValid(password)) {
             Toast.makeText(applicationContext, "Password length less", Toast.LENGTH_LONG).show()
         } else {
-            CoroutineScope(Dispatchers.Main).launch {
-                //presenter.register(firebaseAuth, userName, password)
-                showLoading()
-                presenter.login(firebaseAuth,userName,password)
-            }
+            showLoading()
+            presenter.login(firebaseAuth,userName,password)
 
         }
 
@@ -141,17 +138,6 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
             }
         }
     }
-
-    fun showProgress(){
-        CoroutineScope(Dispatchers.Main).launch {
-            val progressDialog = ProgressDialog(applicationContext)
-            progressDialog.setTitle("Success")
-            progressDialog.setMessage("Account Created Successfullly, Please Login")
-            progressDialog.show()
-        }
-
-    }
-
     override suspend fun createUserRole(role: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -190,7 +176,6 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
 
     override fun moveToNextScreen() {
             val intent = Intent(this@LoginScreen, BaseActivity::class.java)
-            hideLoading()
             startActivity(intent)
             finish()
     }
@@ -215,8 +200,11 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         if (currentUser == null) {
            Log.d("USERCURRENT: ", currentUser.toString())
         }else{
-            showLoading()
-            presenter.getUserDetailsFromId(currentUser,false)
+
+            CoroutineScope(Dispatchers.Main).launch {
+                presenter.getUserDetailsFromId(currentUser,false)
+            }
+
         }
     }
 

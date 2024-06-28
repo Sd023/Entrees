@@ -8,6 +8,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 
     private lateinit var view: FoodActivityManager.View
     private lateinit var foodList: ArrayList<FoodBO>
+    var taxRate: Float? = 0F
     override fun attachView(view: FoodActivityManager.View) {
         this.view = view
     }
@@ -17,7 +18,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 
             foodList = arrayListOf()
             db.openDataBase()
-            val cursor = db.selectSQL("SELECT category,foodName,price,imgUrl from FoodDataMaster")
+            val cursor = db.selectSQL("SELECT FDM.category,FDM.foodName,FDM.price,FDM.imgUrl,TT.taxRate from FoodDataMaster FDM LEFT JOIN TaxTable TT ")
 
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -25,6 +26,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
                     val foodName = cursor.getString(1)
                     val price = cursor.getDouble(2)
                     val imgUrl = cursor.getString(3)
+                    setTaxRate(cursor.getString(4))
                     foodList.add(FoodBO(category, foodName,price, imgUrl,1,"","",0.0))
                 }
                 cursor.close()
@@ -36,5 +38,13 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
         }
 
         return foodList
+    }
+
+    fun setTaxRate(txRate : String){
+        taxRate = txRate.toFloat()
+    }
+
+    fun getTaxRate(): Float{
+        return taxRate!!
     }
 }

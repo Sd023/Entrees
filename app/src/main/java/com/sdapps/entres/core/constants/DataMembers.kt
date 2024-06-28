@@ -20,4 +20,7 @@ object DataMembers {
      const val tbl_orderDetail = "OrderDetail"
      const val tbl_orderDetailCols = "orderId,foodName,qty,price,tableId,seatNumber,totalOrderValue"
 
+     const val tbl_taxTable = "TaxTable"
+     const val tbl_taxTableCols = "isTaxable,taxType,taxRate"
+
 }

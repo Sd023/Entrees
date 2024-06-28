@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.provider.Telephony.Mms.Rate
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,7 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
     var qty = 1
     var totalOrderValue = 0.0
     private lateinit var progressDialog: ProgressDialog
+    var taxRate: Float? = 0F
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +61,8 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
             val masterFoodData: List<FoodBO> = it.getParcelableArrayList(MASTER_DATA) ?: emptyList()
             val masterCategory: String = it.getString(MASTER_CATEGORY, "")
             filteredFoodList = filterDataByCategory(masterFoodData, masterCategory)
+            taxRate = it.getFloat(TAX_RATE)
+
         }
 
         val view = inflater.inflate(R.layout.fragment_base_food, container, false)
@@ -77,7 +81,7 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
         finalList = arrayListOf()
         if (NetworkTools().isAvailableConnection(requireContext())) {
             recyclerView = requireView().findViewById(R.id.recyclerView)
-            adapter = FoodAdapter(filteredFoodList)
+            adapter = FoodAdapter(filteredFoodList, taxRate!!)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
@@ -142,11 +146,13 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
     companion object {
         private const val MASTER_DATA = "all_data"
         private const val MASTER_CATEGORY = "category"
-        fun newInstance(allData: List<FoodBO>, category: String): BaseFoodFragment {
+        private const val TAX_RATE = "tax_rate"
+        fun newInstance(allData: List<FoodBO>, category: String, taxRate: Float): BaseFoodFragment {
             return BaseFoodFragment().apply {
                 arguments = Bundle().apply {
                     putParcelableArrayList(MASTER_DATA, ArrayList(allData))
                     putString(MASTER_CATEGORY, category)
+                    putFloat(TAX_RATE,taxRate)
                 }
             }
         }

@@ -10,13 +10,17 @@ import com.google.firebase.database.ValueEventListener
 import com.sdapps.entres.core.constants.DataMembers
 import com.sdapps.entres.core.constants.DataMembers.tbl_foodDataMaster
 import com.sdapps.entres.core.constants.DataMembers.tbl_foodMasterCols
+import com.sdapps.entres.core.constants.DataMembers.tbl_taxTable
+import com.sdapps.entres.core.constants.DataMembers.tbl_taxTableCols
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.main.login.data.HotelBO
 import com.sdapps.entres.main.login.data.LoginBO
+import com.sdapps.entres.main.login.data.TaxBO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.StringBuilder
 
 class LoginPresenter : LoginHelper.Presenter {
@@ -30,6 +34,8 @@ class LoginPresenter : LoginHelper.Presenter {
 
     private lateinit var masterItemList: MutableList<HotelBO.Items>
 
+    private lateinit var taxMap: MutableMap<*,*>
+
     override fun attachView(view: LoginHelper.View, context: Context, dbHandler: DBHandler) {
         this.view = view
         this.context = context
@@ -41,30 +47,33 @@ class LoginPresenter : LoginHelper.Presenter {
 
     override fun login(firebaseAuth: FirebaseAuth, userName: String, password: String) {
 
-        try {
-            firebaseAuth.signInWithEmailAndPassword(userName, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val currentUser = firebaseAuth.currentUser?.uid
-                        getUserDetailsFromId(currentUser, true)
-                    } else {
-                        view.hideLoading()
-                        view.showErrorDialog(task.exception?.message)
+            try {
+                firebaseAuth.signInWithEmailAndPassword(userName, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val currentUser = firebaseAuth.currentUser?.uid
+                            CoroutineScope(Dispatchers.Main
+                            ).launch {
+                                getUserDetailsFromId(currentUser, true)
+                            }
+                        } else {
+                            view.hideLoading()
+                            view.showErrorDialog(task.exception?.message)
+                        }
                     }
-                }
-        } catch (ex: Exception) {
+            } catch (ex: Exception) {
             view.hideLoading()
             Log.d("FIREBASE", ex.printStackTrace().toString())
             view.showErrorDialog(ex.message)
         }
+
     }
 
     fun QS(data: Any?): String {
         return "'$data'"
     }
 
-    fun getUserDetailsFromId(currentUserID: String?, isNewLogin: Boolean) {
-
+    suspend fun getUserDetailsFromId(currentUserID: String?, isNewLogin: Boolean) {
         if (currentUserID != null) {
 
             if(isNewLogin){
@@ -84,9 +93,13 @@ class LoginPresenter : LoginHelper.Presenter {
                                 hotel = userData?.hotel
                                 hotelBranch = userData?.hotelBranch
                             }
-                            insertUserMasterRecords(bo)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                insertUserMasterRecords(bo)
+                            }
+
                         } else {
                             view.showErrorDialog("Error getting details from firebase!")
+                            view.hideLoading()
                         }
                     }
 
@@ -97,7 +110,9 @@ class LoginPresenter : LoginHelper.Presenter {
                     }
                 })
             }else{
-                view.moveToNextScreen()
+                withContext(Dispatchers.Main) {
+                    view.moveToNextScreen()
+                }
             }
         }
     }
@@ -146,7 +161,7 @@ class LoginPresenter : LoginHelper.Presenter {
     }
 
 
-    fun insertUserMasterRecords(bo: LoginBO){
+    suspend fun insertUserMasterRecords(bo: LoginBO){
         try {
             db.openDataBase()
             val content = StringBuilder()
@@ -164,7 +179,11 @@ class LoginPresenter : LoginHelper.Presenter {
                 .append(",")
                 .append(QS(DateTools().now(DateTools.DATE_TIME)))
             db.insertSQL(DataMembers.tbl_masterUser, DataMembers.tbl_masterUserCols, content.toString())
-            downloadTheHotelData(bo)
+            withContext(Dispatchers.Main) {
+                downloadTheHotelData(bo)
+            }
+
+
         }catch (ex: Exception){
             ex.printStackTrace()
         }
@@ -172,9 +191,12 @@ class LoginPresenter : LoginHelper.Presenter {
 
 
     fun downloadTheHotelData(bo: LoginBO) {
+        CoroutineScope(Dispatchers.Main).launch {
+
+
         foodBOMaster = HotelBO()
         masterItemList = mutableListOf()
-        CoroutineScope(Dispatchers.IO).launch {
+        taxMap = hashMapOf<Any,Any>()
 
             val hotelDBRef = FirebaseDatabase
                 .getInstance()
@@ -186,7 +208,7 @@ class LoginPresenter : LoginHelper.Presenter {
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        if (snapshot != null) {
+                        if (snapshot.exists()) {
                             masterMap = (snapshot.value as? HashMap<*, *>)!!
 
                             for (key in masterMap.keys) {
@@ -201,24 +223,61 @@ class LoginPresenter : LoginHelper.Presenter {
                                     )
                                     masterItemList.add(items)
                                 }
-
-
                             }
                             insertFoodDataToDB()
-
-
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-
+                        print(error.message)
                     }
                 })
 
-            CoroutineScope(Dispatchers.Main).launch {
-                view.moveToNextScreen()
-            }
+        hotelDBRef.child(bo.hotelBranch!!).child("TaxMaster").addValueEventListener(
+            object : ValueEventListener{
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        taxMap = (snapshot.value as? HashMap<*,*>)!!
+                        val taxBO = TaxBO().apply {
+                            taxable = (taxMap["isTaxable"]!! == "YES")
+                            taxType = taxMap["taxType"] as String
+                            taxRate = taxMap["taxRate"] as Long
+                        }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            insertDataIntoTaxMaster(taxBO)
+                        }
+
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                   println(error.message)
+                }
+        })
         }
+
+
+
+
+    }
+
+    suspend fun insertDataIntoTaxMaster(taxBO: TaxBO){
+        try {
+            db.createDataBase()
+            db.openDataBase()
+            val content = "${QT(taxBO.taxable.toString())}, ${QT(taxBO.taxType)}, ${QT(taxBO.taxRate.toString())}"
+            db.insertSQL(tbl_taxTable, tbl_taxTableCols, content)
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            view.hideLoading()
+            view.moveToNextScreen()
+        }
+
     }
 
     fun insertFoodDataToDB() {

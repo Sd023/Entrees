@@ -19,8 +19,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import com.sdapps.entres.R
 import com.sdapps.entres.main.food.main.FoodBO
+import java.util.Locale
+import kotlin.time.times
 
-class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
+class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
 
     private lateinit var appContext: Context
 
@@ -42,7 +44,8 @@ class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.food.text = data[position].foodName
-        holder.amount.text = data[position].price.toString()
+        val taxPrice: Double = ((data[position].price * (taxRate/ 100)) + data[position].price)
+        holder.amount.text = roundV(taxPrice)
 
 
         val img = data[position].imgUrl.replace("\"","").toString()
@@ -91,5 +94,9 @@ class FoodAdapter(private var data: List<FoodBO>): RecyclerView.Adapter<FoodAdap
     fun updateData(newData: List<FoodBO>) {
         data = newData
         notifyDataSetChanged()
+    }
+
+    fun roundV(data: Double): String{
+        return String.format(Locale.getDefault(),"%.2f", data)
     }
 }

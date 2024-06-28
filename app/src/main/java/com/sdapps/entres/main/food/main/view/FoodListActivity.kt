@@ -3,6 +3,7 @@ package com.sdapps.entres.main.food.main.view
 import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityFoodListBinding
@@ -117,14 +119,19 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
         adapter = SectionAdapter(supportFragmentManager)
 
 
-        for (category in categorySet) {
-            val frag = BaseFoodFragment.newInstance(
-                filterFoodListByCategory(masterDataList, category),
-                category
-            )
-            adapter.addFragment(frag, category)
-            // Category is added to TabView & Food list added as RecyclerView.
+        if(presenter.getTaxRate() != null){
+            for (category in categorySet) {
+                val frag = BaseFoodFragment.newInstance(
+                    filterFoodListByCategory(masterDataList, category),
+                    category,presenter.getTaxRate()
+                )
+                adapter.addFragment(frag, category)
+                // Category is added to TabView & Food list added as RecyclerView.
+            }
+        }else{
+            Toast.makeText(applicationContext,"Tax is not available", Toast.LENGTH_LONG).show()
         }
+
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
