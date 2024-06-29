@@ -25,7 +25,6 @@ class OrderHistoryFragment : Fragment(), Listener {
 
 
     companion object {
-
         fun initializeOrderHistoryView(): OrderHistoryFragment{
             val fragment = OrderHistoryFragment()
             return fragment
@@ -65,13 +64,13 @@ class OrderHistoryFragment : Fragment(), Listener {
     }
 
     override fun loadOrderDetail(ordID: String) {
-        //viewModel.getOrderDetail(orderId = ordID)
         binding.recyclerView.visibility = View.GONE
         binding.container.visibility= View.VISIBLE
 
         val detailsFragment = OrderDetailsFragment.newInstance(ordID)
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.container,detailsFragment)
+        transaction.addToBackStack("")
         transaction.commit()
 
     }

@@ -18,13 +18,15 @@ class CartDrawerAdapter(var vm: CartViewModel,var parent : CartDrawerFragment,va
     RecyclerView.Adapter<CartDrawerAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data != null) {
+        if (data.isNotEmpty()) {
             holder.count.text = data[position].qty.toString()
             holder.foodName.text = data[position].foodName
             holder.foodPrice.text = data[position].price.toString()
 
             if(data[position].qty <= 1){
                 holder.removeItem.setImageResource(R.drawable.cross)
+            }else{
+                holder.removeItem.setImageResource(R.drawable.cart_bin)
             }
         }
 
@@ -42,12 +44,17 @@ class CartDrawerAdapter(var vm: CartViewModel,var parent : CartDrawerFragment,va
             val removeQty = count - 1
 
             if (removeQty <= 0) {
-                Toast.makeText(context, "Items cannot be 0", Toast.LENGTH_LONG).show()
+                data.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, data.size)
             } else {
                 data[position].qty = removeQty
                 notifyItemChanged(position)
                 vm.calculateOrderValue(data)
             }
+
+            vm.updateCartCount(data)
+            vm.calculateOrderValue(data)
         }
     }
 

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sdapps.entres.R
 import com.sdapps.entres.databinding.FragmentOrderDetailsBinding
+import com.sdapps.entres.main.home.orderhistory.OrderHistoryFragment
 import com.sdapps.entres.main.home.orderhistory.vm.VM
 import java.lang.StringBuilder
 
@@ -45,7 +47,7 @@ class OrderDetailsFragment : Fragment() {
         binding.ordId.text = orderId
         binding.totalOrderValue.text = StringBuilder().append("Total Value: Rs. ").append(vm.getTotalNetValue()).toString()
         binding.backBtn.setOnClickListener {
-            requireActivity().onBackPressed()
+          requireActivity().finish()
         }
         vm.orderDetailList.observe(viewLifecycleOwner){ data ->
             val adapter = OrderDetailsAdapter(data)

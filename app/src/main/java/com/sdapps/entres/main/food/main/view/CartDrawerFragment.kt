@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -76,11 +77,15 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
 
         vm.cartList.observe(viewLifecycleOwner) { itemList ->
             if (itemList.size <= 0) {
+                binding.totalOrderValue.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
                 binding.cartOrderBtn.visibility = View.GONE
                 binding.noItemsLabel.visibility = View.VISIBLE
             } else {
                 binding.noItemsLabel.visibility = View.GONE
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.cartOrderBtn.visibility = View.VISIBLE
+                binding.totalOrderValue.visibility = View.VISIBLE
                 binding.recyclerView.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -89,7 +94,7 @@ class CartDrawerFragment : BaseEntreesFragment(), BaseEntreesFragment.AlertDialo
 
 
                 binding.cartOrderBtn.setOnClickListener {
-                    if (tableName!!.isNotEmpty() && seat!!.isNotEmpty()) {
+                    if (tableName!!.isNotEmpty() && seat!!.isNotEmpty() && itemList.isNotEmpty()) {
                         vm.insertDataToDB(vm.getOrderValue()!!, itemList, tableName!!, seat!!)
                         itemList.clear()
                         vm.resetCount()

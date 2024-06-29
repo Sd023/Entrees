@@ -17,5 +17,14 @@
         <!-- Add any other custom attributes you want to override -->
     </style>
 
+    <style name="TabSelectedTextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TabUnselectedTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
 </resources>

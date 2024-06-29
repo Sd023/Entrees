@@ -71,6 +71,13 @@ class CartViewModel(var repo: CartRepo) : ViewModel() {
         _orderValue.value = sum
     }
 
+    fun updateCartCount(list: ArrayList<FoodBO>){
+        _counter.value = 0
+       for(value in list){
+           _counter.value = _counter.value!! + value.qty
+       }
+    }
+
     fun getOrderValue(): Double? {
         return totalOrderValue.value
     }

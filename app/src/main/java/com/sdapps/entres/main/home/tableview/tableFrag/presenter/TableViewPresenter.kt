@@ -75,150 +75,47 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
         tblWithStatus = hashMapOf()
         masterTableMap = HashMap<Any, Any>()
         tblKeyList = arrayListOf()
-
-
-            if(hotelName != null && hotelBranch != null) {
-                databaseReference = FirebaseDatabase
-                    .getInstance()
-                    .getReference("hotels")
-                    .child(hotelName!!)
-                    .child(hotelBranch!!)
-                val tblDbRef = databaseReference
-                tblDbRef.child("TableMaster").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            masterTableMap = ((snapshot.value as? HashMap<*, *>)!!)
-                            if (tableList.isNotEmpty())
-                                tableList.clear()
-                            for (mKey in masterTableMap.keys) {
-                                tableList.add(extractString(mKey.toString()))
-                                tblKeyList.add(mKey.toString())
-                                val localMap = masterTableMap[mKey] as? HashMap<String, String>
-                                if (localMap != null) {
-                                    val isStatus = localMap["isStatus"].toString()
-                                    tblWithStatus[extractString(mKey.toString())] = isStatus
-                                }
-
-
-                            }
-                            //handleInsertRecords(masterTableMap, false)
-
-                            CoroutineScope(Dispatchers.Main).launch {
-                                //getSeatsReference(tblKeyList, databaseReference)
-                                view.setupView(list = tableList, map = tblWithStatus)
+        if (hotelName != null && hotelBranch != null) {
+            databaseReference = FirebaseDatabase
+                .getInstance()
+                .getReference("hotels")
+                .child(hotelName!!)
+                .child(hotelBranch!!)
+            val tblDbRef = databaseReference
+            tblDbRef.child("TableMaster").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        masterTableMap = ((snapshot.value as? HashMap<*, *>)!!)
+                        if (tableList.isNotEmpty())
+                            tableList.clear()
+                        for (mKey in masterTableMap.keys) {
+                            tableList.add(extractString(mKey.toString()))
+                            tblKeyList.add(mKey.toString())
+                            val localMap = masterTableMap[mKey] as? HashMap<String, String>
+                            if (localMap != null) {
+                                val isStatus = localMap["isStatus"].toString()
+                                tblWithStatus[extractString(mKey.toString())] = isStatus
                             }
 
 
                         }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            view.setupView(list = tableList, map = tblWithStatus)
+                        }
+
+
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
-            }
-
-
-    }
-
-
-    fun handleInsertRecords(map: HashMap<*, *>, isSeat: Boolean) {
-        var isDataExist: Boolean = false
-        db.createDataBase()
-        db.openDataBase()
-
-
-        var sql = ""
-        if (isSeat) {
-            sql = "select * from TableSeatMapping"
-        } else {
-            sql = "select * from TableMaster"
-        }
-        val cursor = db.selectSQL(sql)
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                isDataExist = true
-            }
-            cursor.close()
-        }
-
-        if (isDataExist) {
-            db.dbRawQuery("DELETE FROM TableMaster")
-            if (isSeat)
-                db.dbRawQuery("DELETE FROM TableSeatMapping")
-        }
-
-        if (isSeat) {
-            var seatNum = String()
-            var tableId = String()
-
-            for (data in map.keys) {
-                val tblData = map[data] as? HashMap<String, String>
-
-                if (tblData != null) {
-                    seatNum = tblData["seatNum"].toString()
-                    tableId = tblData["tableId"].toString()
-                }
-                insertData(data.toString(), seatNum, tableId, true)
-            }
-
-        } else {
-            var isStatus = String()
-            var tableId = String()
-            for (data in map.keys) {
-                val tblData = map[data] as? HashMap<String, String>
-                if (tblData != null) {
-                    isStatus = tblData["isStatus"].toString()
-                    tableId = tblData["tableId"].toString()
-                    insertData(data.toString(), isStatus, tableId, false)
                 }
 
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
 
-            }
-        }
-
-    }
-
-    fun insertData(tblName: String, seatNumOrStatus: String, tableId: String, isSeat: Boolean) {
-        try {
-
-            if (isSeat) {
-
-                val sb = StringBuilder()
-                    .append(QT(tableId))
-                    .append(",")
-                    .append(QT(tblName))
-                    .append(",")
-                    .append(QT(seatNumOrStatus))
-
-                db.insertSQL(
-                    DataMembers.tbl_tableSeatMapping,
-                    DataMembers.tbl_tableSeatMappingCols,
-                    sb.toString()
-                )
-            } else {
-                val sb = StringBuilder()
-                    .append(QT(tableId))
-                    .append(",")
-                    .append(QT(tblName))
-                    .append(",")
-                    .append(QT(seatNumOrStatus))
-
-                db.insertSQL(
-                    DataMembers.tbl_tableMaster,
-                    DataMembers.tbl_tableMasterCols,
-                    sb.toString()
-                )
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+            })
         }
 
 
     }
-
     fun getSeatsReference(dialogView: CommonDialogView.View) {
 
         tblKeyMap = hashMapOf()
@@ -228,34 +125,31 @@ class TableViewPresenter(private var context: Context) : TableViewManager.Presen
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                        val map = (snapshot.value as? HashMap<*, *>)!!
-                        for (test in map.keys) {
-                            val seatKeyList = (map[test] as HashMap<String, String>)
-                            tblSeatDetail = arrayListOf()
-                            for (testp in seatKeyList.keys) {
+                    val map = (snapshot.value as? HashMap<*, *>)!!
+                    for (test in map.keys) {
+                        val seatKeyList = (map[test] as HashMap<String, String>)
+                        tblSeatDetail = arrayListOf()
+                        for (testp in seatKeyList.keys) {
 
-                                val seatAttributes = seatKeyList[testp] as? HashMap<String, String>
+                            val seatAttributes = seatKeyList[testp] as? HashMap<String, String>
 
-                                if (seatAttributes != null) {
+                            if (seatAttributes != null) {
 
-                                    val items = HotelBO.Seats(
-                                        seatAttributes["seatNum"].toString(),
-                                        seatAttributes["tableId"].toString(),
-                                        seatAttributes["isOrdered"].toString().toBoolean()
-                                    )
-                                    tblSeatDetail!!.add(items)
-                                    tblKeyMap!![test.toString()] = tblSeatDetail!!
+                                val items = HotelBO.Seats(
+                                    seatAttributes["seatNum"].toString(),
+                                    seatAttributes["tableId"].toString(),
+                                    seatAttributes["isOrdered"].toString().toBoolean()
+                                )
+                                tblSeatDetail!!.add(items)
+                                tblKeyMap!![test.toString()] = tblSeatDetail!!
 
-                                }
                             }
-
                         }
-                        //handleInsertRecords(map, true)
 
+                    }
 
                     setSeatHashMap(tblKeyMap)
                     dialogView.setupView(tblKeyMap)
-//                    Log.d("TAG", ":->>> $tblKeyMap")
 
                 }
             }

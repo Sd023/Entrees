@@ -1,100 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    android:id="@+id/drawerLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".main.food.main.view.FoodListActivity"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    tools:context=".main.food.main.view.FoodListActivity">
 
-    <FrameLayout
+
+    <RelativeLayout
+        android:id="@+id/layoutView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="?actionBarSize">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tabContentStart="56dp"
-                app:tabMode="scrollable" />
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tabSelectedTextColor="@color/black"
+            app:tabIndicatorColor="@color/black"
+            android:background="@color/white"
+            app:tabTextAppearance="@style/TabUnselectedTextAppearance"
+            app:tabSelectedTextAppearance="@style/TabSelectedTextAppearance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabContentStart="56dp"
+            app:tabMode="scrollable" />
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="wrap_content"
-                android:layout_height="600dp"
-                android:layout_below="@id/tabLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tabLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/primary_light"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cartItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/badge"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:padding="6dp"
+                android:src="@drawable/shopping_cart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewPager"
-                android:layout_marginBottom="30dp"
-                >
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <RelativeLayout
-                    android:id="@+id/cartItem"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:padding="2dp"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="7dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_alignParentEnd="true"
-                    >
 
-                    <ImageView
-                        android:id="@+id/badge"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/shopping_cart"
-                        android:contentDescription="@string/cart" />
-
-                    <TextView
-                        android:id="@+id/count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cart_count"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:background="@drawable/badge"
-                        android:layout_alignTop="@id/badge"
-                        android:layout_alignEnd="@id/badge"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginEnd="-1dp"
-                        android:gravity="center"
-                        android:visibility="visible"/>
-                </RelativeLayout>
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/badge"
+                android:gravity="center"
+                android:text=""
+                app:layout_constraintBottom_toBottomOf="@+id/badge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.608"
+                app:layout_constraintStart_toStartOf="@+id/badge" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+
+    </RelativeLayout>
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/rightFragView"
         android:name="com.sdapps.entres.main.food.main.view.CartDrawerFragment"
         android:layout_width="300dp"
-        android:background="@color/white"
         android:layout_height="match_parent"
-        android:layout_gravity="end"/>
-    
+        android:layout_gravity="end"
+        android:background="@color/white" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

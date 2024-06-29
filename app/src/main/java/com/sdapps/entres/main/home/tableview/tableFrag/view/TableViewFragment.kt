@@ -1,5 +1,6 @@
 package com.sdapps.entres.main.home.tableview.tableFrag.view
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -28,6 +29,9 @@ class TableViewFragment : Fragment(), TableViewManager.View {
     private lateinit var db: DBHandler
     private lateinit var dialog : AlertDialog.Builder
     private lateinit var alert: AlertDialog
+
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +44,7 @@ class TableViewFragment : Fragment(), TableViewManager.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDialog = ProgressDialog(requireContext())
         presenter = TableViewPresenter(context)
         db = DBHandler(context)
         presenter.attachView(this, db)
@@ -48,6 +53,7 @@ class TableViewFragment : Fragment(), TableViewManager.View {
 
     fun initializeFirebase() {
         if(NetworkTools().isAvailableConnection(context)){
+            showLoading()
             presenter.loadUserDetails()
             presenter.tableRef()
         }else{
@@ -58,12 +64,24 @@ class TableViewFragment : Fragment(), TableViewManager.View {
 
     override fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>) {
         try {
+            hideLoading()
             binding!!.recyclerView.layoutManager = GridLayoutManager(context, 3)
             val adapter = TableViewAdapter(list, map,context, this)
             binding!!.recyclerView.adapter = adapter
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
+    }
+
+    override fun showLoading() {
+        progressDialog.setTitle("Loading")
+        progressDialog.setMessage("Fetching Tables...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+
+    override fun hideLoading() {
+        progressDialog.dismiss()
     }
 
     override fun showAlertDialog(msg: String) {

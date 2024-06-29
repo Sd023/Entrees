@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.OnCompleteListener
@@ -62,6 +63,7 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxa
 
                     Glide.with(appContext)
                         .load(imgLink)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .apply(RequestOptions().placeholder(R.drawable.ic_launcher_background))
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.foodImg)
@@ -75,7 +77,9 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxa
         }
 
         holder.foodCardView.setOnClickListener{
-            onItemClickListener?.invoke(position)
+            if(position != RecyclerView.NO_POSITION){
+                onItemClickListener?.invoke(position)
+            }
         }
     }
 
@@ -93,12 +97,6 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxa
         var foodImg : ImageView = itemView.findViewById(R.id.foodImg)
         var foodCardView : RelativeLayout = itemView.findViewById(R.id.foodCardView)
     }
-
-    fun updateData(newData: List<FoodBO>) {
-        data = newData
-        notifyDataSetChanged()
-    }
-
     fun roundV(data: Double): String{
         return String.format(Locale.getDefault(),"%.2f", data)
     }

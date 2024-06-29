@@ -7,7 +7,8 @@ interface TableViewManager {
     interface View {
         fun showDialog(position: Int, tableName: String)
         fun setupView(list: ArrayList<Int>, map: HashMap<Int, String>)
-
+        fun showLoading()
+        fun hideLoading()
         fun showAlertDialog(msg: String)
     }
 

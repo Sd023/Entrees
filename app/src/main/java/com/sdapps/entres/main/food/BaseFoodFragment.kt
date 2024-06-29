@@ -46,7 +46,6 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
     private lateinit var vm: CartViewModel
 
     private lateinit var badCount: NotificationBadge
-    var qty = 1
     var totalOrderValue = 0.0
     private lateinit var progressDialog: ProgressDialog
     var taxRate: Float? = 0F
@@ -86,6 +85,7 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
             recyclerView = requireView().findViewById(R.id.recyclerView)
             adapter = FoodAdapter(filteredFoodList, taxRate!!, isTaxable!!)
             recyclerView.adapter = adapter
+            recyclerView.itemAnimator = null
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
             adapter.itemClickListener { position ->
@@ -97,10 +97,9 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
                 }
                 if (finalList.isNotEmpty()) {
                     if (finalList.contains(foodDetail)) {
-                        qty += 1
-                        foodDetail!!.qty = qty
+                        foodDetail!!.qty += 1
                         vm.calculateOrderValue(finalList)
-                        foodDetail.totalOrderValue = vm.getOrderValue()!!
+                        foodDetail!!.totalOrderValue = vm.getOrderValue()!!
                     } else {
                         finalList.add(foodDetail!!)
                         vm.setFoodDetailList(finalList)

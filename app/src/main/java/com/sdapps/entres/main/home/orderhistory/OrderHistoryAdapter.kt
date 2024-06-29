@@ -36,10 +36,9 @@ class OrderHistoryAdapter(private var data: ArrayList<OrderHistoryBO>) :
         holder.tableId.text  = data[position].tableName
         holder.totalItems.text = StringBuilder().append("Total Items: ").append(data[position].totalItems).toString()
         holder.totalPrice.text = StringBuilder().append("Total Price: ").append(data[position].totalPrice).toString()
-        //holder.status.text = StringBuilder().append("Status: ").append(data[position].status).toString()
 
         holder.cardView.setOnClickListener {
-           listener?.loadOrderDetail(data[position].orderID!!)
+           //listener?.loadOrderDetail(data[position].orderID!!)
         }
     }
 
