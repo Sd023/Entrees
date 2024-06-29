@@ -29,9 +29,6 @@ open class TableActivity : AppCompatActivity(),
 
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var dialog : AlertDialog.Builder
-    private lateinit var alert: AlertDialog
-
     private lateinit var presenter: TableViewPresenter
     private lateinit var db: DBHandler
     private lateinit var customDia : AlertDialog.Builder

@@ -50,7 +50,6 @@ class CartDrawerAdapter(var vm: CartViewModel,var parent : CartDrawerFragment,va
             } else {
                 data[position].qty = removeQty
                 notifyItemChanged(position)
-                vm.calculateOrderValue(data)
             }
 
             vm.updateCartCount(data)
