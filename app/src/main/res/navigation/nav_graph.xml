@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/orderTaking"
+    app:startDestination="@+id/profile"
     >
 
     <fragment
@@ -11,12 +11,6 @@
         android:name="com.sdapps.entres.main.home.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
-
-    <fragment
-        android:id="@+id/orderTaking"
-        android:name="com.sdapps.entres.main.home.tableview.tableFrag.view.TableViewFragment"
-        android:label="@string/order_taking"
-        tools:layout="@layout/fragment_order_taking" />
 
     <fragment
         android:id="@+id/orderHistory"

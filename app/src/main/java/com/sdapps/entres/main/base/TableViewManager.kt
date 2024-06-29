@@ -1,9 +1,9 @@
 package com.sdapps.entres.main.base
 
-interface BaseView {
+interface TableViewManager {
 
     fun showError(msg: String)
-
-    fun showAlert(title: String)
+    fun showLoad()
+    fun hideLoad()
 
 }

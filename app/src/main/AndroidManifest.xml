@@ -21,10 +21,6 @@
             android:name=".main.homenew.HomeHostActivityNew"
             android:exported="false" />
         <activity
-            android:name=".AppSettingsActivity"
-            android:configChanges="uiMode"
-            android:exported="false" />
-        <activity
             android:name=".PrintPreviewActivity"
             android:exported="false" />
         <activity
@@ -42,7 +38,7 @@
             android:configChanges="uiMode"
             android:exported="false" />
         <activity
-            android:name=".main.base.BaseActivity"
+            android:name=".main.base.TableActivity"
             android:configChanges="uiMode"
             android:exported="false" />
     </application>

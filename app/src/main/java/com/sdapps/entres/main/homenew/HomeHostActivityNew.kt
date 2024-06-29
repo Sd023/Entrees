@@ -3,11 +3,9 @@ package com.sdapps.entres.main.homenew
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.sdapps.entres.R
-import com.sdapps.entres.main.base.BaseActivity.Companion.PROFILE
-import com.sdapps.entres.main.base.BaseActivity.Companion.ORDER_HISTORY
+import com.sdapps.entres.main.base.TableActivity.Companion.PROFILE
+import com.sdapps.entres.main.base.TableActivity.Companion.ORDER_HISTORY
 import com.sdapps.entres.main.home.orderhistory.OrderHistoryFragment
 import com.sdapps.entres.main.home.profile.ProfileFragment
 

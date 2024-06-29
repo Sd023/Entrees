@@ -1,20 +1,17 @@
 package com.sdapps.entres.main.login.view
 
-import android.widget.RelativeLayout.LayoutParams
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.view.WindowManager
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
-import android.widget.RelativeLayout
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -22,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.sdapps.entres.R
 import com.sdapps.entres.core.commons.ClickGuard
-import com.sdapps.entres.main.base.BaseActivity
+import com.sdapps.entres.main.base.TableActivity
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.date.DateTools.Companion.DATE_TIME
 import com.sdapps.entres.core.database.DBHandler
@@ -38,7 +35,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
+class LoginScreen :AppCompatActivity() , LoginHelper.View, View.OnClickListener {
 
     private lateinit var binding: ActivityLoginNewBinding
     private lateinit var presenter: LoginPresenter
@@ -47,6 +44,8 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
     private lateinit var dbHandler : DBHandler
     private lateinit var newBo : LoginBO
 
+    private lateinit var dialog : AlertDialog.Builder
+    private lateinit var alert: AlertDialog
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,13 +64,14 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
     }
 
     fun init(){
+        progressDialog = ProgressDialog(this)
         dbHandler = DBHandler(this)
         dbHandler.createDataBase()
         newBo = LoginBO()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         enableEdgeToEdge()
 
-        progressDialog = ProgressDialog(this)
+
         presenter = LoginPresenter()
         presenter.attachView(this, applicationContext, dbHandler)
 
@@ -174,8 +174,24 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         showAlert(msg!!)
     }
 
+    fun showAlert(title: String) {
+        val layoutInflator = this.layoutInflater
+        val dialogView = layoutInflator.inflate(R.layout.common_dialog_layout,null)
+        dialog = AlertDialog.Builder(this).setView(dialogView)
+        val dialogText = dialogView.findViewById<TextView>(R.id.titleDialog)
+        val btn = dialogView.findViewById<Button>(R.id.btn_done)
+        dialogText.text = title
+        alert = dialog.create()
+        alert.show()
+
+        btn.setOnClickListener{
+            alert.dismiss()
+        }
+
+    }
+
     override fun moveToNextScreen() {
-            val intent = Intent(this@LoginScreen, BaseActivity::class.java)
+            val intent = Intent(this@LoginScreen, TableActivity::class.java)
             startActivity(intent)
             finish()
     }
@@ -192,6 +208,9 @@ class LoginScreen : BaseActivity(), LoginHelper.View, View.OnClickListener {
         return password.length > 5
     }
 
+    fun showError(msg: String) {
+        Toast.makeText(applicationContext,msg,Toast.LENGTH_LONG).show()
+    }
 
     override fun onStart() {
         super.onStart()
