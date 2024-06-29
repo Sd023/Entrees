@@ -8,7 +8,7 @@
 
 
     <!--Table Colors -->
-    <color name="empty_table">#5F5F5F</color>
+    <color name="empty_table">#BABABA</color>
     <color name="dead_table">#CA1F3D</color>
     <color name="avail_table">#54DD00</color>
     <color name="bottom_items_color">#172A36</color>

@@ -23,6 +23,14 @@ class OrderHistoryFragment : Fragment(), Listener {
 
     private lateinit var repo : OrderHistoryDataManager
 
+
+    companion object {
+
+        fun initializeOrderHistoryView(): OrderHistoryFragment{
+            val fragment = OrderHistoryFragment()
+            return fragment
+        }
+    }
     private val viewModel by lazy {
         repo = OrderHistoryDataManager(requireContext())
         ViewModelProvider(this,OrderHistoryFactory(requireActivity().application,repo))[VM::class.java]

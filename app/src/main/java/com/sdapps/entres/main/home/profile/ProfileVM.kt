@@ -60,8 +60,10 @@ class ProfileVM(private var app: Application): ViewModel() {
 
             _firebaseRef.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val userProfile : ProfileBO = snapshot.getValue(ProfileBO::class.java)!!
-                    _profileData.value = userProfile
+                    if (snapshot.exists() && snapshot.value != null){
+                        val userProfile : ProfileBO = snapshot.getValue(ProfileBO::class.java)!!
+                        _profileData.value = userProfile
+                    }
                 }
                 override fun onCancelled(error: DatabaseError) {
                    Log.d("ERR", "-> ${error.code} : ${error.message} : ${error.details}")

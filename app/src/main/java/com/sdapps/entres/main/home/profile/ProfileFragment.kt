@@ -34,6 +34,16 @@ class ProfileFragment() : BaseEntreesFragment(){
 
     private lateinit var storageRef: FirebaseStorage
 
+
+
+    companion object {
+        private const val ARGS = "args"
+
+        fun initializeProfileView(): ProfileFragment {
+            val fragment = ProfileFragment()
+            return fragment
+        }
+    }
     private val viewModel by lazy {
         ViewModelProvider(this, ProfileFactory(requireActivity().application))[ProfileVM::class.java]
     }

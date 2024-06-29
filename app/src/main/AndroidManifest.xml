@@ -16,13 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Entreés"
         android:usesCleartextTraffic="true"
-
         tools:targetApi="31">
         <activity
+            android:name=".main.homenew.HomeHostActivityNew"
+            android:exported="false" />
+        <activity
             android:name=".AppSettingsActivity"
-            android:exported="false"
             android:configChanges="uiMode"
-            />
+            android:exported="false" />
         <activity
             android:name=".PrintPreviewActivity"
             android:exported="false" />

@@ -23,8 +23,8 @@ android {
 
     defaultConfig {
         applicationId = "com.sdapps.entres"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.1"
 

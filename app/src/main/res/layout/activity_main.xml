@@ -1,32 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            >
 
-    <fragment
+            <ImageView
+                android:id="@+id/orderHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/order_history"
+                android:background="@drawable/print_shape"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/order_history"
+                android:tooltipText="@string/order_history"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+            <ImageView
+                android:id="@+id/profileView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/profile"
+                android:background="@drawable/print_shape"
+                android:tooltipText="Profile"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/profile"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+
+
+        </RelativeLayout>
+
+
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_home_class"
-        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_graph" />
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        style="@style/MyBottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        app:menu="@menu/homescreen_bottom_items" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@id/header"
+        app:navGraph="@navigation/nav_graph"
+        />
+</RelativeLayout>
