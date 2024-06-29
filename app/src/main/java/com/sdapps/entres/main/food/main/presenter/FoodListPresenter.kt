@@ -53,7 +53,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
     }
 
     fun setIsTaxable(txble:String){
-        isTaxable = txble.equals("YES")
+        isTaxable = txble.equals("true")
     }
 
     fun isTaxable(): Boolean {
