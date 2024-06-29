@@ -22,7 +22,7 @@ import com.sdapps.entres.main.food.main.FoodBO
 import java.util.Locale
 import kotlin.time.times
 
-class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
+class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxable: Boolean): RecyclerView.Adapter<FoodAdapter.ViewHolder>()  {
 
     private lateinit var appContext: Context
 
@@ -44,9 +44,12 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float): RecyclerV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.food.text = data[position].foodName
-        val taxPrice: Double = ((data[position].price * (taxRate/ 100)) + data[position].price)
-        holder.amount.text = roundV(taxPrice)
-
+        if(isTaxable){
+            val taxPrice: Double = ((data[position].price * (taxRate/ 100)) + data[position].price)
+            holder.amount.text = roundV(taxPrice)
+        }else{
+            holder.amount.text = data[position].price.toString()
+        }
 
         val img = data[position].imgUrl.replace("\"","").toString()
         if(img.isNotEmpty()){

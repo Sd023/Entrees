@@ -123,7 +123,7 @@ class FoodListActivity : AppCompatActivity(), FoodActivityManager.View {
             for (category in categorySet) {
                 val frag = BaseFoodFragment.newInstance(
                     filterFoodListByCategory(masterDataList, category),
-                    category,presenter.getTaxRate()
+                    category,presenter.getTaxRate(),presenter.isTaxable()
                 )
                 adapter.addFragment(frag, category)
                 // Category is added to TabView & Food list added as RecyclerView.

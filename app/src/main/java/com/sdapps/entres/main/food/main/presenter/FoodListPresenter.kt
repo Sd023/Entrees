@@ -9,6 +9,9 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
     private lateinit var view: FoodActivityManager.View
     private lateinit var foodList: ArrayList<FoodBO>
     var taxRate: Float? = 0F
+
+    private var isTaxable: Boolean? = false
+
     override fun attachView(view: FoodActivityManager.View) {
         this.view = view
     }
@@ -18,7 +21,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 
             foodList = arrayListOf()
             db.openDataBase()
-            val cursor = db.selectSQL("SELECT FDM.category,FDM.foodName,FDM.price,FDM.imgUrl,TT.taxRate from FoodDataMaster FDM LEFT JOIN TaxTable TT ")
+            val cursor = db.selectSQL("SELECT FDM.category,FDM.foodName,FDM.price,FDM.imgUrl,TT.taxRate, TT.isTaxable from FoodDataMaster FDM LEFT JOIN TaxTable TT ")
 
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -27,6 +30,7 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
                     val price = cursor.getDouble(2)
                     val imgUrl = cursor.getString(3)
                     setTaxRate(cursor.getString(4))
+                    setIsTaxable(cursor.getString(5))
                     foodList.add(FoodBO(category, foodName,price, imgUrl,1,"","",0.0))
                 }
                 cursor.close()
@@ -46,5 +50,13 @@ class FoodListPresenter(val context: Context) : FoodActivityManager.Presenter {
 
     fun getTaxRate(): Float{
         return taxRate!!
+    }
+
+    fun setIsTaxable(txble:String){
+        isTaxable = txble.equals("YES")
+    }
+
+    fun isTaxable(): Boolean {
+        return isTaxable!!
     }
 }

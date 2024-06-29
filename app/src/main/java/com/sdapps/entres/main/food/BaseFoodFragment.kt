@@ -50,6 +50,8 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
     var totalOrderValue = 0.0
     private lateinit var progressDialog: ProgressDialog
     var taxRate: Float? = 0F
+    var isTaxable: Boolean? = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,11 +59,12 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
     ): View? {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        arguments?.let {
-            val masterFoodData: List<FoodBO> = it.getParcelableArrayList(MASTER_DATA) ?: emptyList()
-            val masterCategory: String = it.getString(MASTER_CATEGORY, "")
+        arguments?.let { arg ->
+            val masterFoodData: List<FoodBO> = arg.getParcelableArrayList(MASTER_DATA) ?: emptyList()
+            val masterCategory: String = arg.getString(MASTER_CATEGORY, "")
             filteredFoodList = filterDataByCategory(masterFoodData, masterCategory)
-            taxRate = it.getFloat(TAX_RATE)
+            taxRate = arg.getFloat(TAX_RATE)
+            isTaxable = arg.getBoolean(TAXABLE)
 
         }
 
@@ -81,7 +84,7 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
         finalList = arrayListOf()
         if (NetworkTools().isAvailableConnection(requireContext())) {
             recyclerView = requireView().findViewById(R.id.recyclerView)
-            adapter = FoodAdapter(filteredFoodList, taxRate!!)
+            adapter = FoodAdapter(filteredFoodList, taxRate!!, isTaxable!!)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(context, 3)
 
@@ -147,12 +150,15 @@ class BaseFoodFragment : BaseEntreesFragment(),FoodActivityManager.View {
         private const val MASTER_DATA = "all_data"
         private const val MASTER_CATEGORY = "category"
         private const val TAX_RATE = "tax_rate"
-        fun newInstance(allData: List<FoodBO>, category: String, taxRate: Float): BaseFoodFragment {
+        private const val TAXABLE = "isTaxable"
+
+        fun newInstance(allData: List<FoodBO>, category: String, taxRate: Float, isTaxable: Boolean): BaseFoodFragment {
             return BaseFoodFragment().apply {
                 arguments = Bundle().apply {
                     putParcelableArrayList(MASTER_DATA, ArrayList(allData))
                     putString(MASTER_CATEGORY, category)
                     putFloat(TAX_RATE,taxRate)
+                    putBoolean(TAXABLE,isTaxable)
                 }
             }
         }

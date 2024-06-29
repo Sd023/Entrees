@@ -267,6 +267,8 @@ class LoginPresenter : LoginHelper.Presenter {
         try {
             db.createDataBase()
             db.openDataBase()
+            db.dbRawQuery("delete from table TaxTable")
+
             val content = "${QT(taxBO.taxable.toString())}, ${QT(taxBO.taxType)}, ${QT(taxBO.taxRate.toString())}"
             db.insertSQL(tbl_taxTable, tbl_taxTableCols, content)
         }catch (ex: Exception){
