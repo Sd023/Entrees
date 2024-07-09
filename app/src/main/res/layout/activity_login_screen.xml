@@ -5,123 +5,122 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".main.login.view.LoginScreen">
-
-
-    <View
-        android:id="@+id/ellipse_1"
-        android:layout_width="280dp"
-        android:layout_height="270dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/login_shape"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-
-    <ImageView
-        android:layout_width="237dp"
-        android:layout_height="220dp"
-        android:src="@drawable/food_login"
-        app:layout_constraintBottom_toBottomOf="@+id/ellipse_1"
-        app:layout_constraintEnd_toEndOf="@+id/ellipse_1"
-        app:layout_constraintHorizontal_bias="0.262"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Login"
-        android:fontFamily="@font/righteous_font"
-        android:textSize="45sp"
-        android:layout_marginStart="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ellipse_1" />
-
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_email"
-        android:layout_marginTop="20dp"
-        android:inputType="textEmailAddress"
-        android:padding="25dp"
-        app:layout_constraintWidth_percent="0.91"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/prompt_password"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionDone"
-        android:padding="25dp"
-        android:inputType="textPassword"
-        app:layout_constraintWidth_percent="0.91"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
-
-    <Button
-        android:id="@+id/login"
-        android:layout_width="233dp"
-        android:layout_height="64dp"
-        android:layout_gravity="start"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
-        android:enabled="true"
-        android:textColor="@color/bg_color"
-        android:textSize="20sp"
-        android:text="@string/action_sign_in"
-        android:fontFamily="@font/righteous_font"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+    android:background="@color/white">
 
 
 <!--    <View-->
-<!--        android:id="@+id/ellipse_2"-->
-<!--        android:layout_width="170dp"-->
-<!--        android:layout_height="140dp"-->
+<!--        android:id="@+id/ellipse_1"-->
+<!--        android:layout_width="280dp"-->
+<!--        android:layout_height="270dp"-->
 <!--        android:layout_alignParentStart="true"-->
 <!--        android:layout_alignParentTop="true"-->
-<!--        android:background="@drawable/login_shape_2"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:background="@drawable/login_shape"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        />-->
 
+
+<!--    <ImageView-->
+<!--        android:layout_width="237dp"-->
+<!--        android:layout_height="220dp"-->
+<!--        android:src="@drawable/food_login"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/ellipse_1"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/ellipse_1"-->
+<!--        app:layout_constraintHorizontal_bias="0.262"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.25" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:text="Login"-->
+<!--        android:fontFamily="@font/righteous_font"-->
+<!--        android:textSize="45sp"-->
+<!--        android:layout_marginStart="30dp"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/login"-->
-<!--        app:layout_constraintVertical_bias="0.990"-->
-<!--        tools:ignore="MissingConstraints" />-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/ellipse_1" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/username"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="@string/prompt_email"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:inputType="textEmailAddress"-->
+<!--        android:padding="25dp"-->
+<!--        app:layout_constraintWidth_percent="0.91"-->
+<!--        android:selectAllOnFocus="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/password"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:hint="@string/prompt_password"-->
+<!--        android:imeActionLabel="@string/action_sign_in_short"-->
+<!--        android:imeOptions="actionDone"-->
+<!--        android:padding="25dp"-->
+<!--        android:inputType="textPassword"-->
+<!--        app:layout_constraintWidth_percent="0.91"-->
+<!--        android:selectAllOnFocus="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/username" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/login"-->
+<!--        android:layout_width="233dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginBottom="64dp"-->
+<!--        android:enabled="true"-->
+<!--        android:textColor="@color/bg_color"-->
+<!--        android:textSize="20sp"-->
+<!--        android:text="@string/action_sign_in"-->
+<!--        android:fontFamily="@font/righteous_font"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/password"-->
+<!--        app:layout_constraintVertical_bias="0.2" />-->
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/loading"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="64dp"-->
+<!--        android:layout_marginBottom="64dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/password"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/password"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.3" />-->
+
+
+<!--&lt;!&ndash;    <View&ndash;&gt;-->
+<!--&lt;!&ndash;        android:id="@+id/ellipse_2"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="170dp"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="140dp"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_alignParentStart="true"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_alignParentTop="true"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:background="@drawable/login_shape_2"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+
+<!--&lt;!&ndash;        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:layout_constraintTop_toBottomOf="@+id/login"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:layout_constraintVertical_bias="0.990"&ndash;&gt;-->
+<!--&lt;!&ndash;        tools:ignore="MissingConstraints" />&ndash;&gt;-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

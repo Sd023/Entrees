@@ -10,23 +10,27 @@ glide = "4.16.0"
 gradle = "8.1.2"
 gson = "2.10.1"
 jetbrains-kotlinx-coroutines-android = "1.5.2"
-kotlin = "1.8.0"
+kotlin = "2.0.0"
 core-ktx = "1.12.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 kotlin-gradle-plugin = "1.8.0"
-kotlinx-coroutines-android = "1.7.1"
-material = "1.11.0"
+kotlinx-coroutines-android = "1.8.1"
+material = "1.12.0"
 constraintlayout = "2.1.4"
 retrofit = "2.9.0"
 lifecycle-livedata-ktx = "2.6.2"
 lifecycle-viewmodel-ktx = "2.6.2"
 navigation-fragment-ktx = "2.7.6"
 annotation = "1.7.0"
+lifecycleRuntimeKtx = "2.8.2"
 gms = "4.4.0"
-activity = "1.8.0"
+activity = "1.9.0"
+activityCompose = "1.9.0"
+composeBom = "2024.06.00"
+lifecycleRuntimeKtxVersion = "2.8.3"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
@@ -59,7 +63,20 @@ annotation = { group = "androidx.annotation", name = "annotation", version.ref =
 gms ={group = "com.google.gms.google-services", name = "google-services", version.ref = "gms"}
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
+
+
 [plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 gms = {id = "com.google.gms.google-services", version.ref = "gms"}

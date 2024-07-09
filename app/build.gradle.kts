@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.gms)
+    alias(libs.plugins.compose.compiler)
 }
 
 val gitBuildNumber: Int by lazy {
@@ -18,6 +19,7 @@ val gitBuildNumber: Int by lazy {
 }
 
 android {
+
     namespace = "com.sdapps.entres"
     compileSdk = 34
 
@@ -29,6 +31,9 @@ android {
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -56,6 +61,12 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
     dataBinding {
         true
@@ -66,8 +77,8 @@ android {
             dimension = "frb"
         }
     }
-}
 
+}
 
 class ApplicationVariantAction : Action<ApplicationVariant> {
     override fun execute(variant: ApplicationVariant) {
@@ -91,6 +102,17 @@ class ApplicationVariantAction : Action<ApplicationVariant> {
 
 dependencies {
 
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.material3)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
