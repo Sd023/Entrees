@@ -49,6 +49,7 @@ import com.sdapps.entres.main.base.TableActivity
 import com.sdapps.entres.main.login.view.compose.theme.EntreésTheme
 
 
+var isButtonClicked: Boolean = false
 
 class LoginNewComposeActivity() : ComponentActivity(), LoginManagerCompose.View {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +93,7 @@ class LoginNewComposeActivity() : ComponentActivity(), LoginManagerCompose.View 
     }
 
     override fun hideLoading() {
-       print("hideLoading")
+        isButtonClicked = false
     }
 
     override fun showError(errorMsg: String) {
@@ -178,7 +179,13 @@ fun LoginView(name: String, fireabaseAuth: FirebaseAuth,presenter: LoginManagerC
                         )
 
                         Button(
-                            onClick = { proceedLogin(firebaseAuth = fireabaseAuth,presenter,emailField, passwordField) },
+                            onClick = {
+                                if(!isButtonClicked){
+                                    isButtonClicked = true
+                                    proceedLogin(firebaseAuth = fireabaseAuth,presenter,emailField, passwordField)
+                                }
+
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 30.dp, vertical = 30.dp)
@@ -224,6 +231,8 @@ fun LoginView(name: String, fireabaseAuth: FirebaseAuth,presenter: LoginManagerC
 fun proceedLogin(firebaseAuth: FirebaseAuth,presenter: LoginManagerCompose.Presenter,email: MutableState<String>, password: MutableState<String>) {
     if(email.value.isNotEmpty() && password.value.isNotEmpty()){
         presenter.login(firebaseAuth, email.value, password.value)
+    }else{
+        isButtonClicked = false
     }
 
 

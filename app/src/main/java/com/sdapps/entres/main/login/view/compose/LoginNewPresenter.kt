@@ -43,13 +43,35 @@ class LoginNewPresenter(private var view : LoginManagerCompose.View) : LoginMana
 
     override fun login(auth: FirebaseAuth, email: String, password: String) {
         if(isValidEmail(email) && isValidPassword(password)){
-            proceedToLogin(auth,email,password)
+            if (!checkUserExists()){
+                proceedToLogin(auth,email,password)
+            }
         }else{
+            view.hideLoading()
             view.showError("Unable to login")
         }
     }
 
-    fun proceedToLogin(auth: FirebaseAuth, email: String, password: String){
+    private fun checkUserExists(): Boolean{
+        var isUserExist = false
+
+        try {
+            db.createDataBase()
+            db.openDataBase()
+
+            val cursor = db.selectSQL("select * from MasterUser")
+            if(cursor != null && cursor.count > 0){
+                isUserExist = true
+            }
+        }catch (ex: Exception){
+            ex.printStackTrace()
+            return isUserExist
+        }
+
+        return isUserExist
+    }
+
+    private fun proceedToLogin(auth: FirebaseAuth, email: String, password: String){
         Log.d("FRB", "login start")
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { loginTask ->
             if(loginTask.isSuccessful){
