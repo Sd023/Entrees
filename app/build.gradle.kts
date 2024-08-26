@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.gms)
+    alias(libs.plugins.com.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 val gitBuildNumber: Int by lazy {
@@ -102,6 +103,7 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.annotation)
     implementation(libs.androidx.activity)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -126,10 +128,11 @@ dependencies {
     implementation (libs.gson)
     implementation (libs.glide)
 
-    implementation ("com.nex3z:notification-badge:1.0.5")
+    implementation (libs.notification.badge)
 
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.kotlinx.coroutines.android.v152)
+    implementation (libs.play.services.location)
 
 
 }

@@ -40,8 +40,17 @@ class DBHandler(val context: Context): SQLiteOpenHelper(context, DB_NAME, null, 
     }
 
     fun updateSQL(sql: String){
-        Log.d("QUERY", ": $sql")
-         sqlite!!.rawQuery(sql, null)
+        val db = sqlite ?: return
+        db.beginTransaction()
+        try {
+            Log.d("QUERY", ": $sql")
+            db.execSQL(sql)
+            db.setTransactionSuccessful()
+        } catch (e: Exception) {
+            Log.e("SQL_ERROR", "Error executing SQL: ${e.message}")
+        } finally {
+            db.endTransaction()
+        }
     }
 
     fun insertSQL(tblName: String, columns: String, content: String){
@@ -55,6 +64,10 @@ class DBHandler(val context: Context): SQLiteOpenHelper(context, DB_NAME, null, 
         val delete: Boolean = context.deleteDatabase(DB_NAME)
         if (delete)
             createDataBase()
+    }
+
+    fun isDbClosed(): Boolean {
+        return !sqlite!!.isOpen || sqlite == null
     }
 
 

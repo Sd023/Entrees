@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.sdapps.entres.core.constants.DataMembers
@@ -34,7 +35,7 @@ class LoginPresenter : LoginHelper.Presenter {
 
     private lateinit var masterItemList: MutableList<HotelBO.Items>
 
-    private lateinit var taxMap: MutableMap<*,*>
+    private lateinit var taxMap: MutableMap<*, *>
 
     override fun attachView(view: LoginHelper.View, context: Context, dbHandler: DBHandler) {
         this.view = view
@@ -47,21 +48,18 @@ class LoginPresenter : LoginHelper.Presenter {
 
     override fun login(firebaseAuth: FirebaseAuth, userName: String, password: String) {
 
-            try {
-                firebaseAuth.signInWithEmailAndPassword(userName, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val currentUser = firebaseAuth.currentUser?.uid
-                            CoroutineScope(Dispatchers.Main
-                            ).launch {
-                                getUserDetailsFromId(currentUser, true)
-                            }
-                        } else {
-                            view.hideLoading()
-                            view.showErrorDialog(task.exception?.message)
-                        }
+        try {
+            firebaseAuth.signInWithEmailAndPassword(userName, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val currentUser = firebaseAuth.currentUser?.uid
+                        downloadMasterDataFromUser(currentUser, true)
+                    } else {
+                        view.hideLoading()
+                        view.showErrorDialog(task.exception?.message)
                     }
-            } catch (ex: Exception) {
+                }
+        } catch (ex: Exception) {
             view.hideLoading()
             Log.d("FIREBASE", ex.printStackTrace().toString())
             view.showErrorDialog(ex.message)
@@ -69,53 +67,57 @@ class LoginPresenter : LoginHelper.Presenter {
 
     }
 
-    fun QS(data: Any?): String {
-        return "'$data'"
+
+
+    fun downloadMasterDataFromUser(currentUserID: String?, isNewLogin: Boolean){
+        fetchUserRecords(currentUserID, isNewLogin) { loginBO ->
+            insertUserMasterRecords(loginBO)
+            downloadTheHotelData(loginBO)
+        }
     }
 
-    suspend fun getUserDetailsFromId(currentUserID: String?, isNewLogin: Boolean) {
+    private fun fetchUserRecords(currentUserID: String?, isNewLogin: Boolean, callback: (LoginBO) -> Unit){
         if (currentUserID != null) {
 
-            if(isNewLogin){
+            if (isNewLogin) {
                 val dbRef = FirebaseDatabase.getInstance().getReference("users")
-                dbRef.child(currentUserID).addListenerForSingleValueEvent(object : ValueEventListener {
+                dbRef.child(currentUserID)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
 
-                    override fun onDataChange(snapshot: DataSnapshot) {
+                        override fun onDataChange(snapshot: DataSnapshot) {
 
-                        if (snapshot.exists()) {
+                            if (snapshot.exists()) {
 
-                            val userData = snapshot.getValue(LoginBO::class.java)
-                            val bo = LoginBO().apply {
-                                currentUserUid = currentUserID
-                                email = userData?.email
-                                role = userData?.role
-                                userId = userData?.userId
-                                hotel = userData?.hotel
-                                hotelBranch = userData?.hotelBranch
+                                val userData = snapshot.getValue(LoginBO::class.java)
+                                val bo = LoginBO().apply {
+                                    currentUserUid = currentUserID // user session id not maintained in Firebase.
+                                    email = userData?.email
+                                    role = userData?.role
+                                    userId = userData?.userId
+                                    hotel = userData?.hotel
+                                    hotelBranch = userData?.hotelBranch
+                                }
+                               callback(bo)
+
+                            } else {
+                                view.showErrorDialog("Error getting details from firebase!")
+                                view.hideLoading()
                             }
-                            CoroutineScope(Dispatchers.Main).launch {
-                                insertUserMasterRecords(bo)
-                            }
-
-                        } else {
-                            view.showErrorDialog("Error getting details from firebase!")
-                            view.hideLoading()
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        view.showErrorDialog(error.message)
-                        view.hideLoading()
-                        Log.d("FIREBASE", error.details)
-                    }
-                })
-            }else{
-                withContext(Dispatchers.Main) {
-                    view.moveToNextScreen()
-                }
+                        override fun onCancelled(error: DatabaseError) {
+                            view.showErrorDialog(error.message)
+                            view.hideLoading()
+                            Log.d("FIREBASE", error.details)
+                        }
+                    })
+            } else {
+                view.moveToNextScreen()
+
             }
         }
     }
+
 
     override suspend fun register(firebaseAuth: FirebaseAuth, userName: String, password: String) {
         try {
@@ -161,117 +163,176 @@ class LoginPresenter : LoginHelper.Presenter {
     }
 
 
-    suspend fun insertUserMasterRecords(bo: LoginBO){
+    private fun insertUserMasterRecords(bo: LoginBO) {
         try {
             db.openDataBase()
             val content = StringBuilder()
-                .append(QS(bo.currentUserUid!!))
+                .append(QT(bo.currentUserUid!!))
                 .append(",")
-                .append(QS(bo.email))
+                .append(QT(bo.email))
                 .append(",")
                 .append(bo.userId)
                 .append(",")
-                .append(QS(bo.role))
+                .append(QT(bo.role))
                 .append(",")
-                .append(QS(bo.hotel))
+                .append(QT(bo.hotel))
                 .append(",")
-                .append(QS(bo.hotelBranch))
+                .append(QT(bo.hotelBranch))
                 .append(",")
-                .append(QS(DateTools().now(DateTools.DATE_TIME)))
-            db.insertSQL(DataMembers.tbl_masterUser, DataMembers.tbl_masterUserCols, content.toString())
-            withContext(Dispatchers.Main) {
-                downloadTheHotelData(bo)
-            }
+                .append(QT(DateTools().now(DateTools.DATE_TIME)))
+                .append(",")
+                .append(QT(""))
+                .append(",")
+                .append(QT(""))
+            db.insertSQL(
+                DataMembers.tbl_masterUser,
+                DataMembers.tbl_masterUserCols,
+                content.toString()
+            )
 
-
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
     }
 
 
-    fun downloadTheHotelData(bo: LoginBO) {
-        CoroutineScope(Dispatchers.Main).launch {
+    private fun getHotelIds(bo: LoginBO,firebaseDBRef: DatabaseReference) {
+        fetchHotelId(firebaseDBRef) { hotelID ->
+            fetchBranchId(bo,firebaseDBRef) { branchId ->
+                updateIdsInTable(bo,hotelID,branchId)
+            }
+        }
+    }
 
+    private fun fetchHotelId(firebaseDBRef: DatabaseReference,callback : (Int) -> Unit) {
+        firebaseDBRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                   val hotelId = (snapshot.value as? HashMap<*, *>)?.getOrDefault("id", 1) as? Long ?: 1L
+                    callback(hotelId.toInt())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", error.details)
+            }
+        })
+    }
+
+    private fun fetchBranchId(bo: LoginBO,firebaseDBRef: DatabaseReference, callback: (Int) -> Unit){
+        firebaseDBRef.child(bo.hotelBranch!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val hotelBranchId = (snapshot.value as? HashMap<*, *>)?.getOrDefault("id", 1) as? Long ?: 1L
+                    callback(hotelBranchId.toInt())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG",error.details)
+            }
+
+        })
+    }
+
+
+    private fun getHotelData(bo: LoginBO,firebaseDBRef: DatabaseReference){
+        fetchFoodMenu(bo,firebaseDBRef) { masterItemList ->
+            fetchTaxDetails(bo,firebaseDBRef) { taxBO ->
+                insertFoodDataToDB(masterItemList)
+                insertDataIntoTaxMaster(taxBO)
+                getHotelIds(bo,firebaseDBRef)
+            }
+        }
+    }
+
+    private fun fetchFoodMenu(bo: LoginBO,firebaseDBRef: DatabaseReference,callback : (MutableList<HotelBO.Items>) -> Unit){
+        firebaseDBRef.child(bo.hotelBranch!!).child("FoodMenu").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                if (snapshot.exists()) {
+                    masterMap = (snapshot.value as? HashMap<*, *>)!!
+
+                    for (key in masterMap.keys) {
+                        val keyData = masterMap[key] as? HashMap<String, String>
+                        if (keyData != null) {
+                            val items = HotelBO.Items(
+                                name = key.toString(),
+                                category = keyData["category"].toString(),
+                                id = keyData["id"].toString(),
+                                imgUrl = keyData["imgUrl"] ?: "",
+                                price = keyData["price"].toString()
+                            )
+                            masterItemList.add(items)
+                        }
+                    }
+                   callback(masterItemList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                print(error.message)
+            }
+        })
+    }
+    private fun fetchTaxDetails(bo: LoginBO,firebaseDBRef: DatabaseReference, callback: (TaxBO) -> Unit) {
+        firebaseDBRef.child(bo.hotelBranch!!).child("TaxMaster").addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    taxMap = (snapshot.value as? HashMap<*, *>)!!
+                    val taxBO = TaxBO().apply {
+                        taxable = (taxMap["isTaxable"]!! == "YES")
+                        taxType = taxMap["taxType"] as String
+                        taxRate = taxMap["taxRate"] as Long
+                    }
+                    callback(taxBO)
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println(error.message)
+            }
+        })
+    }
+
+    private fun downloadTheHotelData(bo: LoginBO) {
 
         foodBOMaster = HotelBO()
         masterItemList = mutableListOf()
-        taxMap = hashMapOf<Any,Any>()
-
-            val hotelDBRef = FirebaseDatabase
-                .getInstance()
-                .getReference("hotels")
-                .child(bo.hotel!!)
-
-            hotelDBRef.child(bo.hotelBranch!!)
-                .child("FoodMenu")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-
-                        if (snapshot.exists()) {
-                            masterMap = (snapshot.value as? HashMap<*, *>)!!
-
-                            for (key in masterMap.keys) {
-                                val keyData = masterMap[key] as? HashMap<String, String>
-                                if (keyData != null) {
-                                    val items = HotelBO.Items(
-                                        name = key.toString(),
-                                        category = keyData["category"].toString(),
-                                        id = keyData["id"].toString(),
-                                        imgUrl = keyData["imgUrl"] ?: "",
-                                        price = keyData["price"].toString()
-                                    )
-                                    masterItemList.add(items)
-                                }
-                            }
-                            insertFoodDataToDB()
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        print(error.message)
-                    }
-                })
-
-        hotelDBRef.child(bo.hotelBranch!!).child("TaxMaster").addValueEventListener(
-            object : ValueEventListener{
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
-                        taxMap = (snapshot.value as? HashMap<*,*>)!!
-                        val taxBO = TaxBO().apply {
-                            taxable = (taxMap["isTaxable"]!! == "YES")
-                            taxType = taxMap["taxType"] as String
-                            taxRate = taxMap["taxRate"] as Long
-                        }
-                        CoroutineScope(Dispatchers.Main).launch {
-                            insertDataIntoTaxMaster(taxBO)
-                        }
-
-                    }
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                   println(error.message)
-                }
-        })
-        }
-
-
+        taxMap = hashMapOf<Any, Any>()
+        val hotelDBRefs =
+            FirebaseDatabase.getInstance().getReference("hotels").child(bo.hotel!!)
+        getHotelData(bo,hotelDBRefs)
 
 
     }
 
-    suspend fun insertDataIntoTaxMaster(taxBO: TaxBO){
+    private fun updateIdsInTable(bo: LoginBO,hotelId: Int, hotelBranchId : Int){
+
+        try{
+            db.createDataBase()
+            db.openDataBase()
+            db.writableDatabase
+            db.updateSQL("update MasterUser set hotelId= $hotelId where hotel = ${QT(bo.currentUserUid)}")
+            db.updateSQL("update MasterUser set hotelBranchId= $hotelBranchId where hotel = ${QT(bo.currentUserUid)}")
+
+        } catch (ex: Exception){
+            ex.printStackTrace()
+        }
+    }
+
+    private fun insertDataIntoTaxMaster(taxBO: TaxBO) {
         try {
             db.createDataBase()
             db.openDataBase()
             db.dbRawQuery("delete from TaxTable")
 
-            val content = "${QT(taxBO.taxable.toString())}, ${QT(taxBO.taxType)}, ${QT(taxBO.taxRate.toString())}"
+            val content =
+                "${QT(taxBO.taxable.toString())}, ${QT(taxBO.taxType)}, ${QT(taxBO.taxRate.toString())}"
             db.insertSQL(tbl_taxTable, tbl_taxTableCols, content)
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
 
@@ -282,14 +343,14 @@ class LoginPresenter : LoginHelper.Presenter {
 
     }
 
-    fun insertFoodDataToDB() {
+    private fun insertFoodDataToDB(list: MutableList<HotelBO.Items> ) {
 
         try {
             db.createDataBase()
             db.openDataBase()
 
-            for (i in 0 until masterItemList.size) {
-                val foodBO = masterItemList[i]
+            for (i in 0 until list.size) {
+                val foodBO = list[i]
                 val colValues = getValues(foodBO)
                 db.insertSQL(tbl_foodDataMaster, tbl_foodMasterCols, colValues)
             }
@@ -300,7 +361,7 @@ class LoginPresenter : LoginHelper.Presenter {
     }
 
 
-    fun getValues(data: HotelBO.Items): String {
+    private fun getValues(data: HotelBO.Items): String {
         val sb = StringBuilder()
         sb.append(QT(data.id))
             .append(",")
@@ -315,7 +376,7 @@ class LoginPresenter : LoginHelper.Presenter {
 
     }
 
-    fun QT(data: String?): String {
+    private fun QT(data: Any?): String {
         return "'$data'"
     }
 

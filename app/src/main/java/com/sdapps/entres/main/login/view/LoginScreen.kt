@@ -219,11 +219,7 @@ class LoginScreen :AppCompatActivity() , LoginHelper.View, View.OnClickListener 
         if (currentUser == null) {
            Log.d("USERCURRENT: ", currentUser.toString())
         }else{
-
-            CoroutineScope(Dispatchers.Main).launch {
-                presenter.getUserDetailsFromId(currentUser,false)
-            }
-
+            presenter.downloadMasterDataFromUser(currentUser,false)
         }
     }
 

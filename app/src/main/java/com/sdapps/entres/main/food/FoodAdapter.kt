@@ -52,7 +52,7 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxa
             holder.amount.text = data[position].price.toString()
         }
 
-        val img = data[position].imgUrl.replace("\"","").toString()
+        /*val img = data[position].imgUrl.replace("\"","").toString()
         if(img.isNotEmpty()){
             val imgRef = Firebase.storage.getReferenceFromUrl(img)
 
@@ -75,7 +75,7 @@ class FoodAdapter(private var data: List<FoodBO>, var taxRate: Float, val isTaxa
                 .load(R.drawable.placeholder)
                 .into(holder.foodImg)
         }
-
+*/
         holder.foodCardView.setOnClickListener{
             if(position != RecyclerView.NO_POSITION){
                 onItemClickListener?.invoke(position)
