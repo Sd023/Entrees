@@ -70,6 +70,10 @@ class DBHandler(val context: Context): SQLiteOpenHelper(context, DB_NAME, null, 
         return !sqlite!!.isOpen || sqlite == null
     }
 
+    fun closeDb(){
+        sqlite!!.close()
+    }
+
 
     fun dbRawQuery(sql: String){
         Log.d("QUERY","-> $sql")

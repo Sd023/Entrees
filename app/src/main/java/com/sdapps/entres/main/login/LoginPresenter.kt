@@ -314,9 +314,8 @@ class LoginPresenter : LoginHelper.Presenter {
         try{
             db.createDataBase()
             db.openDataBase()
-            db.writableDatabase
-            db.updateSQL("update MasterUser set hotelId= $hotelId where hotel = ${QT(bo.currentUserUid)}")
-            db.updateSQL("update MasterUser set hotelBranchId= $hotelBranchId where hotel = ${QT(bo.currentUserUid)}")
+            db.updateSQL("update MasterUser set hotelId= ${QT(hotelId)} where uid= ${QT(bo.currentUserUid)}")
+            db.updateSQL("update MasterUser set hotelBranchId= ${QT(hotelBranchId)} where uid= ${QT(bo.currentUserUid)}")
 
         } catch (ex: Exception){
             ex.printStackTrace()
