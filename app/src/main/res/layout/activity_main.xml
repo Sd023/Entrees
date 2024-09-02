@@ -61,4 +61,23 @@
         android:layout_below="@id/header"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="3"/>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        >
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/locationViewFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/location"
+            app:srcCompat = "@drawable/baseline_location_on_24"
+            android:layout_margin="35dp"/>
+
+
+    </FrameLayout>
 </RelativeLayout>

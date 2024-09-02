@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sdapps.entres.MapsActivity
 import com.sdapps.entres.R
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityMainBinding
@@ -21,6 +22,7 @@ import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewManage
 import com.sdapps.entres.main.home.tableview.tableFrag.presenter.TableViewPresenter
 import com.sdapps.entres.main.home.tableview.tableFrag.view.TableViewAdapter
 import com.sdapps.entres.main.homenew.HomeHostActivityNew
+import com.sdapps.entres.main.login.view.LoginScreen.Companion.HOTELID
 import com.sdapps.entres.network.NetworkTools
 
 
@@ -36,6 +38,8 @@ open class TableActivity : AppCompatActivity(),
 
     private lateinit var progressDialog: ProgressDialog
 
+    private lateinit var hotelId: String
+
 
     companion object {
         val PROFILE = "profile"
@@ -49,11 +53,13 @@ open class TableActivity : AppCompatActivity(),
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = ContextCompat.getColor(this, com.sdapps.entres.R.color.black)
-        }
+        val window = window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, com.sdapps.entres.R.color.black)
+
+        if(intent.extras != null)
+            hotelId = intent.getStringExtra(HOTELID)!!
+
         progressDialog = ProgressDialog(this)
         presenter = TableViewPresenter(this)
         db = DBHandler(this)
@@ -66,6 +72,10 @@ open class TableActivity : AppCompatActivity(),
 
         binding.orderHistory.setOnClickListener {
             switchToFragment(ORDER_HISTORY)
+        }
+
+        binding.locationViewFab.setOnClickListener {
+            startActivity(Intent(this@TableActivity,MapsActivity::class.java))
         }
 
     }

@@ -190,10 +190,15 @@ class LoginScreen :AppCompatActivity() , LoginHelper.View, View.OnClickListener 
 
     }
 
-    override fun moveToNextScreen() {
-            val intent = Intent(this@LoginScreen, TableActivity::class.java)
-            startActivity(intent)
-            finish()
+    override fun moveToNextScreen(hotelId: String) {
+        val intent = Intent(this@LoginScreen, TableActivity::class.java)
+        intent.putExtra(HOTELID,hotelId)
+        startActivity(intent)
+        finish()
+    }
+
+    companion object {
+        const val HOTELID = ""
     }
 
     private fun isUserNameValid(username: String): Boolean {

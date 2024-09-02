@@ -8,21 +8,26 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.sdapps.entres.MapsActivity.Companion.TAG
 import com.sdapps.entres.core.constants.DataMembers
 import com.sdapps.entres.core.constants.DataMembers.tbl_foodDataMaster
 import com.sdapps.entres.core.constants.DataMembers.tbl_foodMasterCols
+import com.sdapps.entres.core.constants.DataMembers.tbl_locationMaster
+import com.sdapps.entres.core.constants.DataMembers.tbl_locationMasterCols
 import com.sdapps.entres.core.constants.DataMembers.tbl_taxTable
 import com.sdapps.entres.core.constants.DataMembers.tbl_taxTableCols
 import com.sdapps.entres.core.date.DateTools
 import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.main.login.data.HotelBO
+import com.sdapps.entres.main.login.data.LocationBO
 import com.sdapps.entres.main.login.data.LoginBO
 import com.sdapps.entres.main.login.data.TaxBO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.StringBuilder
+import kotlin.math.log
+import kotlin.text.StringBuilder
 
 class LoginPresenter : LoginHelper.Presenter {
 
@@ -36,6 +41,7 @@ class LoginPresenter : LoginHelper.Presenter {
     private lateinit var masterItemList: MutableList<HotelBO.Items>
 
     private lateinit var taxMap: MutableMap<*, *>
+    private var locationBO : LocationBO = LocationBO()
 
     override fun attachView(view: LoginHelper.View, context: Context, dbHandler: DBHandler) {
         this.view = view
@@ -112,12 +118,36 @@ class LoginPresenter : LoginHelper.Presenter {
                         }
                     })
             } else {
-                view.moveToNextScreen()
+                loadLocationMaster()
+                view.moveToNextScreen(locationBO.hotelId.toString())
 
             }
         }
     }
 
+
+    private fun loadLocationMaster(){
+        try {
+
+            db.createDataBase()
+            db.openDataBase()
+
+            val cursor = db.selectSQL("select $tbl_locationMasterCols from LocationMaster")
+            if(cursor.count > 0){
+                while (cursor.moveToNext()){
+                    locationBO.apply {
+                        hotelId = cursor.getInt(0)
+                        branchId = cursor.getInt(1)
+                        lat = cursor.getString(2)
+                        lng = cursor.getString(3)
+                    }
+                }
+            }
+
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+    }
 
     override suspend fun register(firebaseAuth: FirebaseAuth, userName: String, password: String) {
         try {
@@ -199,8 +229,78 @@ class LoginPresenter : LoginHelper.Presenter {
     private fun getHotelIds(bo: LoginBO,firebaseDBRef: DatabaseReference) {
         fetchHotelId(firebaseDBRef) { hotelID ->
             fetchBranchId(bo,firebaseDBRef) { branchId ->
-                updateIdsInTable(bo,hotelID,branchId)
+                updateIdsInTable(bo,hotelID,branchId) {
+                    if(it){
+                        fetchLatNdLngFromFireStore(hotelID,branchId)
+                    } else {
+                        Log.d(TAG, "err fetching value in updateIds")
+                    }
+                }
             }
+        }
+    }
+
+    private fun fetchLatNdLngFromFireStore(hotelLovId: Int, branchId: Int){
+        val firestoreDB = FirebaseFirestore.getInstance()
+
+        val locationMasterRef = firestoreDB.collection("locationmaster")
+            .document(hotelLovId.toString())
+            .collection("location")
+
+        if(hotelLovId != 0 && branchId != 0){
+            try{
+                locationMasterRef.get()
+                    .addOnSuccessListener { documents ->
+                        if(documents != null){
+                            for(doc in documents){
+                                val docLat = doc.getString("lat")
+                                val docLng = doc.getString("lng")
+                                locationBO.apply {
+                                    hotelId = hotelLovId
+                                    lat = docLat!!
+                                    lng = docLng!!
+                                }
+                                insertLocationDetails(hotelLovId,doc.id,locationBO)
+                                Log.d(TAG, "${doc.id}, ${doc.data}")
+
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    view.hideLoading()
+                                    view.moveToNextScreen(locationBO.hotelId.toString())
+                                }
+
+                            }
+                        }
+                    }.addOnFailureListener { error ->
+                        view.showErrorDialog(error.message)
+                        db.closeDb()
+                    }
+            }catch (ex: Exception){
+                ex.printStackTrace()
+            } finally {
+                db.closeDb()
+            }
+        }
+    }
+
+    private fun insertLocationDetails(hotelId: Int, branchId: String, locationBO: LocationBO){
+        try{
+
+            db.createDataBase()
+            db.openDataBase()
+
+            val sb = StringBuilder()
+                .append(QT(hotelId))
+                .append(",")
+                .append(branchId)
+                .append(",")
+                .append(QT(locationBO.lat))
+                .append(",")
+                .append(QT(locationBO.lng))
+
+            db.insertSQL(tbl_locationMaster, tbl_locationMasterCols,sb.toString())
+
+        }catch (ex: Exception){
+            ex.printStackTrace()
         }
     }
 
@@ -209,6 +309,7 @@ class LoginPresenter : LoginHelper.Presenter {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                    val hotelId = (snapshot.value as? HashMap<*, *>)?.getOrDefault("id", 1) as? Long ?: 1L
+                    locationBO.hotelId = hotelId.toInt()
                     callback(hotelId.toInt())
                 }
             }
@@ -309,16 +410,19 @@ class LoginPresenter : LoginHelper.Presenter {
 
     }
 
-    private fun updateIdsInTable(bo: LoginBO,hotelId: Int, hotelBranchId : Int){
+    private fun updateIdsInTable(bo: LoginBO,hotelId: Int, hotelBranchId : Int, callback: (Boolean) -> Unit){
 
         try{
             db.createDataBase()
             db.openDataBase()
             db.updateSQL("update MasterUser set hotelId= ${QT(hotelId)} where uid= ${QT(bo.currentUserUid)}")
             db.updateSQL("update MasterUser set hotelBranchId= ${QT(hotelBranchId)} where uid= ${QT(bo.currentUserUid)}")
+            callback(true)
 
         } catch (ex: Exception){
+            callback(false)
             ex.printStackTrace()
+            return
         }
     }
 
@@ -333,11 +437,6 @@ class LoginPresenter : LoginHelper.Presenter {
             db.insertSQL(tbl_taxTable, tbl_taxTableCols, content)
         } catch (ex: Exception) {
             ex.printStackTrace()
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            view.hideLoading()
-            view.moveToNextScreen()
         }
 
     }

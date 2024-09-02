@@ -73,16 +73,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     private fun requestLocationPermission(){
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
             ActivityCompat.requestPermissions(this, arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ),MLOCATION_CODE)
         }
     }
 
     private fun isPermissionGranted(): Boolean {
         var isEnabled = false;
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             isEnabled = true
         }
 
@@ -133,10 +140,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
            requestLocationPermission()
+        } else{
+            mMap.isMyLocationEnabled = true
+            mMap.isTrafficEnabled = true
+            startLocationUpdates()
         }
-        mMap.isMyLocationEnabled = true
-        mMap.isTrafficEnabled = true
-        startLocationUpdates()
+
     }
 
     companion object {
@@ -148,5 +157,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onPause()
         mMap.clear()
         fusedLocationProvider.removeLocationUpdates(locationCallback)
+
     }
 }

@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.sdapps.entres"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.1"
 
@@ -112,14 +112,15 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(libs.firebase.bom)
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-database")
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
 
     implementation(libs.firebase.storage)
     implementation (libs.firebase.ui.storage)
+    implementation(libs.firebase.firestore.ktx)
 
     implementation (libs.androidx.lifecycle.viewmodel.ktx.v231)
 
