@@ -13,6 +13,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -26,10 +30,13 @@ import com.sdapps.entres.core.database.DBHandler
 import com.sdapps.entres.databinding.ActivityLoginNewBinding
 import com.sdapps.entres.main.login.LoginHelper
 import com.sdapps.entres.main.login.LoginPresenter
+import com.sdapps.entres.main.login.customLogin.model.User
+import com.sdapps.entres.main.login.customLogin.viewmodel.LoginVM
 import com.sdapps.entres.main.login.data.LoginBO
 import com.sdapps.entres.network.NetworkTools
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -48,13 +55,34 @@ class LoginScreen :AppCompatActivity() , LoginHelper.View, View.OnClickListener 
     private lateinit var alert: AlertDialog
     private lateinit var progressDialog: ProgressDialog
 
+    private lateinit var vm: LoginVM
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("ActivityLifeCycle","onCreate")
         binding = ActivityLoginNewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        vm = ViewModelProvider(this).get(LoginVM::class.java)
+
+        printResponseFromKTOR()
         //startAnimations()
-        init()
+        //init()
+    }
+    fun printResponseFromKTOR(){
+       /* vm.userData.observe(this, { response ->
+            println(response)
+        })*/
+
+        vm.userCreationStatus.observe(this) { isInsertedComplete ->
+            if (isInsertedComplete) {
+                Log.d("STATUS", "User Created Successfully")
+            } else {
+                Log.d("STATUS", "User not created some gone went wrong")
+            }
+        }
+
+        val newUser = User(120, "mobileUser", "sd@gmail.com", "pdw", "2024-10-09")
+        vm.createUser(newUser)
     }
 
     fun startAnimations(){
@@ -214,17 +242,17 @@ class LoginScreen :AppCompatActivity() , LoginHelper.View, View.OnClickListener 
 
     override fun onStart() {
         super.onStart()
-        Log.d("ActivityLifeCycle","onStart")
-        val currentUser = firebaseAuth.currentUser?.uid
-        if (currentUser == null) {
-           Log.d("USERCURRENT: ", currentUser.toString())
-        }else{
-
-            CoroutineScope(Dispatchers.Main).launch {
-                presenter.getUserDetailsFromId(currentUser,false)
-            }
-
-        }
+//        Log.d("ActivityLifeCycle","onStart")
+//        val currentUser = firebaseAuth.currentUser?.uid
+//        if (currentUser == null) {
+//           Log.d("USERCURRENT: ", currentUser.toString())
+//        }else{
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                presenter.getUserDetailsFromId(currentUser,false)
+//            }
+//
+//        }
     }
 
 

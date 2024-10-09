@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.gms)
+    kotlin("plugin.serialization") version "1.8.0"
 }
 
 val gitBuildNumber: Int by lazy {
@@ -111,13 +112,11 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.firebase.bom)
-    implementation("com.google.firebase:firebase-analytics")
 
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-database")
-
-    implementation(libs.firebase.storage)
-    implementation (libs.firebase.ui.storage)
+    implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
+    implementation ("com.firebaseui:firebase-ui-database:8.0.2")
 
     implementation (libs.androidx.lifecycle.viewmodel.ktx.v231)
 
@@ -131,5 +130,13 @@ dependencies {
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.kotlinx.coroutines.android.v152)
 
+    implementation (libs.retrofit)
+
+    implementation("io.ktor:ktor-client-core:2.3.12")
+    implementation(libs.ktor.client.android)
+    implementation("io.ktor:ktor-client-cio:2.3.12")
+
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
 }
